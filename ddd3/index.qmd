@@ -1,0 +1,17 @@
+---
+title: "DDD 3: Summer Field Practice Course"
+subtitle: "Sum-26 · UGRD-10002-1"
+format:
+  html:
+    toc: false
+---
+
+Field practice work on urban slums: cleaning the survey data and studying what determines women's employment.
+
+- [Data Cleaning](data_clean.qmd): renaming, recoding and dummy variables for the women, children and household data.
+- [Presentation: What Determines Women's Employment in Urban Slums?](women_employment.qmd): slides on marital status, family structure and age.
+
+::: {.callout-tip}
+## Slides as PDF
+Open the presentation and add `?print-pdf` at the end of the address, then print to PDF from the browser.
+:::

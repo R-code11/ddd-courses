@@ -1,0 +1,13 @@
+---
+title: "DDD 4: Statistical Principles through Computation"
+subtitle: "Jul-26 · UGRD-10594-1"
+format:
+  html:
+    toc: false
+---
+
+Statistics done with code: data cleaning, plots, correlation and regression in R.
+
+- [Computational Statistics: Class Notes](computational_statistics.qmd): every class with its code and output. Use **Other Formats → Typst (PDF)** on that page to download it as a PDF.
+
+The data come from the R packages `usdata` and `openintro`, so nothing needs to be downloaded.

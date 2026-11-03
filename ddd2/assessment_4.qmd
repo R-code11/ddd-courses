@@ -1,0 +1,199 @@
+---
+title: "Assessment 4"
+subtitle: "DDD 2: Introduction to Programming and Basic Data Analysis"
+author: "Ramesh Beniwal | Admission ID: BAEC2240006"
+date: today
+---
+
+
+
+## Setup
+
+```{r}
+rm(list = ls())
+
+```
+
+## Load Required Libraries
+
+```{r}
+# Library loading
+library(tibble)   
+library(dplyr)    
+library(rlang)    
+library(lobstr)  
+library(rio)      
+library(ggplot2)
+library(purrr)
+library(labelled)
+library(stargazer)
+library(scales)
+library(janitor)
+library(flextable)
+```
+
+
+##  IHDS  Data exercise
+```{r}
+library(tidyverse)
+library(rio)
+HH_DATA <- import("../data/ddd2/RAW_DATA/ICPSR_36151/HH_DATA/HH_DATA.dta")
+
+IHDS<- subset(HH_DATA, select= c(ID18C, ID13, URBAN2011))
+view(IHDS)
+```
+
+
+## Assessment Environment
+
+```{r}
+#All assessment answers and variables stored here in this environment
+assessment_3 <- new.env()
+```
+
+
+## Question 1: Data Cleaning and Visualization
+# Step 1 
+```{r}
+assessment_3$raw_data <- import("../data/ddd2/RAW_DATA/ICPSR_36151/HH_DATA/HH_DATA.dta")
+```
+
+# Step 2 
+```{r}
+# STEP 2: Select required variables
+library(tidyverse)
+assessment_3$df <- assessment_3$raw_data |> 
+  select(ID11, ID13, STATEID, INCOMEPC) |>
+  rename(
+    region = ID11,
+    caste = ID13,
+    state_id = STATEID,
+    income_pc = INCOMEPC)|> filter(!is.na(state_id))
+
+```
+
+# Step 3 : Create new variable for geographical zones
+```{r}
+assessment_3$df <- assessment_3$df |>
+  mutate(
+    geo_zone = case_when(
+      state_id %in% c(2, 3, 6, 7, 12, 5, 22) ~ "North",
+      state_id %in% c(8, 24) ~ "West",
+      state_id %in% c(18, 23) ~ "Central",
+      state_id %in% c(29, 33, 36, 28, 32) ~ "South",
+      state_id %in% c(19, 10, 20, 21, 4) ~ "East",
+      TRUE ~ NA_character_))
+
+```
+# Step 4  : Clean data by removing rows with missing values in key variables
+```{r}
+assessment_3$df_clean <- assessment_3$df |>
+  filter(!is.na(geo_zone), !is.na(caste), !is.na(income_pc))
+```
+
+
+
+
+# Step 5 : Contingency table - Caste vs Zones don
+```{r}
+assessment_3$df_clean |>
+  mutate(across(c(caste, geo_zone), as.factor)) |> 
+  tabyl(geo_zone, caste) |> 
+  adorn_percentages("row") |> 
+  adorn_pct_formatting() |> 
+  janitor::adorn_ns() |>
+  flextable() 
+
+```
+#Step 6 : Summary statistics of income by zone 
+```{r}
+assessment_3$df_clean |>
+  group_by(geo_zone) |>
+  summarise(
+    n = n(),
+    mean_income = mean(income_pc, na.rm = TRUE),
+    min_income = min(income_pc, na.rm = TRUE),
+    max_income = max(income_pc, na.rm = TRUE))
+```
+
+# PLOT 1: Caste distribution across zones
+```{r}
+assessment_3$df_clean |>
+  filter(!is.na(caste), !is.na(geo_zone)) |>
+  count(geo_zone, caste) |> 
+  group_by(geo_zone) |>   # <-- important fix
+  mutate(prop = n / sum(n),top_lab = paste0(round(prop * 100, 1), "%")) |> 
+  ungroup() |>
+  ggplot(aes(
+    x = factor(geo_zone, levels = c("North", "West", "Central", "South", "East")),
+    y = prop,
+    fill = factor(caste))) +
+  geom_col(position = position_dodge(width = 0.9)) +
+  geom_text(
+    aes(label = top_lab),
+    position = position_dodge(width = 0.9),  
+    vjust = -0.5,
+    size = 3) +
+  scale_y_continuous(labels = scales::percent) + 
+  labs(
+    x = "Geographical Zone",
+    y = "Percentage",
+    title = "Distribution of Caste across Geographical Zones- Ramesh Beniwal",
+    fill = "Caste") +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5),
+    legend.position = "right")
+```
+# Interpretatiion of the above plot: The chart shows that Caste 3 has the highest percentage in all regions, with the strongest presence in the South. Caste 2 and Caste 4 appear in moderate proportions across every zone. Caste 1 and Caste 6 have very low representation everywhere. The North region looks more balanced compared to others, with several castes having similar values. In contrast, the West and South are more dominated by one major caste group. The East and Central regions show a mixed pattern without extreme dominance. Overall, caste distribution is uneven and changes from one geographical zone to another.
+
+
+---
+
+
+## plot box to check outliers
+```{r}
+assessment_3$df_clean |>
+  filter(!is.na(income_pc), !is.na(geo_zone)) |> 
+  filter(income_pc > 0, income_pc < 100000) |> 
+  ggplot(aes(x = geo_zone, y = income_pc)) +
+  geom_boxplot() +
+  labs(
+    x = "Geographical Zone",
+    y = "Per Capita Income",
+    title = "Box Plot of Per Capita Income across Geographical Zones- Ramesh Beniwal") +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5),
+    legend.position = "right")
+```
+
+# PLOT 2 : Density plot the Distribution of per capita income across zone and remove outliers from income
+```{r}
+assessment_3$df_clean |>
+  filter(!is.na(income_pc), !is.na(geo_zone)) |> 
+  filter(income_pc > 0, income_pc < 100000) |> 
+  ggplot(aes(x = income_pc, fill = geo_zone)) +
+  geom_density(alpha = 0.5) +
+  labs(
+    x = "Per Capita Income",
+    y = "Density",
+    title = "Density Plot of Per Capita Income across Geographical Zones- Ramesh Beniwal",
+    fill = "Geographical Zone") +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5),
+    legend.position = "right")
+```
+
+# Interpretation of the above plot: The density plot shows that most people in all regions fall in the lower income range, as the curves peak at lower values. The East and Central regions have slightly higher peaks, indicating more people concentrated at lower incomes. The North and South regions show a wider spread, suggesting more variation in income levels. The West also follows a similar pattern but with a slightly smoother distribution. All regions have a long right tail, meaning a smaller number of people earn much higher incomes. Overall, income distribution is positively skewed across all geographical zones.
+
+
+---
+
+
+## Final Check
+
+```{r}
+ls(assessment_3)
+```

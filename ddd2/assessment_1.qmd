@@ -1,0 +1,116 @@
+---
+title: "Assessment 1"
+subtitle: "DDD 2: Introduction to Programming and Basic Data Analysis"
+author: "Ramesh Beniwal | Admission ID: BAEC2240006"
+date: today
+---
+
+## Question 1
+
+```{r}
+x <- c(4, 7, 2, 9, 5, 6)
+x > mean(x)
+#The output TRUE indicates elements greater than the mean of the vector.
+```
+
+## Question 2
+
+```{r}
+df <- data.frame(
+  id = 1:4,
+  score = c(65, 70, 68, 72),
+  group = c("A", "B", "A", "B"))
+df[df$id == 2, "score"] <- 75
+df # again to check new updated one variable in our data frame 
+```
+
+## Question 3
+
+```{r}
+x <- c(1, 2, 3, 4)
+y <- x
+y[2] <- 10 #MODIFY ONE ELEMENT OF Y VARIABLE
+
+#CHECK 
+x#x does NOT change
+y#y changes
+```
+
+## Question 4
+
+```{r}
+df <- data.frame(
+  x = c(2, 4, 6, 8, 10, 12, 14, 16),
+  y = c(5, 7, 9, 11, 13, 15, 17, 19))
+df[] <- lapply(df, function(z) z - mean(z))
+df
+```
+
+## Question 5
+
+```{r}
+v <- c("Low", "Medium", "High", "Medium", "Low", "High")
+f <- factor(v, levels = c("Low", "Medium", "High", "VeryHigh"), ordered = TRUE)
+f
+as.numeric(f)
+typeof(f)
+```
+
+## Question 6
+
+```{r}
+mean_na <- function(x) {
+  mean(x, na.rm = TRUE)}
+#to ceeck it we are taking an example 
+v <- c(2, 4, NA, 6, 8)
+mean_na(v)
+```
+
+## Question 7
+
+```{r}
+# Create data frame with 6 observations
+df <- data.frame(
+  id = 1:6,
+  age = c(22, 27, 24, 30, 26, 21),
+  gender = c("F", "M", "F", "M", "F", "M"),
+  income = c(20000, 35000, 25000, 40000, 32000, 18000))
+#(a) Rename variables
+colnames(df)[colnames(df) == "age"] <- "age_years"
+colnames(df)[colnames(df) == "income"] <- "annual_income"
+#(b) Add indicator variable (age > 25)
+df$older_than_25 <- df$age_years > 25
+#(c) Subset individuals older than 25
+df_sub <- df[df$older_than_25 == TRUE, ]
+#(d) Keep only id and indicator variable
+final_df <- df_sub[, c("id", "older_than_25")]
+final_df
+```
+
+## Question 8
+
+```{r}
+#Create data frame with four numeric variables
+df <- data.frame(
+  a = c(2, 4, 6, NA, 8),
+  b = c(1, 3, 5, 7, NA),
+  c = c(10, 12, NA, 14, 16),
+  d = c(5, NA, 9, 11, 13))
+#Define function
+median_dev_fun <- function(data) {
+  
+  data$a_md <- data$a - median(data$a, na.rm = TRUE)
+  data$b_md <- data$b - median(data$b, na.rm = TRUE)
+  data$c_md <- data$c - median(data$c, na.rm = TRUE)
+  data$d_md <- data$d - median(data$d, na.rm = TRUE)
+  
+  data$sum_md <- data$a_md + data$b_md + data$c_md + data$d_md
+  
+  data
+}
+
+#Apply function
+result <- median_dev_fun(df)
+result
+```
+

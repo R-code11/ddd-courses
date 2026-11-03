@@ -1,0 +1,355 @@
+---
+title: "Data Cleaning"
+subtitle: "DDD 3: Summer Field Practice Course"
+author: "Ramesh Beniwal"
+execute:
+  eval: false
+---
+
+Cleaning of the field survey data from the urban slums: women, children and households. The code is shown as written; it is not run when the site is built.
+
+## Setup
+
+```{r}
+rm(list = ls())
+library(haven)
+library(dplyr) 
+library(rio) 
+library(labelled)
+library(ggplot2)
+library(stargazer)
+```
+
+Clears the workspace and loads the packages.
+
+## Women's data: renaming variables
+
+```{r}
+# 2. WOMEN_SLUMS
+
+W_SLUMS <- W_SLUMS %>%
+  rename(
+    woman_index         = `_index`,
+    date_interview      = Date_of_interview,
+    team_id             = Team_ID,
+    slum_id             = Slum_ID,
+    household_id        = Household_ID,
+    relation_hhd        = Relation_to_HHD_Head,
+    joint_family        = Joint_family,
+    fil_alive           = Father_in_law_alive,
+    mil_alive           = Mother_in_law_alive,
+    gender              = Gender,
+    marital_status      = Marital_status,
+    age                 = Age,
+    age_at_marriage     = Age_at_marriage,
+    education           = Education,
+    currently_working   = Currently_Working,
+    spouse_age          = Spouse_age,
+    spouse_education    = Spouse_education,
+    spouse_working      = Spouse_working,
+    smartphone          = Smart_Phone,
+    internet            = Internet,
+    health_condition    = Health_condition,
+    sleep_trouble       = Sleep_trouble,
+    cognition           = Cognition,
+    life_satisfaction   = Life_Satisfaction,
+    depression          = Depression,
+    d1                  = `group_wl2zg68/D1`,
+    d2                  = `group_wl2zg68/D2`,
+    d3                  = `group_wl2zg68/D3`,
+    d4                  = `group_wl2zg68/D4`,
+    d5                  = `group_wl2zg68/D5`,
+    d6                  = `group_wl2zg68/D6`,
+    d7                  = `group_wl2zg68/D7`,
+    a1                  = `group_zx8ri59/A1`,
+    a2                  = `group_zx8ri59/A2`,
+    a3                  = `group_zx8ri59/A3`,
+    a4                  = `group_zx8ri59/A4`,
+    a5                  = `group_zx8ri59/A5`,
+    mob_market          = `group_qv9zp21/Market`,
+    mob_health          = `group_qv9zp21/Health_center`,
+    mob_relative        = `group_qv9zp21/Relative_s_house`,
+    mob_bank            = `group_qv9zp21/Bank`,
+    mob_outside         = `group_qv9zp21/Outside_locality`,
+    theft               = Theft,
+    break_in            = Break_in,
+    threat              = Threat,
+    harassment          = Harassment,
+    total_children      = Total_Children)
+```
+
+Gives short, clear names to the survey variables.
+
+## Women's data: cleaning
+
+```{r}
+W_SLUMS <- W_SLUMS %>%
+  mutate(
+    age           = ifelse(age == 0, NA, age),
+    education     = ifelse(education > 16, NA, education))
+summary(W_SLUMS$age)
+W_SLUMS |> count(education)
+```
+
+Age 0 and education above 16 are replaced with `NA`.
+
+## Women's data: recoding
+
+```{r}
+W_SLUMS <- W_SLUMS %>%
+  mutate(
+    # widow or separated = 1, others = 0
+    widow_sep = ifelse(marital_status %in% c(3, 4), 1, 0),
+    # age groups
+    age_group = case_when(
+      age < 18               ~ 1,    # below 18
+      age >= 18 & age < 25   ~ 2,    # 18-24
+      age >= 25 & age < 35   ~ 3,    # 25-34
+      age >= 35 & age < 45   ~ 4,    # 35-44
+      age >= 45 & age < 55   ~ 5,    # 45-54
+      age >= 55 & age < 65   ~ 6,    # 55-64
+      age >= 65              ~ 7     # 65+
+    ),
+    
+    # factors
+    slum_id      = as.factor(slum_id),
+    joint_family = as.integer(joint_family == 1),
+    fil_alive    = as.integer(fil_alive == 1),
+    mil_alive    = as.integer(mil_alive == 1))
+
+W_SLUMS <- W_SLUMS %>%
+  mutate(
+    edu_cat = case_when(
+      education == 0                    ~ 1,   # Illiterate
+      education >= 1  & education <= 5  ~ 2,   # Primary
+      education >= 6  & education <= 8  ~ 3,   # Middle
+      education >= 9  & education <= 10 ~ 4,   # Secondary
+      education >= 11 & education <= 12 ~ 5,   # Higher Secondary
+      education >= 13 & education <= 16 ~ 6    # Graduate & Above
+    ))
+```
+
+Widowed or separated indicator, age groups and education categories.
+
+## Dummy variables
+
+```{r}
+# ── CREATE DUMMIES ────────────────────────────────────────────────────────────
+
+W_SLUMS <- W_SLUMS %>%
+  mutate(
+    # education dummies
+    edu_illiterate   = as.integer(edu_cat == 1),
+    edu_primary      = as.integer(edu_cat == 2),
+    edu_middle       = as.integer(edu_cat == 3),
+    edu_secondary    = as.integer(edu_cat == 4),
+    edu_higher_sec   = as.integer(edu_cat == 5),
+    edu_graduate     = as.integer(edu_cat == 6),
+    
+    # age group dummies
+    age_below_18     = as.integer(age_group == 1),
+    age_18_24        = as.integer(age_group == 2),
+    age_25_34        = as.integer(age_group == 3),
+    age_35_44        = as.integer(age_group == 4),
+    age_45_54        = as.integer(age_group == 5),
+    age_55_64        = as.integer(age_group == 6),
+    age_65plus           = as.integer(age_group == 7)
+  )
+```
+
+One 0/1 variable for each education and age category.
+
+## Summary statistics
+
+```{r}
+W_SLUMS %>%
+  dplyr::select(
+    # dependent variable
+    currently_working,
+    
+    # independent variables — marital status
+    widow_sep,
+    
+    # independent variables — family structure
+    joint_family,
+    
+    # independent variables — age groups
+    age_18_24,
+    age_25_34,
+    age_35_44,
+    age_45_54,
+    age_55_64,
+    age_65plus,
+    
+    # control variables — education
+    edu_illiterate,
+    edu_primary,
+    edu_middle,
+    edu_secondary,
+    edu_higher_sec,
+    edu_graduate,
+    
+    # control variables — in-laws
+    fil_alive,
+    mil_alive
+  ) %>%
+  as.data.frame() %>%
+  stargazer(
+    type         = "text",
+    title        = "Table 1: Summary Statistics — Determinants of Women's Employment in Urban Slums",
+    summary.stat = c("n", "mean", "sd", "min", "max"),
+    digits       = 2,
+    covariate.labels = c(
+      # dependent
+      "Currently Working",
+      
+      # independent
+      "Widowed/Separated",
+      "Joint Family",
+      
+      # age groups
+      "Age 18-24",
+      "Age 25-34",
+      "Age 35-44 (ref)",
+      "Age 45-54",
+      "Age 55-64",
+      "Age 65+",
+      
+      # education
+      "Illiterate (ref)",
+      "Primary (1-5 years)",
+      "Middle (6-8 years)",
+      "Secondary (9-10 years)",
+      "Higher Secondary (11-12 years)",
+      "Graduate & Above",
+      
+      # controls
+      "Father-in-law Alive",
+      "Mother-in-law Alive"
+    ))
+```
+
+Summary table of the employment variables.
+
+## Importing and merging
+
+```{r}
+W_SLUMS <- rio::import("../data/ddd3/SLUMS/W_SLUMS.dta")
+
+
+
+
+
+# data merging
+# 1. 1:1:1 merge (merge by a unique identifier)
+#new_data<- merge(data1, data2, by = c("identifiers"))
+
+# 2. m:1 merge 
+# new_data<- merge(data1, data2 by = c("identifiers"), all.x = TRUE)  : all.x = TRUE means that all rows from data1 will be kept, and only matching rows from data2 will be included.
+# in this case we need to at place of data1  we need to keep many rows and at place of data2 we need to keep one row.
+```
+
+Imports the women's data. The merge notes explain a one-to-one and a many-to-one merge.
+
+## Children's data
+
+```{r}
+# 1 CHILD_SLUMS 
+library(tidyverse)
+C_SLUMS <- C_SLUMS %>%
+  rename(
+    birth_order      = `children_history/C_Child_birth_order`,
+    c_gender     = `children_history/C_Gender`,
+    c_age        = `children_history/C_Age`,
+    c_education  = `children_history/C_Education`,
+    c_enrolled   = `children_history/C_currently_enrolled`,
+    c_dropout    = `children_history/C_drop_out`,
+    c_dropout_reason = `children_history/C_dropout_reason`,
+    c_work       = `children_history/C_Work`,
+    c_marital    = `children_history/C_Marital_Status`,
+    parent_index     = `_parent_index`) 
+```
+
+Renames the children's variables.
+
+## Household data
+
+```{r}
+# 3. HH_SLUMS
+
+HH_SLUMS <- HH_SLUMS %>%
+  rename(
+    hh_index          = `_index`,
+    date_interview    = Date_of_interview,
+    team_id           = Team_ID,
+    slum_id           = Slum_ID,
+    household_id      = Household_ID,
+    hh_head_name      = Name_of_the_household_head,
+    religion          = Religion,
+    caste             = Caste,
+    residence         = Residence,
+    house_type        = House_type,
+    n_rooms           = Number_of_rooms,
+    rain_leak         = Rain_leak,
+    hot_summer        = Hot_summer,
+    ownership         = Ownership,
+    electricity       = Electricity,
+    water_supply      = Water_supply,
+    toilet_facility   = Toilet_facility,
+    cooking_fuel      = Cooking_fuel,
+    ration_card       = Ration_card,
+    ration_card_type  = Ration_card_type,
+    land              = Land,
+    tv                = `group_dd5nq69/A1`,
+    fan               = `group_dd5nq69/A2`,
+    cooler            = `group_dd5nq69/A3`,
+    refrigerator      = `group_dd5nq69/A4`,
+    washing_machine   = `group_dd5nq69/A5`,
+    motorcycle        = `group_dd5nq69/A6`,
+    bicycle           = `group_dd5nq69/A7`,
+    auto_car          = `group_dd5nq69/A8`,
+    smartphone        = `group_dd5nq69/A9`,
+    computer          = `group_dd5nq69/A10`,
+    sewing_machine    = `group_dd5nq69/A11`,
+    livestock         = `group_dd5nq69/A12`,
+    income_source     = Income_Source,
+    food_exp          = Food_expenditure,
+    non_food_exp      = Non_food_expenditure,
+    income            = Income,
+    migration         = Migration,
+    loan              = Loan,
+    loan_purpose      = Loan_purpose,
+    loan_source       = Loan_Source,
+    loan_amount       = Loan_Amount,
+    awas_yojna        = `group_uz6ik40/Awas_Yojna`,
+    ujjwala           = `group_uz6ik40/Ujjwala_Yojana`,
+    pds               = `group_uz6ik40/PDS`,
+    ayushman          = `group_uz6ik40/Ayushman_Bharat`,
+    DAY               = `group_uz6ik40/Deendayal_Antyodaya_Yojana`,
+    pm_svanidhi       = `group_uz6ik40/PM_Street_Vendor_Loan`,
+    pension           = `group_uz6ik40/Pension`,
+    swachh_bharat     = `group_uz6ik40/Swachh_Bharat_Mission`,
+    ladli_behna       = `group_uz6ik40/Ladli_Behna_Yojana`,
+    total_members     = Total_members,
+    rain_leak_yes     = `Rain_leak/1`,
+    rain_leak_no      = `Rain_leak/0`,
+    hot_summer_yes    = `Hot_summer/1`,
+    hot_summer_no     = `Hot_summer/0`,
+    ownership_own     = `Ownership/1`,
+    ownership_rent    = `Ownership/2`,
+    ownership_informal = `Ownership/3`,
+    ownership_other   = `Ownership/4`,
+    cooking_lpg       = `Cooking_fuel/1`,
+    cooking_elec      = `Cooking_fuel/2`,
+    cooking_kerosene  = `Cooking_fuel/3`,
+    cooking_firewood  = `Cooking_fuel/4`,
+    cooking_other     = `Cooking_fuel/5`,
+    loan_source_bank  = `Loan_Source/1`,
+    loan_source_ml    = `Loan_Source/2`,
+    loan_source_rel   = `Loan_Source/3`,
+    loan_source_shg   = `Loan_Source/4`,
+    loan_source_other = `Loan_Source/5`)
+```
+
+Renames the household variables.
+

@@ -1,0 +1,933 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Data, Democracy and Development",
+    "section": "",
+    "text": "Occupational Track\n\n\n\n\nWhat does development mean, and how do we measure it? My course work in R and Quarto: notes, code, assessments and field research.\n\n\nStart with DDD 2 DDD 3 DDD 4"
+  },
+  {
+    "objectID": "index.html#courses",
+    "href": "index.html#courses",
+    "title": "Data, Democracy and Development",
+    "section": "Courses",
+    "text": "Courses\n\n\n\n02\n\n\nIntroduction to Programming and Basic Data Analysis\n\nJan 2026 · UGRD-10480-1\n\nR and RStudio from the first line of code: data frames, functions, loops, cleaning, plots and tables, using household survey data.\n\nOverview Class notes Final project\n\n\n\n\n\n03\n\n\nSummer Field Practice Course\n\nSummer 2026 · UGRD-10002-1\n\nField research in urban slums: cleaning the survey data and asking what shapes women’s employment.\n\nOverview Data cleaning Slides\n\n\n\n\n\n04\n\n\nStatistical Principles through Computation\n\nJul 2026 · UGRD-10594-1\n\nStatistics done with code: exploratory analysis, correlation, simple and multiple regression.\n\nOverview Class notes"
+  },
+  {
+    "objectID": "index.html#about-the-track",
+    "href": "index.html#about-the-track",
+    "title": "Data, Democracy and Development",
+    "section": "About the track",
+    "text": "About the track\n\n\nMeasuring development\nWhat development means, and how it can be measured with data.\n\n\nIncome and inequality\nIncome, inequality and socio-economic mobility, seen in real data.\n\n\nCapabilities\nAmartya Sen’s capabilities framework as a way to see well-being.\n\n\nRight to Information\nInformation as a tool for accountability in a democracy.\n\n\nData ethics\nWho collects data, who is counted, and the politics behind it.\n\n\nCode you can read\nEvery page shows its R code, and each page can be saved as a PDF."
+  },
+  {
+    "objectID": "ddd3/women_employment.html#introduction",
+    "href": "ddd3/women_employment.html#introduction",
+    "title": "What Determines Women’s Employment in Urban Slums?",
+    "section": "Introduction",
+    "text": "Introduction\n\n\nMotivation\n\n\nWomen’s employment is a key indicator of empowerment and household welfare\nUrban slum women face multiple barriers — family structure, marital status, and social norms\nVery few studies focus on determinants of employment among slum women in India\nThis study uses data from four urban slums — Atal Ayub Nagar, Nawab Colony, J.P Nagar, Arif Nagar\n\n\n\nResearch Question\n\n“What determines women’s employment in urban slums — role of marital status, family structure, and age?”\n\n\n\nDependent: Currently Working (Yes/No)\nIndependent: Marital Status, Family Type, Age\nControls: Education, In-laws Alive"
+  },
+  {
+    "objectID": "ddd3/women_employment.html#data-cleaning",
+    "href": "ddd3/women_employment.html#data-cleaning",
+    "title": "What Determines Women’s Employment in Urban Slums?",
+    "section": "Data Cleaning",
+    "text": "Data Cleaning\n\n\nData collected from four urban slums in 2026\nAge = 0 replaced with NA  — data entry error\nEducation &gt; 16 replaced with NA  — beyond questionnaire range\nMarital status recoded: Widowed / Separated = 1, others = 0\nEducation grouped into six categories: Illiterate, Primary, Middle, Secondary, Higher Secondary, Graduate & Above\nAge grouped into six categories: 18–24, 25–34, 35–44, 45–54, 55–64, 65+\nBinary dummies created for each education and age category"
+  },
+  {
+    "objectID": "ddd3/women_employment.html#summary-statistics-slums",
+    "href": "ddd3/women_employment.html#summary-statistics-slums",
+    "title": "What Determines Women’s Employment in Urban Slums?",
+    "section": "Summary Statistics (Slums)",
+    "text": "Summary Statistics (Slums)\n\n\n\n\n\nVariable\nN\nMean\nStd. Dev.\nMin\nMax\n\n\n\n\nPanel A: Dependent Variable\n\n\n\n\n\n\n\n    Currently Working (Yes = 1)\n639\n0.178\n0.383\n0\n1\n\n\nPanel B: Independent Variables\n\n\n\n\n\n\n\n  Marital Status\n\n\n\n\n\n\n\n    Married (Yes = 1)\n642\n0.863\n0.344\n0\n1\n\n\n    Unmarried (Yes = 1)\n642\n0.006\n0.079\n0\n1\n\n\n    Widowed / Separated (Yes = 1)\n643\n0.131\n0.337\n0\n1\n\n\n  Family Structure\n\n\n\n\n\n\n\n    Joint Family (Yes = 1)\n642\n0.340\n0.474\n0\n1\n\n\n  Age Groups\n\n\n\n\n\n\n\n    Age 18–24\n641\n0.061\n0.239\n0\n1\n\n\n    Age 25–34\n641\n0.298\n0.458\n0\n1\n\n\n    Age 35–44  (ref)\n641\n0.293\n0.456\n0\n1\n\n\n    Age 45–54\n641\n0.192\n0.394\n0\n1\n\n\n    Age 55–64\n641\n0.120\n0.325\n0\n1\n\n\n    Age 65+\n641\n0.036\n0.186\n0\n1\n\n\nPanel C: Control Variables\n\n\n\n\n\n\n\n  Education Categories\n\n\n\n\n\n\n\n    Illiterate — No Schooling (ref)\n627\n0.327\n0.469\n0\n1\n\n\n    Primary — 1 to 5 years\n627\n0.144\n0.351\n0\n1\n\n\n    Middle — 6 to 8 years\n627\n0.215\n0.411\n0\n1\n\n\n    Secondary — 9 to 10 years\n627\n0.187\n0.390\n0\n1\n\n\n    Higher Secondary — 11 to 12 years\n627\n0.078\n0.269\n0\n1\n\n\n    Graduate and Above — 13 to 16 years\n627\n0.049\n0.217\n0\n1\n\n\n  In-laws\n\n\n\n\n\n\n\n    Father-in-law Alive (Yes = 1)\n640\n0.291\n0.454\n0\n1\n\n\n    Mother-in-law Alive (Yes = 1)\n639\n0.469\n0.499\n0\n1"
+  },
+  {
+    "objectID": "ddd3/women_employment.html#employment-by-marital-status",
+    "href": "ddd3/women_employment.html#employment-by-marital-status",
+    "title": "What Determines Women’s Employment in Urban Slums?",
+    "section": "Employment by Marital Status",
+    "text": "Employment by Marital Status\n\n\nFigure 1: Women’s Employment Status by Marital Status"
+  },
+  {
+    "objectID": "ddd3/women_employment.html#employment-by-family-structure",
+    "href": "ddd3/women_employment.html#employment-by-family-structure",
+    "title": "What Determines Women’s Employment in Urban Slums?",
+    "section": "Employment by Family Structure",
+    "text": "Employment by Family Structure\n\n\nFigure 2: Women’s Employment Status by Family Structure"
+  },
+  {
+    "objectID": "ddd3/women_employment.html#employment-by-age-group",
+    "href": "ddd3/women_employment.html#employment-by-age-group",
+    "title": "What Determines Women’s Employment in Urban Slums?",
+    "section": "Employment by Age Group",
+    "text": "Employment by Age Group\n\n\nFigure 3: Women’s Employment Status by Age Group"
+  },
+  {
+    "objectID": "ddd3/women_employment.html#employment-by-education-level",
+    "href": "ddd3/women_employment.html#employment-by-education-level",
+    "title": "What Determines Women’s Employment in Urban Slums?",
+    "section": "Employment by Education Level",
+    "text": "Employment by Education Level\n\n\nFigure 4: Women’s Employment Status by Education Level"
+  },
+  {
+    "objectID": "ddd3/women_employment.html#key-findings",
+    "href": "ddd3/women_employment.html#key-findings",
+    "title": "What Determines Women’s Employment in Urban Slums?",
+    "section": "Key Findings",
+    "text": "Key Findings\n\n\n📊 Marital Status\n\nMarried → 14.2% working\nUnmarried → 25.0% working\nWidowed / Separated → 41.7% working\nEconomic necessity drives work after loss of spouse\n\n\n\n\n🏠 Family Structure\n\nNuclear family → 20.1% working\nJoint family → 13.4% working\nJoint families restrict women’s mobility and work decisions\n\n\n\n\n📅 Age & Education\n\nWomen aged 35–44 have highest employment (24.7%)\nMore educated women work less — social restrictions in slum communities"
+  },
+  {
+    "objectID": "ddd3/women_employment.html#thank-you",
+    "href": "ddd3/women_employment.html#thank-you",
+    "title": "What Determines Women’s Employment in Urban Slums?",
+    "section": "Thank You",
+    "text": "Thank You\n\nRamesh Beniwal\nWomen’s Employment Study | Urban Slums | 2026"
+  },
+  {
+    "objectID": "ddd2/assessment_4.html",
+    "href": "ddd2/assessment_4.html",
+    "title": "Assessment 4",
+    "section": "",
+    "text": "rm(list = ls())"
+  },
+  {
+    "objectID": "ddd2/assessment_4.html#setup",
+    "href": "ddd2/assessment_4.html#setup",
+    "title": "Assessment 4",
+    "section": "",
+    "text": "rm(list = ls())"
+  },
+  {
+    "objectID": "ddd2/assessment_4.html#load-required-libraries",
+    "href": "ddd2/assessment_4.html#load-required-libraries",
+    "title": "Assessment 4",
+    "section": "Load Required Libraries",
+    "text": "Load Required Libraries\n\n# Library loading\nlibrary(tibble)   \nlibrary(dplyr)    \nlibrary(rlang)    \nlibrary(lobstr)  \nlibrary(rio)      \nlibrary(ggplot2)\nlibrary(purrr)\nlibrary(labelled)\nlibrary(stargazer)\nlibrary(scales)\nlibrary(janitor)\nlibrary(flextable)"
+  },
+  {
+    "objectID": "ddd2/assessment_4.html#ihds-data-exercise",
+    "href": "ddd2/assessment_4.html#ihds-data-exercise",
+    "title": "Assessment 4",
+    "section": "IHDS Data exercise",
+    "text": "IHDS Data exercise\n\nlibrary(tidyverse)\nlibrary(rio)\nHH_DATA &lt;- import(\"../data/ddd2/RAW_DATA/ICPSR_36151/HH_DATA/HH_DATA.dta\")\n\nIHDS&lt;- subset(HH_DATA, select= c(ID18C, ID13, URBAN2011))\nview(IHDS)"
+  },
+  {
+    "objectID": "ddd2/assessment_4.html#assessment-environment",
+    "href": "ddd2/assessment_4.html#assessment-environment",
+    "title": "Assessment 4",
+    "section": "Assessment Environment",
+    "text": "Assessment Environment\n\n#All assessment answers and variables stored here in this environment\nassessment_3 &lt;- new.env()"
+  },
+  {
+    "objectID": "ddd2/assessment_4.html#question-1-data-cleaning-and-visualization",
+    "href": "ddd2/assessment_4.html#question-1-data-cleaning-and-visualization",
+    "title": "Assessment 4",
+    "section": "Question 1: Data Cleaning and Visualization",
+    "text": "Question 1: Data Cleaning and Visualization"
+  },
+  {
+    "objectID": "ddd2/assessment_4.html#plot-box-to-check-outliers",
+    "href": "ddd2/assessment_4.html#plot-box-to-check-outliers",
+    "title": "Assessment 4",
+    "section": "plot box to check outliers",
+    "text": "plot box to check outliers\n\nassessment_3$df_clean |&gt;\n  filter(!is.na(income_pc), !is.na(geo_zone)) |&gt; \n  filter(income_pc &gt; 0, income_pc &lt; 100000) |&gt; \n  ggplot(aes(x = geo_zone, y = income_pc)) +\n  geom_boxplot() +\n  labs(\n    x = \"Geographical Zone\",\n    y = \"Per Capita Income\",\n    title = \"Box Plot of Per Capita Income across Geographical Zones- Ramesh Beniwal\") +\n  theme_minimal() +\n  theme(\n    plot.title = element_text(hjust = 0.5),\n    legend.position = \"right\")"
+  },
+  {
+    "objectID": "ddd2/assessment_4.html#final-check",
+    "href": "ddd2/assessment_4.html#final-check",
+    "title": "Assessment 4",
+    "section": "Final Check",
+    "text": "Final Check\n\nls(assessment_3)\n\n[1] \"df\"       \"df_clean\" \"raw_data\""
+  },
+  {
+    "objectID": "ddd2/assessment_2.html#setup",
+    "href": "ddd2/assessment_2.html#setup",
+    "title": "Assessment 2",
+    "section": "Setup",
+    "text": "Setup\n\nrm(list = ls())"
+  },
+  {
+    "objectID": "ddd2/assessment_2.html#load-required-libraries",
+    "href": "ddd2/assessment_2.html#load-required-libraries",
+    "title": "Assessment 2",
+    "section": "Load Required Libraries",
+    "text": "Load Required Libraries\n\nlibrary(tibble)   \nlibrary(dplyr)    \nlibrary(rlang)    \nlibrary(lobstr)  \nlibrary(rio)\nlibrary(ggplot2)\nlibrary(labelled)\nlibrary(stargazer)\nlibrary(scales)\nlibrary(ivo.table)\nlibrary(flextable)\nlibrary(janitor)\nlibrary(tinytex)"
+  },
+  {
+    "objectID": "ddd2/assessment_2.html#exam-environment",
+    "href": "ddd2/assessment_2.html#exam-environment",
+    "title": "Assessment 2",
+    "section": "Exam Environment",
+    "text": "Exam Environment\n\nASSESSMENT2_DDD &lt;- new.env()"
+  },
+  {
+    "objectID": "ddd2/assessment_2.html#question-1",
+    "href": "ddd2/assessment_2.html#question-1",
+    "title": "Assessment 2",
+    "section": "Question 1",
+    "text": "Question 1\n\nASSESSMENT2_DDD &lt;- new.env()\n\nASSESSMENT2_DDD$x &lt;- 5\n\nwhile(ASSESSMENT2_DDD$x &lt;= 15) {\n  print(ASSESSMENT2_DDD$x)\n  ASSESSMENT2_DDD$x &lt;- ASSESSMENT2_DDD$x + 2\n}\n\n[1] 5\n[1] 7\n[1] 9\n[1] 11\n[1] 13\n[1] 15"
+  },
+  {
+    "objectID": "ddd2/assessment_2.html#question-2-a-explanitation-of-the-code",
+    "href": "ddd2/assessment_2.html#question-2-a-explanitation-of-the-code",
+    "title": "Assessment 2",
+    "section": "Question 2 (a) Explanitation of the code",
+    "text": "Question 2 (a) Explanitation of the code\n\nx&lt;- 13 \nrepeat{\n  x= x+2\n  print(x)\n  if ( x == 25 ) break\n}\n\n[1] 15\n[1] 17\n[1] 19\n[1] 21\n[1] 23\n[1] 25\n\n# During the execution of the code variable x starts with a value of 13. In each iteration of the repeat loop, x is incremented by 2 and its new value is printed. The loop continues until x reaches 25, at which point the break statement is executed, terminating or we can say stoping the loop. The output will be like as printed in the console:"
+  },
+  {
+    "objectID": "ddd2/assessment_2.html#question-2-b-modification-of-the-code",
+    "href": "ddd2/assessment_2.html#question-2-b-modification-of-the-code",
+    "title": "Assessment 2",
+    "section": "Question 2 (b) Modification of the code",
+    "text": "Question 2 (b) Modification of the code\n\nx &lt;- 13\nrepeat{\n  print(x)\n  x = x + 2\n  if (x &gt; 25) break\n}\n\n[1] 13\n[1] 15\n[1] 17\n[1] 19\n[1] 21\n[1] 23\n[1] 25"
+  },
+  {
+    "objectID": "ddd2/assessment_2.html#question-3-a-creating-a-data-frame-with-2-columns-and-6-rows",
+    "href": "ddd2/assessment_2.html#question-3-a-creating-a-data-frame-with-2-columns-and-6-rows",
+    "title": "Assessment 2",
+    "section": "Question 3 (a) Creating a data frame with 2 columns and 6 rows",
+    "text": "Question 3 (a) Creating a data frame with 2 columns and 6 rows\n\ndf &lt;- tibble::tibble(\n  a = rnorm(6),\n  b = rnorm(6))\n\ndf\n\n# A tibble: 6 × 2\n        a      b\n    &lt;dbl&gt;  &lt;dbl&gt;\n1 -0.0459 -0.143\n2  0.244  -0.193\n3  0.752   2.02 \n4 -1.23    1.17 \n5 -0.730   0.718\n6 -0.533   1.84"
+  },
+  {
+    "objectID": "ddd2/assessment_2.html#question-3-b-function-defining-to-calculate-mean-deviation",
+    "href": "ddd2/assessment_2.html#question-3-b-function-defining-to-calculate-mean-deviation",
+    "title": "Assessment 2",
+    "section": "Question 3 (b) function defining to calculate mean deviation",
+    "text": "Question 3 (b) function defining to calculate mean deviation\n\nmean_dev &lt;- function(x) {\n  x - mean(x, na.rm = TRUE)}\nmean_dev(df$a)\n\n[1]  0.2112923  0.5013320  1.0093820 -0.9733525 -0.4724039 -0.2762499\n\nmean_dev(df$b)\n\n[1] -1.0451072 -1.0951159  1.1179410  0.2643910 -0.1841368  0.9420279\n\n## The output of the above code will be the mean deviation of each value in columns a and b from their means. The mean deviation is calculated by subtracting the mean of the column from each individual value in that column. The output will be displayed here;"
+  },
+  {
+    "objectID": "ddd2/assessment_2.html#question-3-c",
+    "href": "ddd2/assessment_2.html#question-3-c",
+    "title": "Assessment 2",
+    "section": "Question 3 (c)",
+    "text": "Question 3 (c)\n\nlibrary(purrr)\n\ndf$c &lt;- mean_dev(df$a)\ndf$d &lt;- mean_dev(df$b)\n\ndf\n\n# A tibble: 6 × 4\n        a      b      c      d\n    &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;\n1 -0.0459 -0.143  0.211 -1.05 \n2  0.244  -0.193  0.501 -1.10 \n3  0.752   2.02   1.01   1.12 \n4 -1.23    1.17  -0.973  0.264\n5 -0.730   0.718 -0.472 -0.184\n6 -0.533   1.84  -0.276  0.942"
+  },
+  {
+    "objectID": "ddd2/assessment_2.html#question-4-ihds-data-exercise",
+    "href": "ddd2/assessment_2.html#question-4-ihds-data-exercise",
+    "title": "Assessment 2",
+    "section": "Question 4 ( IHDS Data exercise )",
+    "text": "Question 4 ( IHDS Data exercise )\n\nlibrary(tidyverse)\nlibrary(rio)\nHH_DATA &lt;- import(\"../data/ddd2/RAW_DATA/ICPSR_36151/HH_DATA/HH_DATA.dta\")\n\nIHDS&lt;- subset(HH_DATA, select= c(ID18C, ID13, URBAN2011))\nview(IHDS)"
+  },
+  {
+    "objectID": "ddd2/assessment_2.html#question-4-data-cleaning-and-variable-labeling",
+    "href": "ddd2/assessment_2.html#question-4-data-cleaning-and-variable-labeling",
+    "title": "Assessment 2",
+    "section": "Question 4 ( Data Cleaning and Variable Labeling )",
+    "text": "Question 4 ( Data Cleaning and Variable Labeling )\n\nlibrary(labelled)\n\nunique(IHDS$ID18C)\n\n [1]  0 10  4  8 16  2  9  5 NA  3 12  6  7 11 15  1 14 13\n\ntable(IHDS$ID18C)\n\n\n    0     1     2     3     4     5     6     7     8     9    10    11    12 \n25569   214  1502  1271  1817  3712   586  1050  1606   567  2206   149   697 \n   13    14    15    16 \n   27    22   565   251 \n\nattributes(IHDS$ID18C)\n\nNULL\n\nunique(IHDS$ID13)\n\n[1]  3 NA  2  5  6  4  1\n\ntable(IHDS$ID13)\n\n\n    1     2     3     4     5     6 \n 2192  9665 17056  8941  3644   568 \n\nattributes(IHDS$ID13)\n\nNULL\n\nunique(IHDS$URBAN2011)\n\n[1] 0 1\n\ntable(IHDS$URBAN2011)\n\n\n    0     1 \n27579 14573 \n\nattributes(IHDS$URBAN2011)\n\nNULL\n\nIHDS &lt;- IHDS |&gt; mutate(ID18C = ifelse(ID18C == 16, NA, ID18C))\n\nIHDS &lt;- IHDS |&gt; filter(ID18C &lt;= 15 & ID18C &gt;= 0 | is.na(ID18C))\n\nvar_label(IHDS$ID18C) &lt;- \"Years of Education\"\nvar_label(IHDS$ID13) &lt;- \"Caste Category\"\nvar_label(IHDS$URBAN2011) &lt;- \"Urban Residence\"\n\nIHDS$ID18C &lt;- as.numeric(IHDS$ID18C)\nIHDS$ID13 &lt;- as.factor(IHDS$ID13)\nIHDS$URBAN2011 &lt;- as.factor(IHDS$URBAN2011)\n\ntable(IHDS$ID18C)\n\n\n    0     1     2     3     4     5     6     7     8     9    10    11    12 \n25569   214  1502  1271  1817  3712   586  1050  1606   567  2206   149   697 \n   13    14    15 \n   27    22   565 \n\ntable(IHDS$ID13)\n\n\n    1     2     3     4     5     6 \n 2192  9665 17056  8941  3644   568 \n\ntable(IHDS$URBAN2011)\n\n\n    0     1 \n27579 14573 \n\nview(IHDS)"
+  },
+  {
+    "objectID": "ddd2/assessment_2.html#question-4-recoding-caste-variable",
+    "href": "ddd2/assessment_2.html#question-4-recoding-caste-variable",
+    "title": "Assessment 2",
+    "section": "Question 4 (Recoding Caste Variable )",
+    "text": "Question 4 (Recoding Caste Variable )\n\nunique(IHDS$ID13)\n\n[1] 3    &lt;NA&gt; 2    5    6    4    1   \nLevels: 1 2 3 4 5 6\n\ntable(IHDS$ID13)\n\n\n    1     2     3     4     5     6 \n 2192  9665 17056  8941  3644   568 \n\nIHDS &lt;- IHDS |&gt; \n  mutate(caste_r = case_when(\n    ID13 == 1 | ID13 == 2 ~ 1,\n    ID13 == 3 ~ 3,\n    ID13 == 4 ~ 4,\n    ID13 == 5 ~ 5,\n    TRUE ~ NA_real_\n  ))\n\ntable(IHDS$caste_r)\n\n\n    1     3     4     5 \n11857 17056  8941  3644 \n\nvar_label(IHDS$caste_r) &lt;- \"Caste Category Recoded\"\nval_labels(IHDS$caste_r) &lt;- c(\n  General = 1,\n  OBC = 3,\n  SC = 4,\n  ST = 5)\n\nattributes(IHDS$caste_r)\n\n$labels\nGeneral     OBC      SC      ST \n      1       3       4       5 \n\n$label\n[1] \"Caste Category Recoded\"\n\n$class\n[1] \"haven_labelled\" \"vctrs_vctr\"     \"double\""
+  },
+  {
+    "objectID": "ddd2/assessment_2.html#question-4-summary-statistics",
+    "href": "ddd2/assessment_2.html#question-4-summary-statistics",
+    "title": "Assessment 2",
+    "section": "Question 4 (SUmmary Statistics)",
+    "text": "Question 4 (SUmmary Statistics)\n\nlibrary(stargazer)\n\nIHDS_summary &lt;- IHDS |&gt; \n  select(ID18C, caste_r, URBAN2011) |&gt;\n  mutate(\n    ID18C = as.numeric(ID18C),\n    caste_recoded = as.numeric(caste_r),\n    URBAN2011 = as.numeric(URBAN2011)\n  )\n\nIHDS_summary |&gt;\n  as.data.frame() |&gt;\n  stargazer(\n    type = \"text\",\n    title = \"Summary Statistics\",\n    summary.stat = c(\"n\", \"mean\", \"sd\", \"min\", \"max\"),\n    digits = 2,\n    out = \"Results/summary_statistics.txt\"\n  )\n\n\nSummary Statistics\n==========================================\nStatistic       N    Mean St. Dev. Min Max\n------------------------------------------\nID18C         41,560 2.48   3.74    0  15 \ncaste_r       41,498 2.82   1.30    1   5 \nURBAN2011     42,152 1.35   0.48    1   2 \ncaste_recoded 41,498 2.82   1.30    1   5 \n------------------------------------------"
+  },
+  {
+    "objectID": "ddd2/assessment_2.html#extra-code-not-run",
+    "href": "ddd2/assessment_2.html#extra-code-not-run",
+    "title": "Assessment 2",
+    "section": "Extra code (not run)",
+    "text": "Extra code (not run)\n\n# STEP 1: Create family size and constructed per capita income\nFINAL_EXAM$HH_DATA_q1 &lt;- HH_DATA |&gt;\n  mutate(\n    family_size = NADULTM + NADULTF + NCHILDM + NCHILDF + NTEENM + NTEENF + NELDERM + NELDERF,\n    income_pc_constructed = INCOME / family_size\n  ) |&gt;\n  select(INCOME, family_size, income_pc_constructed, INCOMEPC)\n\n# Check for missing values\nsummary(FINAL_EXAM$HH_DATA_q1)\n\n# STEP 2: Remove rows with missing or zero values\nFINAL_EXAM$df_q1_clean &lt;- FINAL_EXAM$HH_DATA_q1 |&gt;\n  filter(!is.na(income_pc_constructed), \n         !is.na(INCOMEPC),\n         income_pc_constructed &gt; 0,\n         INCOMEPC &gt; 0)\n\n# STEP 3: Plot correlation between constructed and given per capita income\nFINAL_EXAM$df_q1_clean |&gt;\n  ggplot(aes(x = INCOMEPC, y = income_pc_constructed)) +\n  geom_point(alpha = 0.5, size = 2) +\n  geom_smooth(se = TRUE, method = \"lm\", color = \"red\") +\n  labs(\n    title = \"Correlation between Constructed and Given Per Capita Income (Ramesh Beniwal)\",\n    x = \"Given Per Capita Income (Rupees) [Ramesh Beniwal]\",\n    y = \"Constructed Per Capita Income (Rupees) [Ramesh Beniwal]\"\n  ) +\n  theme_minimal() +\n  theme(\n    plot.title = element_text(hjust = 0.5, face = \"bold\", size = 12),\n    axis.title = element_text(size = 10)\n  )\n\n# STEP 4: Calculate correlation coefficient\nFINAL_EXAM$correlation_q1 &lt;- cor(FINAL_EXAM$df_q1_clean$INCOMEPC, \n                                   FINAL_EXAM$df_q1_clean$income_pc_constructed)\nprint(paste(\"Correlation coefficient:\", round(FINAL_EXAM$correlation_q1, 4)))\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n# =====================================================\n# QUESTION 2: Validate Income-Consumption Assumption\n# =====================================================\n\n# STEP 1: Prepare data with both income variables\nFINAL_EXAM$HH_DATA_q2 &lt;- HH_DATA |&gt;\n  mutate(\n    family_size = NADULTM + NADULTF + NCHILDM + NCHILDF + NTEENM + NTEENF + NELDERM + NELDERF,\n    income_pc_constructed = INCOME / family_size\n  ) |&gt;\n  select(income_pc_constructed, INCOMEPC, COPC) |&gt;\n  filter(income_pc_constructed &gt; 0, INCOMEPC &gt; 0, COPC &gt; 0)\n\n# Check data\nprint(\"Summary before outlier removal (Q2):\")\nsummary(FINAL_EXAM$HH_DATA_q2)\n\n# STEP 2: Remove outliers (filter high values like you did in scripts)\nFINAL_EXAM$HH_DATA_q2 &lt;- FINAL_EXAM$HH_DATA_q2 |&gt;\n  filter(COPC &lt; 100000, income_pc_constructed &lt; 100000, INCOMEPC &lt; 100000)\n\n# Check cleaned data\nprint(\"Summary after outlier removal (Q2):\")\nsummary(FINAL_EXAM$HH_DATA_q2)\n\n# STEP 3: PLOT 1 - Both relationships on same graph\nFINAL_EXAM$HH_DATA_q2 |&gt;\n  ggplot() +\n  geom_smooth(aes(x = INCOMEPC, y = COPC, color = \"Given Per Capita Income\"), \n              se = TRUE, method = \"lm\", linewidth = 1.2) +\n  geom_smooth(aes(x = income_pc_constructed, y = COPC, color = \"Constructed Per Capita Income\"), \n              se = TRUE, method = \"lm\", linewidth = 1.2) +\n  scale_x_continuous(labels = scales::comma) +\n  scale_y_continuous(labels = scales::comma) +\n  labs(\n    title = \"Income-Consumption Relationship: Validation of Assumption (Ramesh Beniwal)\",\n    x = \"Per Capita Income (Rupees) [Ramesh Beniwal]\",\n    y = \"Per Capita Consumption (Rupees) [Ramesh Beniwal]\",\n    color = \"Income Measure [Ramesh Beniwal]\"\n  ) +\n  theme_minimal() +\n  theme(\n    plot.title = element_text(hjust = 0.5, face = \"bold\", size = 12),\n    axis.title = element_text(size = 10),\n    legend.position = \"bottom\"\n  )\n\n# STEP 4: PLOT 2 - Faceted comparison\nFINAL_EXAM$HH_DATA_q2_long &lt;- FINAL_EXAM$HH_DATA_q2 |&gt;\n  pivot_longer(cols = c(INCOMEPC, income_pc_constructed),\n               names_to = \"income_type\",\n               values_to = \"income_value\") |&gt;\n  mutate(income_type = case_when(\n    income_type == \"INCOMEPC\" ~ \"Given Per Capita Income\",\n    income_type == \"income_pc_constructed\" ~ \"Constructed Per Capita Income\"\n  ))\n\nFINAL_EXAM$HH_DATA_q2_long |&gt;\n  ggplot(aes(x = income_value, y = COPC, color = income_type)) +\n  geom_point(alpha = 0.3, size = 1.5) +\n  geom_smooth(se = TRUE, method = \"lm\", linewidth = 1) +\n  facet_wrap(~income_type, scales = \"free_x\") +\n  scale_x_continuous(labels = scales::comma) +\n  scale_y_continuous(labels = scales::comma) +\n  labs(\n    title = \"Income-Consumption Relationship by Income Type (Ramesh Beniwal)\",\n    x = \"Per Capita Income (Rupees) [Ramesh Beniwal]\",\n    y = \"Per Capita Consumption (Rupees) [Ramesh Beniwal]\",\n    color = \"Income Measure [Ramesh Beniwal]\"\n  ) +\n  theme_minimal() +\n  theme(\n    plot.title = element_text(hjust = 0.5, face = \"bold\", size = 12),\n    axis.title = element_text(size = 10),\n    legend.position = \"bottom\"\n  )\n\n# STEP 5: Calculate correlations\nFINAL_EXAM$cor_given_income &lt;- cor(FINAL_EXAM$HH_DATA_q2$INCOMEPC, FINAL_EXAM$HH_DATA_q2$COPC)\nFINAL_EXAM$cor_constructed_income &lt;- cor(FINAL_EXAM$HH_DATA_q2$income_pc_constructed, FINAL_EXAM$HH_DATA_q2$COPC)\n\n# STEP 6: Print results\nprint(\"QUESTION 2: VALIDATION OF INCOME-CONSUMPTION ASSUMPTION\")\nprint(paste(\"Correlation (Given Per Capita Income vs Consumption):\", round(FINAL_EXAM$cor_given_income, 4)))\nprint(paste(\"Correlation (Constructed Per Capita Income vs Consumption):\", round(FINAL_EXAM$cor_constructed_income, 4)))\nprint(\"INTERPRETATION: ASSUMPTION VALIDATED - Both income measures show POSITIVE correlation with consumption\")\nprint(\"As per capita income increases, per capita consumption also increases\")"
+  },
+  {
+    "objectID": "ddd2/midterm.html#setup",
+    "href": "ddd2/midterm.html#setup",
+    "title": "Mid-Semester Exam",
+    "section": "Setup",
+    "text": "Setup\n\nrm(list = ls())"
+  },
+  {
+    "objectID": "ddd2/midterm.html#load-required-libraries",
+    "href": "ddd2/midterm.html#load-required-libraries",
+    "title": "Mid-Semester Exam",
+    "section": "Load Required Libraries",
+    "text": "Load Required Libraries\n\n#Library loading\nlibrary(tibble)   \nlibrary(dplyr)    \nlibrary(rlang)    \nlibrary(lobstr)  \nlibrary(rio)"
+  },
+  {
+    "objectID": "ddd2/midterm.html#exam-environment",
+    "href": "ddd2/midterm.html#exam-environment",
+    "title": "Mid-Semester Exam",
+    "section": "Exam Environment",
+    "text": "Exam Environment\n\n# All exam answers and variables \nMIDSEM_DDD &lt;- new.env()"
+  },
+  {
+    "objectID": "ddd2/midterm.html#question-1",
+    "href": "ddd2/midterm.html#question-1",
+    "title": "Mid-Semester Exam",
+    "section": "Question 1",
+    "text": "Question 1\n\n# Step 1: Create a character \n# c() creating  multiple vectors\nMIDSEM_DDD$performance &lt;- c(\"Poor\", \"Average\", \"Good\", \"Excellent\",\n                             \"Good\", \"Poor\", \"Excellent\", \"Average\")\n# Step 2: Convert to an ordered factor\nMIDSEM_DDD$perf_factor &lt;- factor(MIDSEM_DDD$performance,\n                                  levels = c(\"Poor\", \"Average\", \"Good\", \"Excellent\"),\n                                  ordered = TRUE)\n# Step 3: Print the factor to see categories and their order\nMIDSEM_DDD$perf_factor\n\n[1] Poor      Average   Good      Excellent Good      Poor      Excellent\n[8] Average  \nLevels: Poor &lt; Average &lt; Good &lt; Excellent\n\n# Step 4: Verify the internal representation\nas.numeric(MIDSEM_DDD$perf_factor) \n\n[1] 1 2 3 4 3 1 4 2\n\ntypeof(MIDSEM_DDD$perf_factor)\n\n[1] \"integer\"\n\nlevels(MIDSEM_DDD$perf_factor) #shows the order of categories\n\n[1] \"Poor\"      \"Average\"   \"Good\"      \"Excellent\"\n\nstr(MIDSEM_DDD$perf_factor) # shows the full structure of the factor\n\n Ord.factor w/ 4 levels \"Poor\"&lt;\"Average\"&lt;..: 1 2 3 4 3 1 4 2"
+  },
+  {
+    "objectID": "ddd2/midterm.html#question-2",
+    "href": "ddd2/midterm.html#question-2",
+    "title": "Mid-Semester Exam",
+    "section": "Question 2",
+    "text": "Question 2\n\n# Step 1 Creatig a data frame as per the question \nMIDSEM_DDD$df &lt;- tibble(  # using tibble to create a data frame \n  individual_id      = c(1, 2, 3, 4, 5),        \n  years_of_education = c(10, 14, 12, 16, 8),           \n  employment_status  = c(\"Employed\", \"Unemployed\",\n                         \"Employed\", \"Employed\",\n                         \"Unemployed\"),                 \n  monthly_income     = c(25000, 0, 18000, 45000, 0)     \n)\nprint(MIDSEM_DDD$df)\n\n# A tibble: 5 × 4\n  individual_id years_of_education employment_status monthly_income\n          &lt;dbl&gt;              &lt;dbl&gt; &lt;chr&gt;                      &lt;dbl&gt;\n1             1                 10 Employed                   25000\n2             2                 14 Unemployed                     0\n3             3                 12 Employed                   18000\n4             4                 16 Employed                   45000\n5             5                  8 Unemployed                     0\n\n# -----------------------------------------------\n# Part (a): Rename variables to better names\n# rename() changes column names\n# new_name = old_name is the syntax\n# -----------------------------------------------\n\nMIDSEM_DDD$df &lt;- MIDSEM_DDD$df %&gt;%\n  rename(\n    edu_years      = years_of_education,   # shorter and cleaner name\n    income_monthly = monthly_income        # clearer name\n  )\n\nprint(MIDSEM_DDD$df)\n\n# A tibble: 5 × 4\n  individual_id edu_years employment_status income_monthly\n          &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;                      &lt;dbl&gt;\n1             1        10 Employed                   25000\n2             2        14 Unemployed                     0\n3             3        12 Employed                   18000\n4             4        16 Employed                   45000\n5             5         8 Unemployed                     0\n\n# -----------------------------------------------\n# Part (b): Create new variable - more than 12 years of education?\n# mutate() adds a new column to the data frame\n# ifelse(condition, value_if_true, value_if_false)\n# -----------------------------------------------\n\nMIDSEM_DDD$df &lt;- MIDSEM_DDD$df %&gt;%\n  mutate(\n    high_edu = ifelse(edu_years &gt; 12, TRUE, FALSE)\n  )\nprint(MIDSEM_DDD$df)\n\n# A tibble: 5 × 5\n  individual_id edu_years employment_status income_monthly high_edu\n          &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;                      &lt;dbl&gt; &lt;lgl&gt;   \n1             1        10 Employed                   25000 FALSE   \n2             2        14 Unemployed                     0 TRUE    \n3             3        12 Employed                   18000 FALSE   \n4             4        16 Employed                   45000 TRUE    \n5             5         8 Unemployed                     0 FALSE   \n\n# -----------------------------------------------\n# Part (c): Subset - keep only individuals with high_edu == TRUE\n# filter() keeps only rows that match the condition\n# -----------------------------------------------\n\nMIDSEM_DDD$df_subset &lt;- MIDSEM_DDD$df %&gt;%\n  filter(high_edu == TRUE)  \nprint(MIDSEM_DDD$df_subset)\n\n# A tibble: 2 × 5\n  individual_id edu_years employment_status income_monthly high_edu\n          &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;                      &lt;dbl&gt; &lt;lgl&gt;   \n1             2        14 Unemployed                     0 TRUE    \n2             4        16 Employed                   45000 TRUE    \n\n# -----------------------------------------------\n# Part (d): Keep only individual_id and high_edu columns\n# select() chooses which columns to keep\n# -----------------------------------------------\n\nMIDSEM_DDD$df_final &lt;- MIDSEM_DDD$df_subset %&gt;%\n  select(individual_id, high_edu)  \nprint(MIDSEM_DDD$df_final)\n\n# A tibble: 2 × 2\n  individual_id high_edu\n          &lt;dbl&gt; &lt;lgl&gt;   \n1             2 TRUE    \n2             4 TRUE"
+  },
+  {
+    "objectID": "ddd2/midterm.html#question-3",
+    "href": "ddd2/midterm.html#question-3",
+    "title": "Mid-Semester Exam",
+    "section": "Question 3",
+    "text": "Question 3\n\n# Step 1: Create data frame with 4 numeric variables\nMIDSEM_DDD$df3 &lt;- data.frame(\n  a = c(10, 20, 30, 40, 50, 60),    \n  b = c(5, 15, 25, 35, 45, 55),     \n  c = c(2, 4, 6, 8, 10, 12),        \n  d = c(1, 3, 5, 7, 9, 11)          \n)\nprint(MIDSEM_DDD$df3)\n\n   a  b  c  d\n1 10  5  2  1\n2 20 15  4  3\n3 30 25  6  5\n4 40 35  8  7\n5 50 45 10  9\n6 60 55 12 11\n\n# -----------------------------------------------\n# Part (a): Replace some elements with NA (missing values)\n# [row, column] targets a specific cell in the data frame\n# -----------------------------------------------\n\nMIDSEM_DDD$df3[2, \"a\"] &lt;- NA    \nMIDSEM_DDD$df3[4, \"b\"] &lt;- NA    \nMIDSEM_DDD$df3[1, \"c\"] &lt;- NA    # row 1 of column c becomes missing\nMIDSEM_DDD$df3[3, \"d\"] &lt;- NA    \n\nprint(MIDSEM_DDD$df3)\n\n   a  b  c  d\n1 10  5 NA  1\n2 NA 15  4  3\n3 30 25  6 NA\n4 40 NA  8  7\n5 50 45 10  9\n6 60 55 12 11\n\n# -----------------------------------------------\n# Part (b): Write Z-score function\n# Z-score formula: (value - mean) / standard deviation\n# na.rm = TRUE means ignore NA values during calculation\n# -----------------------------------------------\n\nMIDSEM_DDD$z_score &lt;- function(x) {\n  (x - mean(x, na.rm = TRUE)) / sd(x, na.rm = TRUE)\n} # x is the input numeric vector\n  # mean(x, na.rm=TRUE) calculates average, skipping NA values (same for sd also)\n \n\n# -----------------------------------------------\n# Part (c): Apply function to transform the data frame\n# mutate() creates or changes columns\n# -----------------------------------------------\n\nMIDSEM_DDD$df3_change &lt;- MIDSEM_DDD$df3 %&gt;%\n  mutate(\n    # Replace columns a, b, c with their z-scores\n    across(c(a, b, c), MIDSEM_DDD$z_score),\n\n    # New variable mean_deviation = each value of d minus the mean of d\n    mean_deviation = d - mean(d, na.rm = TRUE),\n\n    # New variable sum_z = sum of z-scores of a, b, c for each row\n    # rowSums() adds values across columns row by row\n    sum_z = rowSums(across(c(a, b, c)), na.rm = TRUE)\n  )\n\nprint(MIDSEM_DDD$df3_change)\n\n           a          b          c  d mean_deviation     sum_z\n1 -1.4556507 -1.1573828         NA  1           -5.2 -2.613033\n2         NA -0.6751400 -1.2649111  3           -3.2 -1.940051\n3 -0.4159002 -0.1928971 -0.6324555 NA             NA -1.241253\n4  0.1039750         NA  0.0000000  7            0.8  0.103975\n5  0.6238503  0.7715885  0.6324555  9            2.8  2.027894\n6  1.1437255  1.2538313  1.2649111 11            4.8  3.662468"
+  },
+  {
+    "objectID": "ddd2/midterm.html#question-4",
+    "href": "ddd2/midterm.html#question-4",
+    "title": "Mid-Semester Exam",
+    "section": "Question 4",
+    "text": "Question 4\n\n# Step 1: Create a numeric vector \nMIDSEM_DDD$vec &lt;- c(4, 8, 15, 16, 23, 42)\n\n# Step 2: Calculate the mean of the full vector ONCE before the loop\nMIDSEM_DDD$vec_mean &lt;- mean(MIDSEM_DDD$vec)   # calculates the average\n\n# Step 3: Write the absolute deviation function\nMIDSEM_DDD$abs_dev &lt;- function(x, mean_val) {\n  sqrt((x - mean_val)^2)\n}\n\n# Step 4: Preallocate empty output vector \n# numeric(length(vec)) creates a vector of zeros, same size as vec\nMIDSEM_DDD$result4 &lt;- numeric(length(MIDSEM_DDD$vec))\n\n# Step 5: Apply function element by element using for loop\n# i goes from 1 to length of vec\nfor (i in 1:length(MIDSEM_DDD$vec)) {\n  MIDSEM_DDD$result4[i] &lt;- MIDSEM_DDD$abs_dev(MIDSEM_DDD$vec[i], MIDSEM_DDD$vec_mean)\n}\nprint(MIDSEM_DDD$result4)\n\n[1] 14 10  3  2  5 24\n\n# -----------------------------------------------\n# WITHOUT for loop - same result in one line\n# -----------------------------------------------\n# sqrt() of squared difference gives absolute deviation\nMIDSEM_DDD$result4_no_loop &lt;- sqrt((MIDSEM_DDD$vec - mean(MIDSEM_DDD$vec))^2)\nprint(MIDSEM_DDD$result4_no_loop)\n\n[1] 14 10  3  2  5 24"
+  },
+  {
+    "objectID": "ddd2/midterm.html#question-5",
+    "href": "ddd2/midterm.html#question-5",
+    "title": "Mid-Semester Exam",
+    "section": "Question 5",
+    "text": "Question 5\n\n# We need two vectors for two loops\nMIDSEM_DDD$outer_vec &lt;- c(2, 4, 6)    # outer values\nMIDSEM_DDD$inner_vec &lt;- c(10, 20)     # inner values\n\n# Nested for loop:\n# For each i in (2, 4, 6), loop through all j in (10, 20)\nfor (i in MIDSEM_DDD$outer_vec) {     \n  for (j in MIDSEM_DDD$inner_vec) {     \n    print(c(i, j))                     \n  }\n}\n\n[1]  2 10\n[1]  2 20\n[1]  4 10\n[1]  4 20\n[1]  6 10\n[1]  6 20"
+  },
+  {
+    "objectID": "ddd2/midterm.html#question-6",
+    "href": "ddd2/midterm.html#question-6",
+    "title": "Mid-Semester Exam",
+    "section": "Question 6",
+    "text": "Question 6\n\n# Create data frame with 5 employees\nMIDSEM_DDD$df6 &lt;- tibble(\n  id     = c(1, 2, 3, 4, 5),\n  salary = c(20000, 35000, 28000, 42000, 31000)\n)\n\n# hike = fixed amount added to every employee salary\nMIDSEM_DDD$hike &lt;- 5000\n\n# -----------------------------------------------\n# PART (a) - Create empty vector FIRST before loop\n# storing length in a simple variable n\n# -----------------------------------------------\nn &lt;- length(MIDSEM_DDD$df6$salary)   # n = 5\nnew_salary &lt;- numeric(n)              # creates --&gt; 0 0 0 0 0\n\n# -----------------------------------------------\n# PART (b) - For loop to calculate new salary\n# -----------------------------------------------\nfor (i in 1:n) {\n  new_salary[i] &lt;- MIDSEM_DDD$df6$salary[i] + MIDSEM_DDD$hike\n}\nnew_salary\n\n[1] 25000 40000 33000 47000 36000\n\n# -----------------------------------------------\n# PART (c) - Add new_salary as a column in df6\n# -----------------------------------------------\nMIDSEM_DDD$df6$new_salary &lt;- new_salary\nMIDSEM_DDD$df6\n\n# A tibble: 5 × 3\n     id salary new_salary\n  &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt;\n1     1  20000      25000\n2     2  35000      40000\n3     3  28000      33000\n4     4  42000      47000\n5     5  31000      36000\n\n# -----------------------------------------------\n# PART (d) - WITHOUT for loop\n# -----------------------------------------------\nMIDSEM_DDD$df6$new_salary_v2 &lt;- MIDSEM_DDD$df6$salary + MIDSEM_DDD$hike\nMIDSEM_DDD$df6\n\n# A tibble: 5 × 4\n     id salary new_salary new_salary_v2\n  &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt;         &lt;dbl&gt;\n1     1  20000      25000         25000\n2     2  35000      40000         40000\n3     3  28000      33000         33000\n4     4  42000      47000         47000\n5     5  31000      36000         36000"
+  },
+  {
+    "objectID": "ddd2/midterm.html#question-7",
+    "href": "ddd2/midterm.html#question-7",
+    "title": "Mid-Semester Exam",
+    "section": "Question 7",
+    "text": "Question 7\n\n# Step 1: Create a vector of marks for 10 students\nMIDSEM_DDD$marks &lt;- c(95, 82, 67, 55, 78, 91, 60, 45, 73, 88)\n\n# Step 2: Preallocate empty character vector to store grades\nMIDSEM_DDD$grades &lt;- character(length(MIDSEM_DDD$marks))\n\n# Step 3: For loop with if-else to check each student's marks\nfor (i in 1:length(MIDSEM_DDD$marks)) {\n\n  if (MIDSEM_DDD$marks[i] &gt;= 90) {   # marks &gt;= 90 gets Grade A\n    MIDSEM_DDD$grades[i] &lt;- \"Grade A\"\n\n  } else if (MIDSEM_DDD$marks[i] &gt;= 75) { # marks &gt;= 75 but less than 90 gets Grade B\n    MIDSEM_DDD$grades[i] &lt;- \"Grade B\"\n\n  } else if (MIDSEM_DDD$marks[i] &gt;= 60) {    # marks &gt;= 60 but less than 75 gets Grade C\n    MIDSEM_DDD$grades[i] &lt;- \"Grade C\"\n\n  } else {      # marks below 60 gets Fail\n    MIDSEM_DDD$grades[i] &lt;- \"Fail\"\n  }\n}\n\n\nprint(MIDSEM_DDD$grades)\n\n [1] \"Grade A\" \"Grade B\" \"Grade C\" \"Fail\"    \"Grade B\" \"Grade A\" \"Grade C\"\n [8] \"Fail\"    \"Grade C\" \"Grade B\"\n\n# Step 5: Show marks and grades together\nMIDSEM_DDD$result_q7 &lt;- tibble(\n  marks  = MIDSEM_DDD$marks,   \n  grades = MIDSEM_DDD$grades    \n)\n\nprint(MIDSEM_DDD$result_q7)\n\n# A tibble: 10 × 2\n   marks grades \n   &lt;dbl&gt; &lt;chr&gt;  \n 1    95 Grade A\n 2    82 Grade B\n 3    67 Grade C\n 4    55 Fail   \n 5    78 Grade B\n 6    91 Grade A\n 7    60 Grade C\n 8    45 Fail   \n 9    73 Grade C\n10    88 Grade B"
+  },
+  {
+    "objectID": "ddd2/midterm.html#final-check",
+    "href": "ddd2/midterm.html#final-check",
+    "title": "Mid-Semester Exam",
+    "section": "Final Check",
+    "text": "Final Check\n\nls(MIDSEM_DDD)\n\n [1] \"abs_dev\"         \"df\"              \"df_final\"        \"df_subset\"      \n [5] \"df3\"             \"df3_change\"      \"df6\"             \"grades\"         \n [9] \"hike\"            \"inner_vec\"       \"marks\"           \"outer_vec\"      \n[13] \"perf_factor\"     \"performance\"     \"result_q7\"       \"result4\"        \n[17] \"result4_no_loop\" \"vec\"             \"vec_mean\"        \"z_score\""
+  },
+  {
+    "objectID": "ddd2/final_exam.html#setup",
+    "href": "ddd2/final_exam.html#setup",
+    "title": "Final Exam",
+    "section": "Setup",
+    "text": "Setup\n\nrm(list = ls())"
+  },
+  {
+    "objectID": "ddd2/final_exam.html#load-required-libraries",
+    "href": "ddd2/final_exam.html#load-required-libraries",
+    "title": "Final Exam",
+    "section": "Load Required Libraries",
+    "text": "Load Required Libraries\n\nlibrary(tibble)   \nlibrary(dplyr)    \nlibrary(rlang)    \nlibrary(lobstr)  \nlibrary(rio)\nlibrary(ggplot2)\nlibrary(labelled)\nlibrary(stargazer)\nlibrary(scales)\nlibrary(ivo.table)\nlibrary(flextable)\nlibrary(janitor)\nlibrary(tinytex)\nlibrary(labelled)"
+  },
+  {
+    "objectID": "ddd2/final_exam.html#exam-environment",
+    "href": "ddd2/final_exam.html#exam-environment",
+    "title": "Final Exam",
+    "section": "Exam Environment",
+    "text": "Exam Environment\n\nFINAL_EXAM &lt;- new.env()"
+  },
+  {
+    "objectID": "ddd2/final_exam.html#data-loading",
+    "href": "ddd2/final_exam.html#data-loading",
+    "title": "Final Exam",
+    "section": "Data Loading",
+    "text": "Data Loading\n\nlibrary(tidyverse)\nlibrary(rio)\n#1 HH_DATA\nHH_DATA &lt;- import(\"../data/ddd2/RAW_DATA/ICPSR_36151/HH_DATA/HH_DATA.dta\")\nView(HH_DATA)"
+  },
+  {
+    "objectID": "ddd2/final_exam.html#question-1",
+    "href": "ddd2/final_exam.html#question-1",
+    "title": "Final Exam",
+    "section": "QUESTION 1",
+    "text": "QUESTION 1\n\n## Creating my own per capita income from household  income variable \n# creating household size from given variables \n\nFINAL_EXAM$HH_DATA_q1 &lt;- HH_DATA |&gt;\n  mutate(\n    family_size = NADULTM + NADULTF + NCHILDM + NCHILDF + NTEENM + NTEENF + NELDERM + NELDERF,\n    income_pc_constructed = INCOME / family_size) |&gt;\n  select(INCOME, family_size, income_pc_constructed, INCOMEPC)\n\n# Check for missing values\nsummary(FINAL_EXAM$HH_DATA_q1)\n\n     INCOME          family_size     income_pc_constructed    INCOMEPC      \n Min.   :-1037040   Min.   : 1.000   Min.   :-289008       Min.   :-289008  \n 1st Qu.:   39000   1st Qu.: 4.000   1st Qu.:   8000       1st Qu.:   8975  \n Median :   73500   Median : 5.000   Median :  15000       Median :  16583  \n Mean   :  127760   Mean   : 5.373   Mean   :  26521       Mean   :  29402  \n 3rd Qu.:  144000   3rd Qu.: 7.000   3rd Qu.:  29421       3rd Qu.:  32400  \n Max.   :11360000   Max.   :34.000   Max.   :4161000       Max.   :4161000  \n\n# Some Oultiers in Income and Per Capita so we need to remove them\n#Remove negative values and zeros\nFINAL_EXAM$HH_DATA_q1 &lt;- FINAL_EXAM$HH_DATA_q1 |&gt;\n  filter(income_pc_constructed &gt; 0, INCOMEPC &gt; 0)\n\n\n# CHECKING SUMMARY AGAIN TO MATCH \nsummary(FINAL_EXAM$HH_DATA_q1)\n\n     INCOME          family_size     income_pc_constructed    INCOMEPC        \n Min.   :     100   Min.   : 1.000   Min.   :     16.7     Min.   :     16.7  \n 1st Qu.:   40230   1st Qu.: 4.000   1st Qu.:   8255.5     1st Qu.:   9193.2  \n Median :   75000   Median : 5.000   Median :  15233.3     Median :  16833.3  \n Mean   :  129987   Mean   : 5.378   Mean   :  26990.7     Mean   :  29922.6  \n 3rd Qu.:  145708   3rd Qu.: 7.000   3rd Qu.:  29889.8     3rd Qu.:  32837.1  \n Max.   :11360000   Max.   :34.000   Max.   :4161000.0     Max.   :4161000.0  \n\n# THERE IS DIFFERENCE BETWEEN INCOMEPC AND income_pc_constructed lets know this difference\nFINAL_EXAM$HH_DATA_q1 &lt;- FINAL_EXAM$HH_DATA_q1 |&gt;\n  mutate(\n    difference = income_pc_constructed - INCOMEPC,\n    pct_diff = (difference / INCOMEPC) * 100)\n\nsummary(FINAL_EXAM$HH_DATA_q1$difference)\n\n   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. \n-825000   -2309       0   -2932       0    4500 \n\nsummary(FINAL_EXAM$HH_DATA_q1$pct_diff)\n\n   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. \n-50.000 -16.667   0.000  -9.094   0.000  25.000 \n\n# So if we look into summary of it the median is around 0  for both cases means our correlation is strong and this difference is may be due to some small differences in household sizes and rounding of eorrors. \n\n\n## CORRELATION BETWEEEN THE CONSTRUCTED ADN ORIGINAL INCOMEPC \n# PLOT CORRELATION BETWEEN CONSTRUCTED AND GIVEN PER CAPITA INCOME\nFINAL_EXAM$HH_DATA_q1 |&gt;\n  ggplot(aes(x = INCOMEPC, y = income_pc_constructed)) +\n  geom_point(alpha = 0.5, size = 2, color = \"steelblue\") +\n  geom_abline(intercept = 0, slope = 1, color = \"red\", linetype = \"dashed\", linewidth = 1) +\n  geom_smooth(se = TRUE, method = \"lm\", color = \"darkblue\", linewidth = 1) +\n  scale_y_continuous(labels = scales::comma) +\n  scale_x_continuous(labels = scales::comma) +\n  annotate(\"text\", x = Inf, y = -Inf, label = \"Red dashed line = Perfect correlation\", \n           hjust = 1.1, vjust = -0.5, color = \"red\", size = 3) +\n  annotate(\"text\", x = Inf, y = -Inf, label = \"Blue line = Actual relationship\", \n           hjust = 1.1, vjust = -2, color = \"darkblue\", size = 3) +\n  labs(\n    title = \"Correlation between Constructed and Given Per Capita Income (Ramesh Beniwal)\",\n    x = \"Given Per Capita Income (Rupees) [Ramesh Beniwal]\",\n    y = \"Constructed Per Capita Income (Rupees) [Ramesh Beniwal]\",\n    subtitle = \"Check Median difference above = 0 | Correlation is very strong\") +\n  theme_minimal() +\n  theme(\n    plot.title = element_text(hjust = 0.5, face = \"bold\", size = 12),\n    plot.subtitle = element_text(hjust = 0.5, size = 10, color = \"gray40\"),\n    axis.title = element_text(size = 10))\n\n\n\n\n\n\n\n# coefficient for correlation\nFINAL_EXAM$correlation_q1 &lt;- cor(FINAL_EXAM$HH_DATA_q1$INCOMEPC,FINAL_EXAM$HH_DATA_q1$income_pc_constructed)\n\nprint(paste(\"Correlation coefficient (Q1):\", round(FINAL_EXAM$correlation_q1, 2)))\n\n[1] \"Correlation coefficient (Q1): 0.98\"\n\nprint(paste(\"Interpretation: Very strong positive correlation - constructed and given per capita income are highly similar\"))\n\n[1] \"Interpretation: Very strong positive correlation - constructed and given per capita income are highly similar\""
+  },
+  {
+    "objectID": "ddd2/final_exam.html#question-2",
+    "href": "ddd2/final_exam.html#question-2",
+    "title": "Final Exam",
+    "section": "QUESTION 2",
+    "text": "QUESTION 2\n\n# ASSUMPTION - Y GOES UP ~ C GOES UP \n# VALIDATION BY RELATIONSHIP BETWEEN COPC AND income_pc_constructed\n\n# PART1\nFINAL_EXAM$HH_DATA_q2 &lt;- HH_DATA |&gt;\n  mutate(\n    family_size = NADULTM + NADULTF + NCHILDM + NCHILDF + NTEENM + NTEENF + NELDERM + NELDERF,\n    income_pc_constructed = INCOME / family_size\n  ) |&gt;\n  select(income_pc_constructed, INCOMEPC, COPC) |&gt;\n  filter(income_pc_constructed &gt; 0, INCOMEPC &gt; 0, COPC &gt; 0)\n\nsummary(FINAL_EXAM$HH_DATA_q2)\n\n income_pc_constructed    INCOMEPC              COPC        \n Min.   :     16.7     Min.   :     16.7   Min.   :    180  \n 1st Qu.:   8258.2     1st Qu.:   9194.2   1st Qu.:  12791  \n Median :  15233.7     Median :  16833.3   Median :  19435  \n Mean   :  26983.1     Mean   :  29915.6   Mean   :  27071  \n 3rd Qu.:  29889.8     3rd Qu.:  32849.3   3rd Qu.:  30929  \n Max.   :4161000.0     Max.   :4161000.0   Max.   :1461484  \n\n\n\n#BOXPLOT - Check outliers in COPC before filtering\nFINAL_EXAM$HH_DATA_q2 |&gt;\n  ggplot(aes(y = COPC)) +\n  geom_boxplot(fill = \"orange\", color = \"black\", linewidth = 1) +\n  scale_y_continuous(labels = scales::comma) +\n  labs(\n    title = \"Boxplot of Per Capita Consumption - Identifying Outliers (Ramesh Beniwal)\",\n    y = \"Per Capita Consumption (Rupees) [Ramesh Beniwal]\") +\n  theme_minimal() +\n  theme(\n    plot.title = element_text(hjust = 0.5, face = \"bold\", size = 12),\n    axis.title = element_text(size = 10),\n    axis.text.x = element_blank())\n\n\n\n\n\n\n\n\n\n# BOXPLOT FOR CONSTRUCTED PER CAPITA INCOME\nFINAL_EXAM$HH_DATA_q2 |&gt;\n  ggplot(aes(y = income_pc_constructed)) +\n  geom_boxplot(fill = \"skyblue\", color = \"black\", linewidth = 1) +\n  scale_y_continuous(labels = scales::comma) +\n  labs(\n    title = \"Boxplot of Constructed Per Capita Income - Identifying Outliers (Ramesh Beniwal)\",\n    y = \"Constructed Per Capita Income (Rupees) [Ramesh Beniwal]\") +\n  theme_minimal() +\n  theme(\n    plot.title = element_text(hjust = 0.5, face = \"bold\", size = 12),\n    axis.title = element_text(size = 10),\n    axis.text.x = element_blank())\n\n\n\n\n\n\n\n\n\n# BOXPLOT FOR GIVEN PER CAPITA INCOME\nFINAL_EXAM$HH_DATA_q2 |&gt;\n  ggplot(aes(y = INCOMEPC)) +\n  geom_boxplot(fill = \"lightgreen\", color = \"black\", linewidth = 1) +\n  scale_y_continuous(labels = scales::comma) +\n  labs(\n    title = \"Boxplot of Given Per Capita Income - Identifying Outliers (Ramesh Beniwal)\",\n    y = \"Given Per Capita Income (Rupees) [Ramesh Beniwal]\") +\n  theme_minimal() +\n  theme(\n    plot.title = element_text(hjust = 0.5, face = \"bold\", size = 12),\n    axis.title = element_text(size = 10),\n    axis.text.x = element_blank())\n\n\n\n\n\n\n\n\n\n# Remove outliers from COPC and other variables\nFINAL_EXAM$HH_DATA_q2 &lt;- FINAL_EXAM$HH_DATA_q2 |&gt;\n  filter(COPC &lt; 600000, income_pc_constructed &lt; 900000, INCOMEPC &lt; 900000)\n\nsummary(FINAL_EXAM$HH_DATA_q2)\n\n income_pc_constructed    INCOMEPC              COPC       \n Min.   :    16.67     Min.   :    16.67   Min.   :   180  \n 1st Qu.:  8254.53     1st Qu.:  9192.07   1st Qu.: 12790  \n Median : 15225.00     Median : 16825.00   Median : 19426  \n Mean   : 26530.25     Mean   : 29398.94   Mean   : 26790  \n 3rd Qu.: 29841.50     3rd Qu.: 32800.00   3rd Qu.: 30906  \n Max.   :895400.00     Max.   :895400.00   Max.   :584348  \n\n\n\n# Both relationships on same graph\nFINAL_EXAM$HH_DATA_q2 |&gt;\n  ggplot() +\n  geom_smooth(aes(x = INCOMEPC, y = COPC, color = \"Given Per Capita Income\"), \n              se = TRUE, method = \"lm\", linewidth = 1.2) +\n  geom_smooth(aes(x = income_pc_constructed, y = COPC, color = \"Constructed Per Capita Income\"), \n              se = TRUE, method = \"lm\", linewidth = 1.2) +\n  scale_x_continuous(labels = scales::comma) +\n  scale_y_continuous(labels = scales::comma) +\n  labs(\n    title = \"Income-Consumption Relationship: Validation of Assumption (Ramesh Beniwal)\",\n    x = \"Per Capita Income (Rupees) [Ramesh Beniwal]\",\n    y = \"Per Capita Consumption (Rupees) [Ramesh Beniwal]\",\n    color = \"Income Measure [Ramesh Beniwal]\",\n    subtitle = \"shows positive relationship- As income increases, consumption increases\") +\n  theme_minimal() +\n  theme(\n    plot.title = element_text(hjust = 0.5, face = \"bold\", size = 12),\n    plot.subtitle = element_text(hjust = 0.5, size = 10, color = \"gray40\"),\n    axis.title = element_text(size = 10),\n    legend.position = \"bottom\")\n\n\n\n\n\n\n\n\n\n# side by side\nFINAL_EXAM$HH_DATA_q2_side&lt;- FINAL_EXAM$HH_DATA_q2 |&gt;\n  pivot_longer(cols = c(INCOMEPC, income_pc_constructed),\n               names_to = \"income_type\",\n               values_to = \"income_value\") |&gt;\n  mutate(income_type = case_when(\n    income_type == \"INCOMEPC\" ~ \"Given Per Capita Income\",\n    income_type == \"income_pc_constructed\" ~ \"Constructed Per Capita Income\"))\n\nFINAL_EXAM$HH_DATA_q2_side|&gt;\n  ggplot(aes(x = income_value, y = COPC, color = income_type)) +\n  geom_point(alpha = 0.3, size = 1.5) +\n  geom_smooth(se = TRUE, method = \"lm\", linewidth = 1) +\n  facet_wrap(~income_type, scales = \"free_x\") +\n  scale_x_continuous(labels = scales::comma) +\n  scale_y_continuous(labels = scales::comma) +\n  labs(\n    title = \"Income-Consumption Relationship by Income Type (Ramesh Beniwal)\",\n    x = \"Per Capita Income (Rupees) [Ramesh Beniwal]\",\n    y = \"Per Capita Consumption (Rupees) [Ramesh Beniwal]\",\n    color = \"Income Measure [Ramesh Beniwal]\") +\n  theme_minimal() +\n  theme(\n    plot.title = element_text(hjust = 0.5, face = \"bold\", size = 12),\n    axis.title = element_text(size = 10),\n    legend.position = \"bottom\")\n\n\n\n\n\n\n\n\n\n#Cor calculation for both \nFINAL_EXAM$cor_given_income &lt;- cor(FINAL_EXAM$HH_DATA_q2$INCOMEPC, FINAL_EXAM$HH_DATA_q2$COPC)\nFINAL_EXAM$cor_constructed_income &lt;- cor(FINAL_EXAM$HH_DATA_q2$income_pc_constructed, FINAL_EXAM$HH_DATA_q2$COPC)\n\n\n# Results / Print\nprint(paste(\"Correlation (Given Per Capita Income vs Consumption):\", round(FINAL_EXAM$cor_given_income, 2)))\n\n[1] \"Correlation (Given Per Capita Income vs Consumption): 0.49\"\n\nprint(paste(\"Correlation (Constructed Per Capita Income vs Consumption):\", round(FINAL_EXAM$cor_constructed_income, 2)))\n\n[1] \"Correlation (Constructed Per Capita Income vs Consumption): 0.48\"\n\nprint(\"INTERPRETATION: ASSUMPTION VALIDATED - Both income measures show POSITIVE correlation with consumption\")\n\n[1] \"INTERPRETATION: ASSUMPTION VALIDATED - Both income measures show POSITIVE correlation with consumption\"\n\nprint(\"As per capita income increases, per capita consumption also increases\")\n\n[1] \"As per capita income increases, per capita consumption also increases\""
+  },
+  {
+    "objectID": "ddd2/final_exam.html#interpretation",
+    "href": "ddd2/final_exam.html#interpretation",
+    "title": "Final Exam",
+    "section": "INTERPRETATION",
+    "text": "INTERPRETATION\n\n\n\n\n\n\nNoteKey Findings\n\n\n\nCorrelation Coefficients: - Given Per Capita Income vs Consumption: 0.49 - Constructed Per Capita Income vs Consumption: 0.48\nInterpretation:\nBoth per capita income measures ( manually and given ) show a POSITIVE correlation (approximately 0.48-0.49) with per capita consumption, which VALIDATES the assumption that as income increases, consumption also increases.\nKey Observations:\n\nPositive Relationship: The correlation of ~0.48 indicates a positive relationship between income and consumption.\nBoth Measures Consistent: The constructed per capita income and given per capita income show nearly identical correlations (0.49 vs 0.48), confirming our constructed income variable is valid.\nAssumption Validated: The economic assumption that consumption increases with income is CONFIRMED as per Household Data we are using.\n\nConclusion:\nThe analysis provides evidence supporting the economic thinking and assumption of positive income-consumption relationship. Both graphs and correlation shows that their is positive relationships between them and positively related to each other."
+  },
+  {
+    "objectID": "ddd2/class_notes.html",
+    "href": "ddd2/class_notes.html",
+    "title": "Class Notes",
+    "section": "",
+    "text": "My class notes in R. The code is shown as I wrote it in class; it is not run when the site is built."
+  },
+  {
+    "objectID": "ddd2/class_notes.html#setup",
+    "href": "ddd2/class_notes.html#setup",
+    "title": "Class Notes",
+    "section": "Setup",
+    "text": "Setup\n\nrm(list=ls())\n\n\nlibrary()\n\nClears the workspace and sets the working directory."
+  },
+  {
+    "objectID": "ddd2/class_notes.html#matrix-factor-and-list",
+    "href": "ddd2/class_notes.html#matrix-factor-and-list",
+    "title": "Class Notes",
+    "section": "Matrix, factor and list",
+    "text": "Matrix, factor and list\n\nm1&lt;- matrix(c(0,0,1,0,0,0,0,1,1,0,0,0),nrow=4,byrow=TRUE)\nm1\n\nv1&lt;- c(\"A\",\"E\",\"C\",\"D\")\nf1&lt;- factor(v1, levels=c(\"A\",\"C\",\"D\",\"E\"), ordered = T)\nf1\n\nf2&lt;- factor(c(\"a\", \"b\", \"c\", \"a\", \"b\", \"c\")) # categorical variableal\nf2\n\nn1&lt;- as.numeric(f2)\nn1\n\nl1&lt;- list(\n  1:3,\n  a=c(\"a\",\"b\"),\n  c(T,F,T,F),\n  c(2,3,5.6))\ntypeof(l1)\nstr(l1)\n\nBuilds a matrix, an ordered factor and a list, and checks their types."
+  },
+  {
+    "objectID": "ddd2/class_notes.html#tibble-and-data-frame",
+    "href": "ddd2/class_notes.html#tibble-and-data-frame",
+    "title": "Class Notes",
+    "section": "Tibble and data frame",
+    "text": "Tibble and data frame\n\n# difference between tibble and data.frame\n# we always need r to use tibble package\nlibrary(tibble) # used to create data frame \ndf1&lt;- tibble(x=1:3, y=letters[1:3]) # we dont need to check indicators of data\ndf1\ndf2&lt;- data.frame(x=1:3, y=letters[1:3])\ndf2\ndf3&lt;- tibble(x=1:3,y=x*2)\ndf3\n\n?tibble\n\n# generating rows names in data frame\ndf4&lt;- data.frame(\n  age= c(25,30,35),\n  gender= c(\"M\",\"F\",\"M\"),\n  row.names = c(\"ID1\",\"ID2\",\"ID3\"))\ndf4\n\nA tibble does not change names or types and lets a new column use an earlier one; a data frame can carry row names."
+  },
+  {
+    "objectID": "ddd2/class_notes.html#missing-values-and-z-scores",
+    "href": "ddd2/class_notes.html#missing-values-and-z-scores",
+    "title": "Class Notes",
+    "section": "Missing values and z-scores",
+    "text": "Missing values and z-scores\n\nlibrary(dplyr)\n\ndf &lt;- data.frame(\n  a = c(1, 2, 3, 4),\n  b = c(6, 8, NA, 7),\n  c = c(5, 7, 8, 9))\n\n\nf&lt;- function(x){x=(x-mean(x)/sd(x))}\nbs&lt;- f(df$b)\nbs\n\n\n\n\ndf &lt;- df %&gt;%\n  mutate(\n    c = ifelse(c == 8, NA, c), #ifelse(test, yes, no)\n    b = ifelse(is.na(b), 2, b))\ndf\n\n# ifelse commend used to remove outliers , like replace -ve income by na , this is data cleaning \n\n\nz_score &lt;- function(x) {\n  (x - mean(x, na.rm = TRUE)) / sd(x, na.rm = TRUE)}\n\ndf |&gt;\n  mutate(\n    across(c(a, b, c, d), z_score))\n\n# Apply z-score function to columns a, b, c, and d.\n\n\n\nz_score &lt;- function(x) {\n  (x - mean(x)) / sd(x)\n}\n\ndf |&gt;\n  mutate(\n    across(c(a, b, c, d), z_score)\n  )\n\nifelse() replaces unwanted values with NA (data cleaning), and across() applies one function to several columns."
+  },
+  {
+    "objectID": "ddd2/class_notes.html#environments",
+    "href": "ddd2/class_notes.html#environments",
+    "title": "Class Notes",
+    "section": "Environments",
+    "text": "Environments\n\nenvironment()\nls()\nrm(list= ls())\nx&lt;-50\n\n# save same variable in different environments \nnew_envv&lt;- new.env()\nnew_envv$x&lt;- 50\nls(new_envv)\nparent.env(new_envv)\n#rlang used to create a new env with many variables \nlibrary(rlang)\ne2&lt;- env(a= 120, b= 100, z=20)\n\n# function creates it is own env \nf&lt;- function(){a&lt;-4\nb&lt;-4\na+b\n}\nf()\n\nVariables live in environments; a function creates its own environment."
+  },
+  {
+    "objectID": "ddd2/class_notes.html#for-loops",
+    "href": "ddd2/class_notes.html#for-loops",
+    "title": "Class Notes",
+    "section": "For loops",
+    "text": "For loops\n\n# LOOPS IN R \n# to run same task many times repeating in same form \nloops&lt;- new.env()\nloops$x&lt;- c(1,2,3,4,5)\n\nfor (i in loops$x) {\n  print(i^2)\n}\n\nloops$y&lt;- 1:20\nfor (i in loops$y) {\n  print(i^2)\n}\n\n\nloops$z&lt;-c(20,30,40)\nfor(r in loops$z){print(r^2)}\n\nfor(a in loops$a&lt;-c(1,2,3,4,5)){print(a^2)}\n\nloops$xx&lt;- numeric(5)\nfor(w in 1:3){loops$xx[w]&lt;-w^2}\n\n\nloops$e&lt;- c(2,6,9)\nloops$f &lt;- numeric(length(loops$e))\nfor(f in 1:length(loops$e)){loops$f[f] &lt;- loops$e[f]^2}\nloops$f\n\n \n# \nx &lt;- 1:5\nfor (i in x) {\n  print(paste0(i, i^2,  i^3))}\n\n\n\n\nfor (i in 1:5) {     \n  for (j in 1:10) {    \n    print(i * j)\n  }\n}\n\n\n\nx &lt;- c(4, 7, 10, 13, 16)\nz_values &lt;- numeric(length(x))\nfor (i in 1:length(x)) {\n  z_values[i] &lt;- (x[i] - mean(x)) / sd(x)}\nz_values\n\n\n\nloops$table &lt;- 2:4\n\nfor (i in loops$table) {\n  cat(\"\\nTable of\", i, \"\\n\")\n  for (j in loops$table) {\n    cat(i, \"*\", j, \"=\", i*j, \"\\n\")\n  }\n}\n\n\n\n\n# random variables :- the outcomes of the an experiment \nx&lt;- c(-1,3,4)\nfor (i in x){if (i&lt;0) {print(\"Negative\")} else\n  {print(\"Positive\")}}\n\n\n## nested for loop \nfor (i in vec1) {\n  for (j in vec2) {\n    for (k in vecn) {\n      \n      # your code here\n      \n    }\n  }\n}\n\n\n\nfor (i in 1:3){\n  for(j in 1:2){\n    print(i+j)\n  } \n}\n\n\n\n\n\n\n\n\nf&lt;- function(x){\n  x^2\n}\n\n# save these results of the functions \nv &lt;- c(1,2,3,4,5,6)\nx &lt;- numeric(length(v))  # it generated empty vector  holding empty values  \nfor (i in 1:length(x)) {\n  x[i] &lt;- (v[i])^2\n}\nx\n\n\nfor (i in 1:3) {\n  for (j in 1:3) {\n    print(c(i, j))\n  }\n}\n\nA for loop repeats the same task; the results are saved in a vector created before the loop."
+  },
+  {
+    "objectID": "ddd2/class_notes.html#while-and-repeat-loops",
+    "href": "ddd2/class_notes.html#while-and-repeat-loops",
+    "title": "Class Notes",
+    "section": "While and repeat loops",
+    "text": "While and repeat loops\n\n# while loop \n\n#while(logical condition) {command here}\n\nx&lt;- 1\nwhile(x&lt;=5){print(x)\n  x&lt;-x+1\n}\n \n# position of the code matters alot \nwhile(x&lt;=5){  x&lt;-x+1\nprint(x)\n}\n\n\n# store the  result \nx&lt;-1 \ny&lt;- c()\nwhile(x&lt;5){y&lt;- c(y,x)\n  x&lt;- x+1\n}\n\n#y&lt;-c(y,x) “Take the current values in y, add x to them, and save the result again in y.”\n\nx&lt;-1 \ny&lt;- c()\nwhile(x&lt;5){y&lt;- c(y,x)\nx&lt;- x+1\n}\n\nx&lt;- 1\nwhile(x&lt;14){print(x)\n  x&lt;-x+2\n}\n\n\n# repeat loop \n# infinite loop\nx&lt;-10 \nrepeat{x&lt;-x+1\n  print(x)\n}\n\n# to break the loop \nx&lt;-10\nrepeat{x&lt;-x+1\n  print(x)\n  if(x&gt;15){break}\n}\n\nwhile runs while a condition holds; repeat runs until break."
+  },
+  {
+    "objectID": "ddd2/class_notes.html#the-map-family",
+    "href": "ddd2/class_notes.html#the-map-family",
+    "title": "Class Notes",
+    "section": "The map family",
+    "text": "The map family\n\n# the map function \n# we use map function to apply a function to each element of a list or vector and return a list of the results.\nlibrary(purrr)\nmap(x,f) # x is data, f is function, it will apply function to each element of x and return a list of the results\nmap() # makes a list \nmap_lgl() # return logical vector\nmap_dbl() # return double vector\nmap_chr() # return character vector\nmap_int() # return integer vector\n\nf1&lt;- function(x){x^3}\n# first line \nmap(1:3, f1) # stored in data frame\nmap_dbl(1:3, f1) # stored in vector and values are in vector formats \nmap_dbl(1:3,function(x){x^3})\nmap_dbl(1:3, ~ .x^3) \n#~.x is used to avoid writing  function(x) every time.\n\n\n\n# two apply maps for two variables\npmap_dbl(list(1:3, 4:6), function(x,y){x^y})\n\n\n# for dataframe \n df&lt;- tibble:: tibble(rnorm(5), b=rnorm(5), c=rnorm(5))\n\nmap() applies a function to every element; the suffix (_dbl, _chr, …) sets the output type."
+  },
+  {
+    "objectID": "ddd2/class_notes.html#data-handling-and-cleaning",
+    "href": "ddd2/class_notes.html#data-handling-and-cleaning",
+    "title": "Class Notes",
+    "section": "Data handling and cleaning",
+    "text": "Data handling and cleaning\n\n # data handling and EDA (clean, and use data for analysis)\n \n # Categorical (factor command ) - 1. nominal ( order does not matter ) 2, ordinal ( order matters))\n # continuous (numerical) - 1. discrete (countable) 2. continuous (uncountable)\n # binary (logical) - 1. TRUE 2. FALSE\n # indicator variable from a categorical variable ( 0 and 1)\n \n \n# 1. SET WORKING DIRECTORY\n \n# 2. LOAD PACKAGES\n library(rio) # used to import data in R\n#3. IMPORT DATA\nhh_data &lt;- import(\"../data/ddd2/RAW_DATA/ICPSR_36151/HH_DATA/HH_DATA.dta\") \n#4 SubSET DATA\nhh_data|&gt; select(ID11,ID13,FM1,ID18C) |&gt; export(\"../data/ddd2/AUXILIARY_DATA/hh_data_final.csv\")\n\nError in `select()`:\n! could not find function \"select\"\n\nhh&lt;- import(\"../data/ddd2/AUXILIARY_DATA/hh_data_final.csv\")\n\nError:\n! No such file: ../data/ddd2/AUXILIARY_DATA/hh_data_final.csv\n\n# to remove old raw files and keep only the final data\nrm(hh_data)\n\n\nattach(hh) # attach command is used to access the variables in the data frame without using the $ sign\n\nError:\n! object 'hh' not found\n\nlibrary(labelled)\nvar_label(hh$ID13)&lt;- \"Caste Category\" # we can also use var_label(hh$ID13) to check the label of the variable and give labels to variables \n\nError:\n! object 'hh' not found\n\nvar_label(hh$ID11)&lt;- \"Region of  household head\" \n\nError:\n! object 'hh' not found\n\n# if wee will work collectively on two variables, we need to delete the data which holds missing values but, if we are dealing with single variables, we just need to replace the missing with na .\nlibrary(dplyr)\nhh&lt;-hh|&gt; rename(land= FM1, education=ID18C, caste_category=ID13, region=ID11)\n\nError:\n! object 'hh' not found\n\nvar_label(hh$land)&lt;- \"Land\"\n\nError:\n! object 'hh' not found\n\nvar_label(hh$education)&lt;- \"Education\"\n\nError:\n! object 'hh' not found\n\n# clean the data for variables\n# first attach()\nattach(hh)\n\nError:\n! object 'hh' not found\n\nunique(education) # to check the unique values in the variable educations\n\nError:\n! object 'education' not found\n\ntable(education) # to check the frequency of each unique value in the variable education\n\nError:\n! object 'education' not found\n\nattributes(caste_category) # to check the labels of the values inside variable education\n\nError:\n! object 'caste_category' not found\n\ntable(caste_category)\n\nError:\n! object 'caste_category' not found\n\nhh|&gt;count(caste_category) # to check the frequency of each unique value in the variable\n\nError:\n! object 'hh' not found\n\n# how to check outliers in the datars\nhh&lt;- hh|&gt; mutate(education= ifelse(education==16,NA, education)) # to replace the outliers with NA\n\nError:\n! object 'hh' not found\n\ntable(hh$education)\n\nError:\n! object 'hh' not found\n\nsummary(hh$education)\n\nError:\n! object 'hh' not found\n\n# creatting new education variables ( creating dummy for continuous variable)\nhh&lt;- hh|&gt;\n  mutate(any_edu= ifelse(education&gt;0,1,0| is.na(education))) # to create a dummy variable for education, if education is greater than 0, then any_edu is 1, otherwise it is 0. We also need to check for NA values in education variable and assign 0 to any_edu for those cases.))\n\nError:\n! object 'hh' not found\n\nvar_label(hh$any_edu)&lt;- \"Any education\"\n\nError:\n! object 'hh' not found\n\n# categories of education (1.2.3.....)\nhh&lt;- hh|&gt; \n  mutate(edu_cat= case_when(\n    education&lt;= 5 ~ 1,\n    education &gt; 5 & education &lt;= 12 ~ 2,\n    education &gt; 12 ~ 3,\n  ))\n\nError:\n! object 'hh' not found\n\nvar_label(hh$edu_cat)&lt;- \"Education categories\"\n\nError:\n! object 'hh' not found\n\nval_labels(hh$edu_cat)&lt;- c(primary=1, secondary=2, higher=3)\n\nError:\n! object 'hh' not found\n\nattributes(hh$edu_cat)\n\nError:\n! object 'hh' not found\n\ntable(hh$edu_cat)\n\nError:\n! object 'hh' not found\n\nhh&lt;- hh|&gt; filter(education&lt;=15&education&gt;0| is.na(education))\n\nError:\n! object 'hh' not found\n\n\nImports the IHDS household data, keeps four variables, adds labels, replaces outliers with NA and builds education categories."
+  },
+  {
+    "objectID": "ddd2/class_notes.html#summary-statistics",
+    "href": "ddd2/class_notes.html#summary-statistics",
+    "title": "Class Notes",
+    "section": "Summary statistics",
+    "text": "Summary statistics\n\n# summary statistics\nHH_research |&gt; \n  dplyr::select(total_income, education_max) |&gt; \n  stargazer(\n    type = \"text\",\n    title = \"Summary Statistics\",\n    summary.stat = c(\"n\", \"mean\", \"sd\", \"min\", \"max\"),\n    digits = 2)\n\n\n# This gives you ONE table with caste as columns\nHH_research |&gt; \n  dplyr::filter(!is.na(caste_cat)) |&gt;  \n  dplyr::mutate(\n    total_income = as.numeric(as.character(total_income)),\n    education_max = as.numeric(as.character(education_max))\n  ) |&gt; \n  group_by(caste_cat) |&gt; \n  summarise(\n    N = n(),\n    Mean_Income = mean(total_income, na.rm = TRUE),\n    SD_Income = sd(total_income, na.rm = TRUE),\n    Min_Income = min(total_income, na.rm = TRUE),\n    Max_Income = max(total_income, na.rm = TRUE),\n    Mean_Edu = mean(education_max, na.rm = TRUE),\n    SD_Edu = sd(education_max, na.rm = TRUE))\n\nSummary table for income and education, and the same by caste category."
+  },
+  {
+    "objectID": "ddd2/class_notes.html#bar-plots",
+    "href": "ddd2/class_notes.html#bar-plots",
+    "title": "Class Notes",
+    "section": "Bar plots",
+    "text": "Bar plots\n\n# data visualization \nlibrary(rio)\nlibrary(dplyr)\nlibrary(labelled)\nlibrary(ggplot2)\nlibrary(stargazer)\n\n# set working \n\n# BAR PLOT simple variable  here x= consider as numerical variable\nggplot(hh, aes(x= edu_cat)) +\n  geom_bar() # NAs are not included\n\nError:\n! object 'hh' not found\n\n#BAR PLOT by using factor to say that the variable is categorical\nggplot(hh, aes(x= factor(edu_cat))) +\n  geom_bar() # NAs are included \n\nError:\n! object 'hh' not found\n\nggplot(hh, aes(x= factor(edu_cat), fill= factor(edu_cat))) +\n  geom_bar() # add legends and colour \n\nError:\n! object 'hh' not found\n\n# like here NA is included in our graphs , and, i dont need na so usie filter to remove NA values\nhh|&gt; filter(!is.na(edu_cat)) |&gt; \n  ggplot(aes(x= factor(edu_cat), fill= factor(edu_cat))) +\n  geom_bar() # now NA is not included in our graph\n\nError:\n! object 'hh' not found\n\nggplot(hh|&gt; filter(!is.na(edu_cat)), aes(x= factor(edu_cat), fill= factor(edu_cat))) +\n  geom_bar() # same as above but in one line code\n\nError:\n! object 'hh' not found\n\n# how to remove legends\n#way1 \nggplot(hh|&gt; filter(!is.na(edu_cat)), aes(x= factor(edu_cat), fill= factor(edu_cat))) +\n  geom_bar() +\n  theme(legend.position = \"none\") # to remove legends\n\nError:\n! object 'hh' not found\n\n# way2 \nhh|&gt; filter(!is.na(edu_cat)) |&gt; \n  ggplot(aes(x= factor(edu_cat, levels= c(1,2,3), labels = c(\"Primary\", \"Secondary\", \"Higher\")), fill= factor(edu_cat))) +\n  geom_bar()+\n  theme(legend.position = \"none\")\n\nError:\n! object 'hh' not found\n\n# best code for plotting the graph with all the details\nhh|&gt; filter(!is.na(edu_cat)) |&gt; \n  ggplot(aes(x= factor(edu_cat, levels= c(1,2,3), labels = c(\"Primary\", \"Secondary\", \"Higher\")), fill= factor(edu_cat))) +\n  geom_bar()+labs(\n    x = \"Education Categories\",\n    y = \"Count\",\n    title = \"Distribution of Education Categories\",\n    fill = \"Education Categories\"\n  )+\n  theme_minimal()+# to change the background of the graph\n  theme(\n    plot.title = element_text(hjust = 0.5))+ # to center the title\n  theme(legend.position = \"left\")\n\nError:\n! object 'hh' not found\n\n# but this is not useful, we need to add proportions in the graph, so we need to use geom_text to add the proportions in the graph\nhh|&gt; filter(!is.na(edu_cat)) |&gt;\n  count(edu_cat) |&gt; mutate(prop = n / sum(n)) |&gt;\n  ggplot(aes(x= factor(edu_cat, levels= c(1,2,3), labels = c(\"Primary\", \"Secondary\", \"Higher\")), y = prop,  fill= factor(edu_cat))) +\n  geom_col()+labs(\n    x = \"Education Categories\",\n    y = \"Proportion\",\n    title = \"Distribution of Education Categories\",\n    fill = \"Education Categories\"\n  )+\n  theme_minimal()+# to change the background of the graph\n  theme(\n    plot.title = element_text(hjust = 0.5))+ # to center the title\n  theme(legend.position = \"left\")\n\nError:\n! object 'hh' not found\n\nlibrary(scales)\n\n# converting y axis in percentage \n# add after geom_col() to convert y axis in percentage, use scale_y_continuous(labels= percent) to convert y axis in percentage\nhh|&gt; filter(!is.na(edu_cat)) |&gt;\n  count(edu_cat) |&gt; mutate(prop = n / sum(n)) |&gt;\n  ggplot(aes(x= factor(edu_cat, levels= c(1,2,3), labels = c(\"Primary\", \"Secondary\", \"Higher\")), y = prop,  fill= factor(edu_cat))) +\n  geom_col()+ scale_y_continuous(labels= percent)+labs( ### percentage \n    x = \"Education Categories\",\n    y = \"Percentage\",\n    title = \"Distribution of Education Categories\",\n    fill = \"Education Categories\"\n  )+\n  theme_minimal()+# to change the background of the graph\n  theme(\n    plot.title = element_text(hjust = 0.5))+ # to center the title\n  theme(legend.position = \"left\") \n\nError:\n! object 'hh' not found\n\n# add percentage at the top of the bars\nhh|&gt; filter(!is.na(edu_cat)) |&gt;\n  count(edu_cat) |&gt; mutate(prop = n / sum(n), top_lab= paste0(round(prop*100,1), \"%\")) |&gt; # creating new variable top_lab to add percentage at the top of the bars\n  ggplot(aes(x= factor(edu_cat, levels= c(1,2,3), labels = c(\"Primary\", \"Secondary\", \"Higher\")), y = prop,  fill= factor(edu_cat))) +\n  geom_col()+ scale_y_continuous(labels= percent)+\n  geom_text(aes(label = top_lab), vjust = -0.5, size= 2) + # add geom_text to add percentage at the top of the bars, vjust is used to adjust the position of the text, size is used to adjust the size of the text\n  labs( ### percentage \n    x = \"Education Categories\",\n    y = \"Percentage\",\n    title = \"Distribution of Education Categories\",\n    fill = \"Education Categories\"\n  )+\n  theme_minimal()+# to change the background of the graph\n  theme(\n    plot.title = element_text(hjust = 0.5))+ # to center the title\n  theme(legend.position = \"left\") \n\nError:\n! object 'hh' not found\n\n######3 add side by side bars  \n#1. in filter we need to another variable \n#2. in aes we need to add fill= factor(land) to add side by side bars for land variable, \n#3. need to add labels for land variable in fill= factor(land, levels =c(0,1) , labels= c(\"No\",\"Yes\"))\n#4. in geom_col we need to add position = \"dodge\" to add side by side bars for land variable \n#5.. dodge is used to place the bars next to each other instead of stacking them on top of each other.\n#6.  add fill= factor(land) in labs to add legends for land variable\nhh|&gt; filter(!is.na(edu_cat), !is.na(land)) |&gt;\n  count(edu_cat,land) |&gt; mutate(prop = n / sum(n), top_lab= paste0(round(prop*100,1), \"%\")) |&gt; \n  ggplot(aes(x= factor(edu_cat, levels= c(1,2,3), \n                       labels = c(\"Primary\", \"Secondary\", \"Higher\")),y = prop,fill= factor(land, levels =c(0,1) , labels= c(\"No\",\"Yes\")))) +\n  geom_col(position = \"dodge\")+ scale_y_continuous(labels= percent)+ \n  labs( \n    x = \"Education Categories\",\n    y = \"Percentage\",\n    title = \"Distribution of Education Categories\",\n    fill = \"Land\"\n  )+\n  theme_minimal()+\n  theme(\n    plot.title = element_text(hjust = 0.5))+ \n  theme(legend.position = \"right\") \n\nError:\n! object 'hh' not found\n\n\nCounts, colours, percentages on the bars and side-by-side bars for a second variable."
+  },
+  {
+    "objectID": "ddd2/class_notes.html#frequency-and-contingency-tables",
+    "href": "ddd2/class_notes.html#frequency-and-contingency-tables",
+    "title": "Class Notes",
+    "section": "Frequency and contingency tables",
+    "text": "Frequency and contingency tables\n\n###### FREQUENCY TABLE #######\nlibrary(ivo.table)\nlibrary(flextable)\n\n## CONTINGENCY TABLE\nhh |&gt;\n  dplyr::filter(!is.na(edu_cat)) |&gt;  \n  dplyr::mutate(edu_cat = as.numeric(edu_cat)) |&gt; \n  dplyr::select(edu_cat) |&gt; \n  ivo.table::ivo_table(\n    color = \"black\",\n    font = \"Times New Roman\",\n    percent_by = \"row\"\n  ) |&gt;\n  flextable::save_as_docx(\n    path = \"Results/frequency_table.docx\"\n  )\n\nError:\n! object 'hh' not found\n\n## install package janitor to clean the frequency tables\nlibrary(janitor)\nhh|&gt; mutate(across(c(edu_cat, land), as.factor)) |&gt; \n  tabyl(edu_cat, land) |&gt; \n  adorn_percentages(\"row\") |&gt; \n  adorn_pct_formatting() |&gt; \n  janitor::adorn_ns() |&gt;\n  flextable::save_as_docx(\n    path = \"Results/freq_1.docx\"\n  )\n\nError:\n! object 'hh' not found\n\n# saving it \nhh |&gt;\n  dplyr::mutate(across(c(edu_cat, land), haven::as_factor)) |&gt; \n  janitor::tabyl(edu_cat, land) |&gt; \n  janitor::adorn_percentages(\"row\") |&gt; \n  janitor::adorn_pct_formatting() |&gt; \n  janitor::adorn_ns() |&gt; \n  flextable::flextable() |&gt;   \n  flextable::save_as_docx(\n    path = \"Results/freq_1.docx\"\n  )\n\nError:\n! object 'hh' not found\n\n\nCross tables with janitor, saved to Word with flextable."
+  },
+  {
+    "objectID": "ddd2/class_notes.html#pie-chart",
+    "href": "ddd2/class_notes.html#pie-chart",
+    "title": "Class Notes",
+    "section": "Pie chart",
+    "text": "Pie chart\n\n## simple pie chart \nlibrary(ggplot2)\nhh|&gt; filter(!is.na(edu_cat)) |&gt; \n  count(edu_cat) |&gt; \n  mutate(prop = n / sum(n), top_lab= paste0(round(prop*100,1), \"%\")) |&gt; \n  ggplot(aes(x= \"\", y = prop, fill= factor(edu_cat))) +\n  geom_col() + coord_polar(theta = \"y\") + theme_void() \n\nError:\n! object 'hh' not found\n\n## final pie chart with labels and legends\nhh|&gt; filter(!is.na(edu_cat)) |&gt;\n  count(edu_cat) |&gt; \n  mutate(prop = n / sum(n), top_lab= paste0(round(prop*100,1), \"%\")) |&gt; \n  ggplot(aes(x= \"\", y = prop, fill= factor(edu_cat, levels= c(1,2,3), labels = c(\"Primary\", \"Secondary\", \"Higher\")))) +\n  geom_col() + coord_polar(theta = \"y\") + theme_void() + # coordinate polar is used to convert bar chart to pie chart\n  labs(fill = \"Education Categories\") + \n  geom_text(aes(label = top_lab), position = position_stack(vjust = 0.5))\n\nError:\n! object 'hh' not found\n\n\nA bar chart turned into a pie with coord_polar(), with percentage labels."
+  },
+  {
+    "objectID": "ddd2/class_notes.html#box-plot-histogram-and-density",
+    "href": "ddd2/class_notes.html#box-plot-histogram-and-density",
+    "title": "Class Notes",
+    "section": "Box plot, histogram and density",
+    "text": "Box plot, histogram and density\n\n### now th continuous variable\n# box plots \nggplot(hh, aes(y = education))+ # to check the distribution of education variable by education categories\n  geom_boxplot(fill= \"orange\")+ # to create box plot for education variable\n  labs(\n    y = \"Years of Education\",\n    title = \"Distribution of Education\"\n  )\n\nError:\n! object 'hh' not found\n\n##3 using raw data \nHH_DATA |&gt; \n  dplyr::filter(!is.na(COPC)) |&gt; filter(COPC &lt; 50000) |&gt; # to remove outliers from the data\n  ggplot2::ggplot(ggplot2::aes(y = COPC)) +\n  ggplot2::geom_boxplot(fill = \"orange\") +\n  ggplot2::labs(\n    y = \"Consumption per capita\",\n    title = \"Distribution of Consumption\"\n  )\n\n\n\n\n\n\n\n## IN BOX PLOT Q1 , Q2 Q3 are the values of the variable at 25th, 50th and 75th percentiles respectively. The interquartile range (IQR) is the difference between Q3 and Q1. The whiskers of the box plot extend to the smallest and largest values within 1.5 times the IQR from the lower and upper quartiles, respectively. Any data points outside this range are considered outliers and are plotted as individual points on the box plot.\n## raw data ended \n\n\n\n# HISTOGRAM IS THE BAR POT FOR THE CONTINUOUS VARIABLE\nggplot(hh, aes(education, fill=\"red\")) + geom_histogram(bins=8) +\n  labs(title=\"hist_1\", x=\"Education Years\", y=\"Count\") +\n  scale_x_continuous(breaks=c(0,4,8,12,16)) + labs(fill = \"Educ\") + \n  theme(legend.position = \"\")\n\nError:\n! object 'hh' not found\n\n# FREQUENCY POLYGON \nggplot(hh, aes(x=education, color=\"blue\")) + geom_freqpoly(bins=8) +\n  labs(title=\"FRequency\", x=\"Education Years\", y=\"Count\") +\n  scale_x_continuous(breaks=c(0,4,8,12,16)) + labs(color = \"Educ\") + \n  theme(legend.position = \"\")\n\nError:\n! object 'hh' not found\n\n# DENSITY PLOT\nggplot(hh, aes(x=education, fill=\"red\")) + geom_density(bw = 0.4) + # bw means how smooth it will be \n  labs(title=\"Density\", x=\"Education Years\", y=\"Proportion\") +\n  scale_x_continuous(breaks=c(0,4,8,12,16)) + labs(color = \"Educ\") + \n  theme(legend.position = \"\")\n\nError:\n! object 'hh' not found\n\n# combaining continuous and categorical variable in one graph\n# density plot by groups \n\nggplot(hh, aes(x=education, fill= factor(edu_cat, levels= c(1,2,3), labels = c(\"Primary\", \"Secondary\", \"Higher\")))) + \n  geom_density(bw = 0.4, alpha = 0.5) + # alpha is used to adjust the transparency of the density plot\n  labs(title=\"Density by Education Categories\", x=\"Education Years\", y=\"Proportion\", fill = \"Education Categories\") +\n  scale_x_continuous(breaks=c(0,4,8,12,16)) + \n  theme(legend.position = \"right\")\n\nError:\n! object 'hh' not found\n\n# now fill for land variable\nggplot(hh, aes(x=education, fill= factor(land, levels =c(0,1) , labels= c(\"No\",\"Yes\")))) + \n  geom_density(bw = 0.4) +\n  labs(title=\"Density by Land Ownership\", x=\"Education Years\", y=\"Proportion\", fill = \"Land Ownership\") +\n  scale_x_continuous(breaks=c(0,4,8,12,16)) + \n  theme(legend.position = \"right\")\n\nError:\n! object 'hh' not found\n\n# replace fill with color to see two lines for two groups \nggplot(hh, aes(x = education,color = factor(land, levels = c(0,1), labels = c(\"No\",\"Yes\")))) +\n  geom_density(bw = 0.4) +\n  labs(title = \"Density by Land Ownership\", x = \"Education Years\", y = \"Proportion\", color = \"Land Ownership\") +\n  scale_x_continuous(breaks = c(0,4,8,12,16)) +\n  theme(legend.position = \"right\")\n\nError:\n! object 'hh' not found\n\n\nPlots for a continuous variable, and density by group."
+  },
+  {
+    "objectID": "ddd2/class_notes.html#scatter-plots",
+    "href": "ddd2/class_notes.html#scatter-plots",
+    "title": "Class Notes",
+    "section": "Scatter plots",
+    "text": "Scatter plots\n\n# scatter plots  \n# plots all the points from the data, we will be the corelation between two variables, we need to remove NA values and outliers from the data to see the clear relationship between two variables\nHH_DATA |&gt; \n  dplyr::filter(!is.na(COPC), !is.na(ID18C)) |&gt; filter(COPC &lt; 30000) |&gt;\n  ggplot2::ggplot(ggplot2::aes(x = ID18C, y = COPC)) +\n  ggplot2::geom_point() +\n  ggplot2::labs(\n    x = \"Years of Education\",\n    y = \"Consumption per capita\",\n    title = \"Scatter Plot of Education and Consumption\"\n  )\n\n\n\n\n\n\n\n# smooth lines \nHH_DATA |&gt; \n  dplyr::filter(!is.na(COPC), !is.na(ID18C)) |&gt; filter(COPC &lt; 30000) |&gt;\n  ggplot2::ggplot(ggplot2::aes(x = ID18C, y = COPC)) +\n  ggplot2::geom_smooth(se = T) + \n  ggplot2::labs(\n    x = \"Years of Education\",\n    y = \"Consumption per capita\",\n    title = \"Scatter Plot of Education and Consumption with Smooth Line\"\n  )\n\n\n\n\n\n\n\n# se is used to add confidence interval around the smooth line, if se is false then there will be no confidence interval around the smooth line. The confidence interval gives us an idea of the uncertainty around the smooth line, it shows us the range of values within which we can be confident that the true relationship between the two variables lies. If the confidence interval is narrow, it means that we can be more confident about the relationship between the two variables, if it is wide, it means that we are less confident about the relationship between the two variables.\n\n# by groups \nHH_DATA |&gt; \n  dplyr::filter(!is.na(COPC), !is.na(ID18C), !is.na(FM1)) |&gt; filter(COPC &lt; 30000) |&gt;\n  ggplot2::ggplot(ggplot2::aes(x = ID18C, y = COPC, color = factor(FM1, levels = c(0,1), labels = c(\"No\",\"Yes\")))) +\n  ggplot2::geom_smooth(se = T, linewidth = 0.5) + \n  ggplot2::labs(\n    x = \"Years of Education\",\n    y = \"Consumption per capita\",\n    title = \"Scatter Plot of Education and Consumption with Smooth Line by Land Ownership\",\n    color = \"Land Ownership\"\n  ) +\n  theme(legend.position = \"right\")\n\n\n\n\n\n\n\n# THESE ARE THE CORELATIONS , BETWEEN , EDUCATION AND CONSUMPTION, AND HOW LAND OWNERSHIP AFFECTS THE RELATIONSHIP BETWEEN EDUCATION AND CONSUMPTION. THE SMOOTH LINE SHOWS US THE TREND OF THE RELATIONSHIP BETWEEN EDUCATION AND CONSUMPTION, IF THE LINE IS UPWARD SLOPING THEN IT MEANS THAT THERE IS A POSITIVE RELATIONSHIP BETWEEN EDUCATION AND CONSUMPTION, IF IT IS DOWNWARD SLOPING THEN IT MEANS THAT THERE IS A NEGATIVE RELATIONSHIP BETWEEN EDUCATION AND CONSUMPTION. THE COLOR OF THE LINE SHOWS US THE DIFFERENCE IN THE RELATIONSHIP BETWEEN EDUCATION AND CONSUMPTION FOR LAND OWNERS AND NON-LAND OWNERS. IF THE LINES ARE SEPARATE THEN IT MEANS THAT THERE IS A DIFFERENCE IN THE RELATIONSHIP BETWEEN EDUCATION AND CONSUMPTION FOR LAND OWNERS AND NON-LAND OWNERS, IF THEY ARE OVERLAPPING THEN IT MEANS THAT THERE IS NO DIFFERENCE IN THE RELATIONSHIP BETWEEN EDUCATION AND CONSUMPTION FOR LAND OWNERS AND NON-LAND OWNERS. \n#  THE CORELATION IS POSITIVE FOR BOTH LAND OWNERS AND NON-LAND OWNERS, BUT THE CORELATION IS STRONGER FOR LAND OWNERS THAN NON-LAND OWNERS, BECAUSE THE SMOOTH LINE FOR LAND OWNERS IS MORE UPWARD SLOPING THAN THE SMOOTH LINE FOR NON-LAND OWNERS. THIS MEANS THAT EDUCATION HAS A STRONGER IMPACT ON CONSUMPTION FOR LAND OWNERS THAN NON-LAND OWNERS.\n\nEducation against consumption, with a smooth line, also by land ownership."
+  },
+  {
+    "objectID": "ddd4/index.html",
+    "href": "ddd4/index.html",
+    "title": "DDD 4: Statistical Principles through Computation",
+    "section": "",
+    "text": "Statistics done with code: data cleaning, plots, correlation and regression in R.\n\nComputational Statistics: Class Notes: every class with its code and output. Use Other Formats → Typst (PDF) on that page to download it as a PDF.\n\nThe data come from the R packages usdata and openintro, so nothing needs to be downloaded."
+  },
+  {
+    "objectID": "ddd4/computational_statistics.html",
+    "href": "ddd4/computational_statistics.html",
+    "title": "Computational Statistics: Class Notes",
+    "section": "",
+    "text": "These notes follow the Computational Statistics class in R. They start with loading and cleaning data, then move to exploratory analysis and plots, and finish with regression."
+  },
+  {
+    "objectID": "ddd4/computational_statistics.html#loading-datasets-and-library",
+    "href": "ddd4/computational_statistics.html#loading-datasets-and-library",
+    "title": "Computational Statistics: Class Notes",
+    "section": "Loading datasets and library",
+    "text": "Loading datasets and library\n\n#install.packages(\"usdata\")\nlibrary(usdata)\n\n\n# Load a dataset named as county data sets \ncounty\n\n# A tibble: 3,142 × 15\n   name           state pop2000 pop2010 pop2017 pop_change poverty homeownership\n   &lt;chr&gt;          &lt;fct&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;int&gt;      &lt;dbl&gt;   &lt;dbl&gt;         &lt;dbl&gt;\n 1 Autauga County Alab…   43671   54571   55504       1.48    13.7          77.5\n 2 Baldwin County Alab…  140415  182265  212628       9.19    11.8          76.7\n 3 Barbour County Alab…   29038   27457   25270      -6.22    27.2          68  \n 4 Bibb County    Alab…   20826   22915   22668       0.73    15.2          82.9\n 5 Blount County  Alab…   51024   57322   58013       0.68    15.6          82  \n 6 Bullock County Alab…   11714   10914   10309      -2.28    28.5          76.9\n 7 Butler County  Alab…   21399   20947   19825      -2.69    24.4          69  \n 8 Calhoun County Alab…  112249  118572  114728      -1.51    18.6          70.7\n 9 Chambers Coun… Alab…   36583   34215   33713      -1.2     18.8          71.4\n10 Cherokee Coun… Alab…   23988   25989   25857      -0.6     16.1          77.5\n# ℹ 3,132 more rows\n# ℹ 7 more variables: multi_unit &lt;dbl&gt;, unemployment_rate &lt;dbl&gt;, metro &lt;fct&gt;,\n#   median_edu &lt;fct&gt;, per_capita_income &lt;dbl&gt;, median_hh_income &lt;int&gt;,\n#   smoking_ban &lt;fct&gt;\n\nhead(county)\n\n# A tibble: 6 × 15\n  name           state  pop2000 pop2010 pop2017 pop_change poverty homeownership\n  &lt;chr&gt;          &lt;fct&gt;    &lt;dbl&gt;   &lt;dbl&gt;   &lt;int&gt;      &lt;dbl&gt;   &lt;dbl&gt;         &lt;dbl&gt;\n1 Autauga County Alaba…   43671   54571   55504       1.48    13.7          77.5\n2 Baldwin County Alaba…  140415  182265  212628       9.19    11.8          76.7\n3 Barbour County Alaba…   29038   27457   25270      -6.22    27.2          68  \n4 Bibb County    Alaba…   20826   22915   22668       0.73    15.2          82.9\n5 Blount County  Alaba…   51024   57322   58013       0.68    15.6          82  \n6 Bullock County Alaba…   11714   10914   10309      -2.28    28.5          76.9\n# ℹ 7 more variables: multi_unit &lt;dbl&gt;, unemployment_rate &lt;dbl&gt;, metro &lt;fct&gt;,\n#   median_edu &lt;fct&gt;, per_capita_income &lt;dbl&gt;, median_hh_income &lt;int&gt;,\n#   smoking_ban &lt;fct&gt;\n\n\n\n\n\n\n\n\nFor a numeric variable we do not know the range (minimum and maximum) in advance, so we check it first.\n\n\n\n\nmy_data&lt;- county\n# Copy the data into a shorter name so it is easy to use.\n\n\n# attach() lets us use column names directly, without writing my_data$ every time.\n\nattach(my_data)\n\n\n# Packages needed for these notes (install once, then load them).\n#install.packages(\"ggplot2\")\n#install.packages(\"tidyr\")\n#install.packages(\"tidyverse\")\n#install.packages(\"dplyr\")\n#install.packages(\"rio\")\n#install.packages(\"labelled\")\n#install.packages(\"stargazer\")\n#install.packages(\"janitor\")\n\n\nlibrary(ggplot2)\nlibrary(tidyr)\nlibrary(dplyr)\nlibrary(rio)\nlibrary(tidyverse)\nlibrary(labelled)\nlibrary(stargazer)\nlibrary(janitor)\n\n\n# plot\n\nmy_data |&gt; ggplot(aes(median_hh_income, unemployment_rate))\n\n\n\n\n\n\n\n\n\nmy_data |&gt; ggplot(aes(median_hh_income, unemployment_rate))+geom_point()\n\n\n\n\n\n\n\n\n\n# creating linear line using \"lm\"\nmy_data |&gt; ggplot(aes(median_hh_income, unemployment_rate))+geom_point()+geom_smooth(method = \"lm\", se= F)\n\n\n\n\n\n\n\n\nThe scatter plot shows a negative association. The flatter the line, the weaker the association.\n\nboxplot(my_data$median_edu)\n\n\n\n\n\n\n\n\n\n# Step 1: keep only the variables we need.\n\nmy_data_1&lt;- my_data|&gt; select(median_hh_income, poverty, metro, median_edu)\n\n# To drop variables instead, use select(-variable).\n\nattach(my_data_1)\n\nRename the variables we want to change.\n\nmy_data_1&lt;- my_data_1 |&gt; rename( median_inc = median_hh_income)\n\n# Syntax: rename(new_name = old_name).\n\n\n# var_label() tells us what a variable is about.\nvar_label(my_data_1$median_inc)\n\nNULL\n\n# This variable has no label yet, so we assign one.\n\n\n# Assign the label (a short description).\n\nvar_label(my_data_1$median_inc) &lt;- \"median household income\"\n\n# In a group project, every variable should carry a label like this.\n\n\n# Data cleaning part\n\n# Clean the variables: outliers must be found and removed.\n# We need the janitor package for this.\n\ntabyl(metro) # frequency table of a categorical variable, to spot unusual categories\n\n metro    n      percent valid_percent\n    no 1974 0.6282622533     0.6288627\n   yes 1165 0.3707829408     0.3711373\n  &lt;NA&gt;    3 0.0009548059            NA\n\ntabyl(my_data_1$median_edu) # frequency table of the education variable\n\n my_data_1$median_edu    n      percent valid_percent\n             below_hs    2 0.0006365372  0.0006369427\n           hs_diploma 1397 0.4446212603  0.4449044586\n         some_college 1695 0.5394653087  0.5398089172\n            bachelors   46 0.0146403565  0.0146496815\n                 &lt;NA&gt;    2 0.0006365372            NA\n\n# Outliers are always replaced with NA.\n\n\n# For a continuous variable, start with the summary.\n\nsummary(my_data_1$median_inc) \n\n   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.     NAs \n  19264   41126   48072   49765   55771  129588       2 \n\n# The summary shows the spread (range) of the data, but not clearly the outliers.\n\n\n# Boxplots and histograms show the outliers.\n\nboxplot(my_data_1$median_inc) \n\n\n\n\n\n\n\n# The same check with a histogram.\n\nhist(my_data_1$median_inc) \n\n\n\n\n\n\n\n\n\n# sum() counts how many observations satisfy a condition.\n\nsum(my_data_1$median_inc&gt;100000, na.rm = T) # how many values are above the cut-off\n\n[1] 21\n\n\n\n# See what the plot looks like after trimming the outliers.\n\nmy_data_1 |&gt; filter(my_data_1$median_inc&gt;40000 & my_data_1$median_inc&lt;100000) |&gt; with(boxplot(median_inc))\n\n\n\n\n\n\n\n\n\n# The same with a histogram.\nmy_data_1 |&gt; filter(my_data_1$median_inc&gt;40000 & my_data_1$median_inc&lt;100000) |&gt; with(hist(median_inc))\n\n\n\n\n\n\n\n\n\n# Replace outliers by NA.\n\nmy_data_1 &lt;- my_data_1 %&gt;%\n  mutate(median_inc = ifelse(median_inc &lt; 20000, NA, median_inc))\n\n# Check the result\nsummary(my_data_1$median_inc)\n\n   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.     NAs \n  20330   41130   48073   49775   55778  129588       3 \n\n\n\n# How to create a categorical variable from a continuous variable.\n# First check the summary of the variable.\n\nmy_data_1 &lt;- my_data_1 %&gt;% mutate(poor = labelled(\n  case_when(\n    median_inc &lt;= 45000 ~ 1,\n    median_inc &gt; 45000 ~ 0), # case_when() ends here; next we name the values (labels)\n  c( Yes = 1, No = 2) # c() puts the labels together\n))\n\n# labelled() gives names to the values.\nsummary(my_data_1$poor)\n\n   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.     NAs \n 0.0000  0.0000  0.0000  0.3874  1.0000  1.0000       3 \n\n# val_labels() shows the labels of the values (var_label() shows the label of the variable).\nval_labels(my_data_1$poor)\n\nYes  No \n  1   2 \n\n\n\n# Create poverty categories\nmy_data_1 &lt;- my_data_1 %&gt;%\n  mutate(\n    poverty = labelled(\n      case_when(\n        poverty &gt;= 2 & poverty &lt;= 11 ~ 1,\n        poverty &gt;= 12 & poverty &lt;= 16 ~ 2,\n        poverty &gt;= 17 & poverty &lt;= 52 ~ 3\n      ),\n      c(\n        Poorest = 1,\n        Poor = 2,\n        Rich = 3\n      )\n    )\n  )\n\n# Check the variable\nsummary(my_data_1$poverty)\n\n   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.     NAs \n  1.000   1.000   2.000   2.177   3.000   3.000     371 \n\n# Check value labels\nval_labels(my_data_1$poverty)\n\nPoorest    Poor    Rich \n      1       2       3 \n\n\n\nClass of 08/09/2026\n\n# Convert factor to numeric \nmy_data_1&lt;- my_data_1 %&gt;% mutate(metro = case_when(\n  my_data_1$metro == \"yes\" ~ 1,\n  my_data_1$metro == \"no\" ~ 0\n))\n\ntabyl(my_data_1$metro)\n\n my_data_1$metro    n      percent valid_percent\n               0 1974 0.6282622533     0.6288627\n               1 1165 0.3707829408     0.3711373\n              NA    3 0.0009548059            NA\n\n\n\n# put label names back \nval_labels(my_data_1$metro)&lt;- c(yes=1, no=0)\ntabyl(my_data_1$metro)\n\n my_data_1$metro    n      percent valid_percent\n               0 1974 0.6282622533     0.6288627\n               1 1165 0.3707829408     0.3711373\n              NA    3 0.0009548059            NA\n\n\n\n# Keep only the poverty range we want (and missing values).\nsummary(my_data_1$poverty)\n\n   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.     NAs \n  1.000   1.000   2.000   2.177   3.000   3.000     371 \n\nmy_data_1&lt;- my_data_1|&gt; filter(poverty&gt;1 & poverty&lt;3 | is.na(poverty))"
+  },
+  {
+    "objectID": "ddd2/main_script.html",
+    "href": "ddd2/main_script.html",
+    "title": "Main Script",
+    "section": "",
+    "text": "The class script from the course. The code is shown as given; it is not run when the site is built, because some lines are exercises or deliberate errors."
+  },
+  {
+    "objectID": "ddd2/main_script.html#setup-and-packages",
+    "href": "ddd2/main_script.html#setup-and-packages",
+    "title": "Main Script",
+    "section": "Setup and packages",
+    "text": "Setup and packages\n\n#Download and install R and R-Studio (Copy and paste following URL in your browser)\n#(R) https://cran.r-project.org/bin/windows/base/ \n#(R-Studio) https://posit.co/download/rstudio-desktop/\n#we can run a command by Run option or ctrl+enter\n\n#clear the environment\nrm(list = ls())\n#Set the working directory\n#Call our WD path as 'directory'\nsetwd(directory) #Set new working directory\ngetwd() #get your working directly (for a cross check)\n\n#(1)for help use ? before command:  ?mean or help(mean)\n\n#(2)Packages: extensions programmed in R by advanced users\n# see all packages\nlibrary()  #you can manually see this from right bottom panel\n\n#activation of different packages: can be installed in three ways \n#a) by command\n#b) from Tools option at top \n#c) from Packages option on bottom right panel\n\n#Install packages\ninstall.packages(\"lobstr\") #Check data structure\ninstall.packages(\"rio\") #import, export almost any file format\n\n#Load packages\nlibrary(lobstr,rio)\n\n?lobstr #check description of this package\n\n#install different packages\n#install.packages(c(\"package1\", \"package1\"))\n\n#see packages currently loaded\nsearch() \n\nClears the workspace, sets the working directory and installs and loads packages."
+  },
+  {
+    "objectID": "ddd2/main_script.html#objects-values-and-names",
+    "href": "ddd2/main_script.html#objects-values-and-names",
+    "title": "Main Script",
+    "section": "Objects, values and names",
+    "text": "Objects, values and names\n\n#(3)Objects, values and names\n# &lt;- is called assign operator. Left is object name and right is value \n# data flows flows from right → left\n\n## create an object (e.g., any vector) and assign it any name\nx&lt;-c(1,2,3,4)\ny&lt;-x  #this does not create new object (i.e., vector (1,2,3,4)), only get another binding y\n\n#check the adress of object\nlobstr::obj_addr(x)\nlobstr::obj_addr(y)\n\n#not a valid name\n_a &lt;- 5\n\n#can use \"\" or ''\n\"_a\"&lt;-5\n'_b'&lt;-5\n\n#Question: comment on a,b,c and d (are these different objects)\na &lt;- 1:10\nb &lt;- a\nc &lt;- b\nd &lt;- 1:10\n#check\nlist_1 &lt;- list(a, b, c, d)\nobj_addrs(list_1) #without calling the package \"lobstr\"\n\n\n##copy-on-modify (modify some value in y)\ny[[3]] &lt;- 5 #change the third one\ny[[5]]&lt;- 6 #add new one\n#now these are two different objects\nobj_addr(x)\nobj_addr(y)\n\n#list and copy-on-modify with list command\nlist_2&lt;-list(1,2,3,4)\nlist_3&lt;-list_2\nobj_addr(list_2)\nobj_addr(list_3)\n\n#modify list_3\nlist_3[[4]]&lt;-5\nlist_3[[5]]&lt;-6\nobj_addr(list_2)\nobj_addr(list_3)\n\nTwo names can point to one object; R copies it only when one of them is modified (copy-on-modify)."
+  },
+  {
+    "objectID": "ddd2/main_script.html#operations",
+    "href": "ddd2/main_script.html#operations",
+    "title": "Main Script",
+    "section": "Operations",
+    "text": "Operations\n\n##Operations in R\n# Define two numbers (number vs number)\na &lt;- 10\nb &lt;- 3\n# Addition\na + b\n# Subtraction\na - b\n# Multiplication\na * b\n# Division\na / b\n# Greater than\na &gt; b\n# Less than\na &lt; b\n\n# Define two vectors (vector vs vector)\nx &lt;- c(2, 4, 6, 8)\ny &lt;- c(1, 2, 3, 4)\n# Addition (element-wise)\nx + y\n# Subtraction (element-wise)\nx - y\n# Multiplication (element-wise)\nx * y\n# Division (element-wise)\nx / y\n# Greater than (element-wise comparison)\nx &gt; y\n# Less than (element-wise comparison)\nx &lt; y\n\n#vector and number\nx+5 #same for -,*,/\nx&gt;5 #same for logical operator\n\n#Columns of unequal length\nx1&lt;-c(1,2,3,4)\nx2&lt;-c(7,8)\nx3&lt;-c(7,8,1)\n\nx1+x2\nx1+x3\n\nArithmetic and comparison on numbers and vectors; vectors of unequal length are recycled."
+  },
+  {
+    "objectID": "ddd2/main_script.html#data-frames",
+    "href": "ddd2/main_script.html#data-frames",
+    "title": "Main Script",
+    "section": "Data frames",
+    "text": "Data frames\n\n##Data frames\n#way_1\ndata_1 &lt;- data.frame(id = c(1,2,3), age = c(20,19,23), gender=c(\"m\",\"f\",\"m\"))\n#way_2\nid= c(1,2,3)\nage= c(20,19,23)\ngender=c(\"m\",\"f\",\"m\") #characters are in \"\"\ndata_2&lt;-data.frame(id,age,gender)\n\n#data_3 same as data_1\ndata_3&lt;-data_1\n\n#list of data\nlist_d&lt;-list(data_1,data_2,data_3)\n#check address\nobj_addrs(list_d)\n\n#change one column or row by [row number,column number]\ndata_3[, 2] &lt;- data_3[, 2] * 2\n#can no not be done with character\ndata_3[, 3] &lt;- dacta_3[, 3] * 2\n\n#change only one entry of variable \"age\"\ndata_1[1, \"age\"] &lt;- 29\n\ninstall.packages(\"rio\")\nlibrary(rio)\n#export data-frame in excel format\nrio::export(data_1, \"data/my_data_1.csv\")\n\n##Exercise\n#generate a data frame called students_df for a group of 10 students: id, age, gender, state\n#suppose age of the second student is recorded incorrectly. Write an R command to correct it.\n#export both datasets in excel format for a cross check\n\nTwo ways to create a data frame, changing a column or a single entry, and exporting."
+  },
+  {
+    "objectID": "ddd2/main_script.html#vectors-and-missing-values",
+    "href": "ddd2/main_script.html#vectors-and-missing-values",
+    "title": "Main Script",
+    "section": "Vectors and missing values",
+    "text": "Vectors and missing values\n\n###################\n##Vectors\nlg_v &lt;- c(TRUE, FALSE) #logical\nin_v &lt;- c(1L, 6L, 10L) #integer\ndb_v &lt;- c(1, 2.5, 4.5) #double\nch_v &lt;- c(\"these are\", \"some strings\") #character\n#check type\ntypeof(lg_v)\n\nv1&lt;-c(1,2,3,4)\nv2&lt;-c(1L,2L,3L,4L)\n#logical vector more\nas.numeric(lg_v)\nsum(lg_v)\nmean(lg_v)\n#make chnages in logical vector\nlg_v[[3]]&lt;-FALSE\nsum(ch_v)\n\n##Missing values  --- NA\nm &lt;- c(NA, 5, NA, 10)\n#check which value is missing\nis.na(m)\nis.na(data_1)\n\nThe four vector types and NA."
+  },
+  {
+    "objectID": "ddd2/main_script.html#matrices-and-arrays",
+    "href": "ddd2/main_script.html#matrices-and-arrays",
+    "title": "Main Script",
+    "section": "Matrices and arrays",
+    "text": "Matrices and arrays\n\n##Matrices and Arrays\nmr&lt;-matrix(1:6, c(2, 3)) #c(rows,cols)\n\nar&lt;-array(1:12, c(2, 3, 2)) #(row,cols,layers)\n\ndim(mr) #check the dimensions\n\n#dim can be used either for matrix or array\nz &lt;- 1:6\ndim(z) &lt;- c(3, 2,1) #we can layer for array\nz\n\n#matrix can be of 1Xn dimensions (will look like a column)\nc1&lt;-c(1,2,3,4)\nm1&lt;-matrix(1:4,c(4,1))\nstr(c1) #check the structure\nstr(m1)\n\n#comment on the following arrays\nar1 &lt;- array(1:5, c(1, 1, 5))\nar2 &lt;- array(1:5, c(1, 5, 1))\nar3 &lt;- array(1:5, c(5, 1, 1))\n\nc4&lt;-c(1:5) #how is c4 different from ar2\n\ndim() sets rows, columns and layers."
+  },
+  {
+    "objectID": "ddd2/main_script.html#data-types-factors-and-lists",
+    "href": "ddd2/main_script.html#data-types-factors-and-lists",
+    "title": "Main Script",
+    "section": "Data types, factors and lists",
+    "text": "Data types, factors and lists\n\n##Data Types\n#(1) Numerical: Discrete and Continuous\n#(2) Categorical: Nominal and Ordinal\n\n#Factors (for categorical data)\nv1&lt;-c( \"M\", \"P\", \"S\", \"H\", \"P\", \"S\", \"M\", \"M\") #levels are automatically decide by alphabetic order\nf1&lt;-factor(v1) #or f&lt;-factor(c(\"a\", \"b\"))\ntypeof(f1) #check what type it is\n\n#define levels from here\nf2&lt;-factor(v1, levels = c(\"P\", \"M\", \"S\", \"H\"), ordered=T)\n\nas.character()\nas.numeric()  #can be used to check distinction between character vector and a factor\n\n##Lists\nl3 &lt;- list(\n  1:3, \n  a=c(\"a\",\"b\"),\n  c(TRUE, FALSE, TRUE), \n  c(2.3, 5.9)\n)\ntypeof(l3)\nstr(l3)\n\nNumerical and categorical data; factors with levels; lists."
+  },
+  {
+    "objectID": "ddd2/main_script.html#tibbles-and-data-frames",
+    "href": "ddd2/main_script.html#tibbles-and-data-frames",
+    "title": "Main Script",
+    "section": "Tibbles and data frames",
+    "text": "Tibbles and data frames\n\n#data frame and tibble\ninstall.packages(\"tibble\")\nlibrary(tibble)\n\ndf1 &lt;- data.frame(x = 1:3, y = letters[1:3])\ndf2 &lt;- tibble(x = 1:3, y = letters[1:3])\ndf1\ndf2\n\ntibble( \n  x = 1:3,\n  y = x * 2\n)     #refer to variables created during construction\n\ndata.frame(\n  x = 1:3,\n  y = x * 2\n)   #doesn't refer to variables created during construction\n\n\n#row names\ndf3 &lt;- data.frame(\n  age = c(35, 27, 18),\n  gender = c(\"M\", \"F\", \"F\"),\n  row.names = c(\"aa\", \"bb\", \"cc\")\n)\n\n#we can get the details of only specific row now\ndf3[\"bb\",1] #first column\ndf3[\"bb\",]  #all columnns\n\nrownames(df3)\ncolnames(df3) #or names(df3)\n\nnrow(df3)\nncol(df3) #or length(df3)\n\n#add new col to data\ndf2$z&lt;-3:5\n\nlibrary(dplyr)  #for data manipulation\n\n#rename variables of data frame  %&gt;% or |&gt; is the pipe operator\ndf2 &lt;- df2 %&gt;%\n  rename(\n    xn = x,\n    yn = y\n  )  #new name = old name\n\nRow and column names, adding a column and renaming with dplyr."
+  },
+  {
+    "objectID": "ddd2/main_script.html#sub-setting",
+    "href": "ddd2/main_script.html#sub-setting",
+    "title": "Main Script",
+    "section": "Sub-setting",
+    "text": "Sub-setting\n\n##Sub-setting\n#in vectors\nrm(x)\nx &lt;- c(2.1, 4.2, 3.3, 5.4)\n\ny&lt;-x[c(1,2)] #get only 1st and 2nd obs\nx[-c(1,2)] #get all except 1st and 2nd obs\nx[c(1.3, 1.9)] #real numbers get the integers places\nx[x &gt; 3]\nx[2] #will keep only second element\nx[] #empty returns all\n\n#in data-frames\ndf &lt;- data.frame(x = 1:3, y = 4:6, z = letters[1:3])\n\nlibrary(dplyr)\n#select rows\ndf1&lt;- df[df$x == 2, ] #selects only row 2\ndf[c(1,3), ] #selects row 1 and 3\n\ndf3&lt;-df[c(\"x\", \"z\")] #all rows, only x and y\n\ndf[c(1,3), c(\"x\", \"z\")] #row 1 and 3, only x and y\n\n##Exercise\n#Create a data frame students with: id = 1:4, age = c(20, 22, 21, 23), gender = c(\"F\", \"M\", \"F\", \"M\")\n#Rename:age to age_years, gender to gender_binary\n#Add a new column passed with values: TRUE, TRUE, FALSE, TRUE\n#Select: Only students whose age_years is greater than 21, only columns id and sex\n\nSelecting elements of a vector and rows and columns of a data frame."
+  },
+  {
+    "objectID": "ddd2/main_script.html#functions",
+    "href": "ddd2/main_script.html#functions",
+    "title": "Main Script",
+    "section": "Functions",
+    "text": "Functions\n\n##Functions##\ndf &lt;- tibble(\n  a = rnorm(5),\n  b = rnorm(5),\n  c = rnorm(5),\n  d = rnorm(5),\n)\n\n\n#make changes in the data\ndf&lt;-df |&gt; mutate(\n  a = (a - mean(a, na.rm = TRUE)),\n  b = (b - mean(b, na.rm = TRUE)),\n  c = (c - mean(c, na.rm = TRUE)),\n  e = (d - min(d, na.rm = TRUE))\n)\n\n\n#Function (basics)\nadd_1 &lt;- function(x) {\n  x + 1\n}  #three parts are there, name (add_1), argument(x), and body{}\n\nadd_1(6)\n\nsq_x &lt;- function(x) {\n  x^2\n}\n\nsq_x(7)\n\n\nx_p &lt;- function(x,p=3) {\n  x^p\n}\n\nx_p(2)\n\nadd_xy &lt;- function(x,y) {\n  x + y\n}\n\nadd_xy(x=c(1,2,4,5),y=c(4,6,8,9))\n\n\n#nowf2&lt;- lets go back to our example\nmean_dev &lt;- function(x) {\n  (x - mean(x, na.rm = TRUE))\n}    \n\n#do it for all a,b,c,d\ndf |&gt;\n  mutate(\n    across(c(a, b, c, d), mean_dev),\n    e=d - mean(d, na.rm = TRUE),\n    f=sum(a),\n    g=mean(b)\n  )\n\n#Exercise for the above data frame: \n#define an function for mean of variable and do the above exercise\n#define an function for x-min/min-max of variable and do the above exercise\n\nf2#Let's do so some standarization with function()\nsnv&lt;-function(x){(x-mean(x))/sd(x)} #run it for any variable\n\n#what if you will not use na.rm=T and your data has missing values\n#(will functions run correctly?)\n\nA function has a name, arguments and a body; used here to standardise variables."
+  },
+  {
+    "objectID": "ddd2/main_script.html#environments",
+    "href": "ddd2/main_script.html#environments",
+    "title": "Main Script",
+    "section": "Environments",
+    "text": "Environments\n\n##Environments##\ninstall.packages(\"rlang\") #for env rlang package is required\nlibrary(rlang)\n\n\n#Check current environment\nenvironment()\n\nls()\n\nrm(list=ls())\n\n#clear the current env\nrm(list = ls())\n\n#Creating objects in Global Environment\nx &lt;- 10\ny &lt;- 20\nname &lt;- \"Rohit\"\n#check what is in current env\nls()\n\n#crate new env\ne1 &lt;- new.env()\n#adding objs to new env\ne1$a &lt;- 100\ne1$b &lt;- 200\n#check the list in this new env\nls(e1)\ne1$a\n#check parent env\nparent.env(e1)\n\n#from rlang package\ne2 &lt;- env(\n  a = 120,\n  b = 250,\n)\n\ne2$a\ne2$b\n\nls(e2)\nrm(e1$a)\n\n\n#function creates it is own env\nf &lt;- function() {x &lt;- 15\ny &lt;- 10\nx + y\n}\n\nf()\n\n#lexical scoping (if object is not found inside function, will go to global env)\na &lt;- 100\n\ng &lt;- function() {\n  a + 1\n}\n\ng()\n\nGlobal and new environments, and lexical scoping."
+  },
+  {
+    "objectID": "ddd2/main_script.html#for-loops",
+    "href": "ddd2/main_script.html#for-loops",
+    "title": "Main Script",
+    "section": "For loops",
+    "text": "For loops\n\n###Loops###\n\n#A loop repeats the same task multiple times\n#same task again and again\nx1 &lt;- 1^2\nx2 &lt;- 2^2\nx3 &lt;- 3^2\n\n#Main loops in R: (1)for (2)while (3)repeat loops\n#For loop : \n#for(values in sequence){ \ncode that will repeat for all vlaues\n}\n\n#for vector\nfor(i in 1:3){\n  print(i^2)\n}   #print will only show results\n\nfor(i in c(1,2,3)){\n  print(i^2)\n}\n\n#to use the results we need to save results from for loop\nfor(i in c(1,2,3)){\n  x&lt;-(i^2)\n}  #this will only consider last value i.e., 3\n\n#gen empty vector of length 3 and then x[i] will gen i^2\nx&lt;-numeric(3)\n\nfor (i in 1:3) {\n  x[i] &lt;- i^2\n}\n\n#for existing vector\nx&lt;-c(3,2,5)\nfor(i in x){print(i^2)\n}\n\n#this will overwrite x\nfor(i in x){x[i]&lt;-(i^2)\n}\n\n#to store the loop results for x in y\ny&lt;-numeric(3)\n\nfor (i in x) {y[i]&lt;-i^2}\n\n#how to solve the issue\nx &lt;- c(3, 2, 5)\ny &lt;- numeric(length(x))\n\nfor (i in 1:length(x)) {\n  y[i] &lt;- (x[i])^2\n}\n\nfor (i in 1:length(x)) {\n  y[i] &lt;- f(i)\n}\n\ny\n\n#we can have more than one repeating codes\nfor(i in x){print(c(i,i^2,i^3))\n}\n\nfor(i in x){z&lt;-i^2\nprint(c(i,z))}\n\n#write for loop and print z as x-mean(x)/sd(x)\n\nRepeating a task, and saving the result in a vector."
+  },
+  {
+    "objectID": "ddd2/main_script.html#conditions-and-nested-loops",
+    "href": "ddd2/main_script.html#conditions-and-nested-loops",
+    "title": "Main Script",
+    "section": "Conditions and nested loops",
+    "text": "Conditions and nested loops\n\n#ifelse for loop\nx&lt;-c(-1,2,3)\n#if else can not work for x\nif(x&lt;0){print(\"negative\")} else\n{print(\"positive\")}\n\n#for loop can be used(Conditional logic inside loops)\nfor(i in x){if(i&lt;0){print(\"negative\")} else \n{print(\"positive\")}\n}\n\n\n#Nested for loop\nfor(i in vec 1) {\n  for(j in vect 2){\n    for(k in vect n) {\n      code here\n    }#n\n  }#2\n} #1\n\n#for two vectors sum of cross elements\nfor(i in 1:3){\n  for(j in 1:2){\n    print(i+j)\n  }\n}\n\n#write the one for three vectors\n\n#nested loop for matrices (5x4)\nmat &lt;- matrix(0, nrow = 5, ncol = 4)\ndim(mat)\n\n\nfor (i in 1:5) {\n  for (j in 1:4) {\n    mat[i, j] &lt;- i * j\n  }\n}\n\n\n#loops can be avoided\nx&lt;-c(1,2,3)\nx&lt;-x^2\n\n#loop with function\n\nf &lt;- function(x) {\n  x^2\n}\n\nfor (i in 2:4) {\n  print(f(i))\n}\n\n#save these results\nx &lt;- numeric(3)\nfor (i in 2:4){\n  x[i]&lt;-f(i)\n}\nx\n\n\nx &lt;- numeric(3)\nfor (i in c(2,3,5)){\n  x[i]&lt;-f(i)\n}\n\nx &lt;- c(3, 2, 5)\ny &lt;- numeric(length(x))\n\nfor (i in 1:length(x)) {\n  y[i] &lt;- f(x[i])\n}\n\n\n\n\n#how can we avoid this loop here, write direct code\n\n#exercises\n#(1) Gen a vector of length 5, multiply each element by 3 and save the result in new vector\n#(2) use nested loop and gen output like\n[1] 1 1\n[1] 1 2\n[1] 1 3\n[1] 2 1\n[1] 2 2\n[1] 2 3\n[1] 3 1\n[1] 3 2\n[1] 3 3\n\nif inside a loop, and loops inside loops, including a matrix."
+  },
+  {
+    "objectID": "ddd2/main_script.html#for-loops-with-data-frames",
+    "href": "ddd2/main_script.html#for-loops-with-data-frames",
+    "title": "Main Script",
+    "section": "For loops with data frames",
+    "text": "For loops with data frames\n\n#for loop in data frame\ndf &lt;- data.frame(\n  id = 1:5,\n  income = c(1000, 1500, 1200, 1800, 1600)\n)\n\nx &lt;- numeric(5)\n#change x as per any column\nfor (i in 1:nrow(df)) {\n  x[i] &lt;- df$income[i]+500\n}\n\nx\n\n#add this newly generated x to df\n#how can you add x directly without writing for loop\n\nAdds a number to a column with a loop."
+  },
+  {
+    "objectID": "ddd2/main_script.html#if-else-and-else-if",
+    "href": "ddd2/main_script.html#if-else-and-else-if",
+    "title": "Main Script",
+    "section": "If, else and else if",
+    "text": "If, else and else if\n\n#if, else, ifelse , elseif conditions\n#logical operators\n1&gt;2\n2&lt;3\n2==3\n2&gt;=1\n5&lt;=4\n5!=2\n\n#if\n\n#if(condition){run if \nTrue} #code will run only if condition is true\n\nx&lt;-10\n\nif(x&gt;10){\n  print(\"x is 10\")\n}\n\n#if else\nif (condition 1) { code if true\n} else {\n  code if false\n}\n\n\n#pass or fail\nmarks &lt;- 42\n\nif (marks &gt;= 40) {\n  print(\"Pass\")} else {\n    print(\"Fail\")\n  }\n\n#even/odd number\nx &lt;- 7\n\nif (x %% 2 == 0) {\n  print(\"Even number\")\n} else {\n  print(\"Odd number\")\n}\n\n#gen a vector of even and odd numbers and run if else condition for that vector\n\nmarks &lt;- 75\n\nif (marks &gt;= 90) {\n  print(\"Grade A\")\n} else if (marks &gt;= 75) {\n  print(\"Grade B\")\n} else if (marks &gt;= 60) {\n  print(\"Grade C\")\n} else {\n  print(\"Fail\")\n}\n\n#run this for a vector\n\nPass or fail, even or odd, and grades."
+  },
+  {
+    "objectID": "ddd2/main_script.html#while-and-repeat-loops",
+    "href": "ddd2/main_script.html#while-and-repeat-loops",
+    "title": "Main Script",
+    "section": "While and repeat loops",
+    "text": "While and repeat loops\n\n#while loop\nwhile(logical condition) {command here}\n\nx&lt;-1\nwhile(x&lt;5){print(x)\n  x&lt;-x+1}\nx&lt;-1\nwhile(x&lt;5){x&lt;-x+1\nprint(x)\n}  #position of code matters here\n\n#store the results \ny&lt;-c() #gen null vector \n\n#overwrite this null y as per the while loop conditions\nx&lt;-1\nwhile(x&lt;5){y&lt;-c(y,x)\nx&lt;-x+1\n}\n\n\n#exercise\nx &lt;- 2\nwhile (x &lt;= 10) {\n  print(x)\n  x &lt;- x + 2\n}\n#(i)Predict the output without running the code\n#(ii)What is the starting value of x?\n#(iii)When does the loop stop?\n#(iv)Modify the code so that it prints odd numbers less than 14\n\n#repeat loop\nx&lt;-10\nrepeat{x=x+2\nprint(x)\n}\n\n#put a break\nx&lt;-10\nrepeat{x=x+2\nprint(x)\nif(x==20) break\n}\n\nwhile runs while a condition holds; repeat runs until break."
+  },
+  {
+    "objectID": "ddd2/main_script.html#the-map-family",
+    "href": "ddd2/main_script.html#the-map-family",
+    "title": "Main Script",
+    "section": "The map family",
+    "text": "The map family\n\n#The map function (runs function for data)\n#basic syntax\nmap(x,f) #x is data and f is function\n\nmap() makes a list.\nmap_lgl() makes a logical vector\nmap_int() makes an integer vector\nmap_dbl() makes a double vector\nmap_chr() makes a character vector\nlibrary(purrr)\n\nf1 &lt;- function(x){x*3}\n#first one\nmap(1:3, f1)\nm&lt;-map_dbl(1:3, f1) #or function inside map()\nmap_dbl(1:3, function(x){x*3})\nmap_dbl(1:3, ~.x*3)\n#long code\nf1(1)\nf1(2)\nf1(3) # or we will write for loop\n\n#for many vectors (pmap)\npmap_dbl(list(c(1,2,5),c(2,5,7)), function(x,y){x+y})\npmap_dbl(list(c(1,2,5),c(2,5,7)), function(x,y){mean(c(x,y))})\n\n\n#for dataframe\ndf&lt;-tibble::tibble(a=rnorm(5), b=rnorm(5),c=rnorm(5))\n#what if we need to find median of vaaibles of df\n#way 1\nmean(df$a)\nmean(df$b)\nmean(df$3)\n#way 2\nfor (i in seq_along(df)) { \n  print(mean(df[[i]]))\n}\n#way 3 (map)\nmap_dbl(df, mean) #or\ndf|&gt;map_dbl(mean)\n#for only selected columns\ndf|&gt;select(a,b)|&gt;map_dbl(mean)\n\n\n#lappy(similar to map, but gives result only as list)\n#sapply(gives output as vector)\nl1&lt;-list(a=c(1,2,4),b=c(3,5,6))\nlapply(l1,mean)\nsapply(df,mean)\ndf|&gt;select(a,b)|&gt;lapply(mean)\n\nmap(), pmap(), lapply() and sapply()."
+  },
+  {
+    "objectID": "ddd2/main_script.html#real-world-data-ihds",
+    "href": "ddd2/main_script.html#real-world-data-ihds",
+    "title": "Main Script",
+    "section": "Real-world data: IHDS",
+    "text": "Real-world data: IHDS\n\ndf1&lt;-import(\"C:\\\\Users\\\\BilalAhmadBhat\\\\OneDrive - Azim Premji Foundation\\\\\n            Teaching\\\\4_Inro_Prog_Data_25_26_II\\\\\n            R_work\\\\data\\\\raw_data\\\\ihds\\\\DS0002\\\\36151-0002-Data.dta\")\n\n\n\n###Real World Data###\n\nlibrary(rio)\nlibrary(dplyr)\nlibrary(labelled)\nlibrary(ggplot2)\nlibrary(stargazer)\n\n#import ihds hhd data\ndf1&lt;-import(\"data\\\\raw_data\\\\ihds\\\\DS0002\\\\36151-0002-Data.dta\")\n\n##select required vars and export this data\ndf1|&gt;select(ID11,ID13,FM1,ID18C)|&gt;export(\"data\\\\auxiliary_data\\\\hhd_1.dta\")\n#import this small file\ndf2&lt;-import(\"data\\\\auxiliary_data\\\\hhd_1.dta\")\n\n## With out questionnaire check var details\ninstall.packages(\"labelled\")\nlibrary(labelled)\nvar_label(df2$ID11)\n#change existing var labels\nvar_label(df2$ID11) &lt;- \"religion of houesehold head\"\n\n##rename req vars\ndf2&lt;-df2|&gt;rename(land=FM1,religion=ID11,education=ID18C)\n\n##clean the data for vars\nunique(education)\ntable(education)\nattributes(education)\ndf2|&gt;count(education) #preferable way\n\n#let 16 years of educ is outlier (replace by NA)\ndf2 &lt;- df2 |&gt;mutate(education=na_if(education,16))\n#or\ndf2&lt;-df2|&gt;mutate(education=ifelse(education==16,NA,education))\n\n\n#create dummy from continuous variables\ndf2&lt;-df2|&gt;mutate(any_educ=ifelse(education&gt;0,1,0|is.na(education)))\n#add label for this now\nvar_label(df2$any_educ)&lt;-\"if any years of education\"\n\n#categories of education (1,2,3)\ndf2&lt;- df2 |&gt; \n  mutate(educ_cat= case_when(\n    education &lt;=5 ~ 1,\n    education &gt;5  & education &lt;= 12 ~ 2,\n    education &gt;12 ~ 3\n  ))\n\n#add labels to these (assign some name to these categories)\nval_labels(df2$educ_cat) &lt;- c(\n  Primary = 1,\n  High = 2,\n  Higher = 3\n)\n\n#keep for some values (filter for outliers)\ndf2&lt;-df2|&gt;filter(education&lt;=15&education&gt;0|is.na(education))\n\n#save the cleaned data for future use\ndf2|&gt;export(\"data\\\\auxiliary_data\\\\hhd_2.dta\")\n\n#now begin analysis on hhd_2 data\ndf2&lt;-import(\"data\\\\auxiliary_data\\\\hhd_2.dta\")\n\n\n\n######Data Analysis######\n##Summary Statistics\nlibrary(stargazer)\ndf2|&gt;select(education, land)|&gt;stargazer(\n  type = \"text\", title = \"Summary Stat 1\", # or \"html\", \"latex\"\n  summary.stat = c(\"n\", \"mean\", \"sd\", \"min\", \"max\"),\n  out = \"results/summary_stats_1.rtf\")\n\nImports the IHDS data, keeps four variables, labels and cleans them, and prepares the summary table."
+  },
+  {
+    "objectID": "ddd2/main_script.html#bar-plots",
+    "href": "ddd2/main_script.html#bar-plots",
+    "title": "Main Script",
+    "section": "Bar plots",
+    "text": "Bar plots\n\n###Data visualization\nlibrary(ggplot2)\n#basic syntax\n\nggplot(data,aes(x=var1,y=var2))+\n  geom_yourchoice()\n\n##bar chat [total count to begin with]\nggplot(df2, aes(x = educ_cat)) +\n  geom_bar()  #will not include NAs and will consider x as continuous\n\nggplot(df2, aes(x = factor(educ_cat))) +\n  geom_bar()  #will include NAs and will consider x as categorical\n\nggplot(df2, aes(x = factor(educ_cat), fill=factor(educ_cat))) +\n  geom_bar()  #add legend and colors\n\nggplot(df2|&gt;filter(!is.na(educ_cat)), aes(x = factor(educ_cat, levels=c(1,2,3),labels=c(\"Low\",\"high\",\"higher\")), fill=factor(educ_cat))) +\n  geom_bar()  #get rid of NAs\n\n#this will remove legend\nggplot(df2|&gt;filter(!is.na(educ_cat)), aes(x = factor(educ_cat,levels=c(1,2,3),labels=c(\"Low\",\"High\",\"Higher\")), fill = factor(educ_cat))) +\n  geom_bar()\n\nggplot(df2|&gt;filter(!is.na(educ_cat)), aes(x = factor(educ_cat,levels=c(1,2,3),labels=c(\"Low\",\"High\",\"Higher\")), fill = factor(educ_cat))) +\n  geom_bar() + theme(legend.position = \"none\")\n\n#edit axis labels and titles: labs()\nggplot(df2|&gt;filter(!is.na(educ_cat)), aes(x = factor(educ_cat,levels=c(1,2,3),labels=c(\"Low\",\"High\",\"Higher\")), fill = factor(educ_cat))) +\n  geom_bar() + labs(\n    title = \"Figure 1: Bar Plot\",\n    x = \"Education Category\",\n    y = \"Count\",\n    fill = \"Educ cat\"\n  ) + theme(legend.position = \"none\") + theme_minimal() + theme()\n\n#over all theme and position of title and legend\nggplot(df2|&gt;filter(!is.na(educ_cat)), aes(x = factor(educ_cat,levels=c(1,2,3),labels=c(\"Low\",\"High\",\"Higher\")), fill = factor(educ_cat))) +\n  geom_bar() + labs(\n    title = \"Figure 1: Bar Plot\",\n    x = \"Education Category\",\n    y = \"Count\",\n    fill = \"Educ cat\"\n  ) +  theme_minimal() + theme(plot.title = element_text(hjust = 0.5), \n                               legend.position = \"\")\n\n\n#Now let's do proportions\ndf2|&gt;filter(!is.na(educ_cat))|&gt;\n  count(educ_cat)|&gt;mutate(prop=n/sum(n))|&gt;\n  ggplot(aes(x = factor(educ_cat,levels=c(1,2,3),\n                        labels=c(\"Low\",\"High\",\"Higher\")), y=prop, fill = factor(educ_cat))) +\n  geom_col() + labs(\n    title = \"Figure 1: Bar Plot\",\n    x = \"Education Category\",\n    y = \"Count\",\n    fill = \"Educ cat\"\n  ) +  theme_minimal() + theme(plot.title = element_text(hjust = 0.5), \n                               legend.position = \"\")\n\n\ninstall.packages(\"scales\")\nlibrary(scales)\n\n#convert y label into %\ndf2|&gt;filter(!is.na(educ_cat))|&gt;\n  count(educ_cat)|&gt;mutate(prop=n/sum(n))|&gt;\n  ggplot(aes(x = factor(educ_cat,levels=c(1,2,3),\n                        labels=c(\"Low\",\"High\",\"Higher\")), y=prop, fill = factor(educ_cat))) +\n  geom_col() + scale_y_continuous(labels = percent) + labs(\n    title = \"Figure 1: Bar Plot\",\n    x = \"Education Category\",\n    y = \"Percent\",\n    fill = \"Educ cat\"\n  ) +  theme_minimal() + theme(plot.title = element_text(hjust = 0.5), \n                               legend.position = \"\")\n\n#add percent at top of bar (by geom_text)\ndf2|&gt;filter(!is.na(educ_cat))|&gt;\n  count(educ_cat)|&gt;mutate(prop=n/sum(n),top_lab=paste0(round(prop*100,1),\"%\"))|&gt;\n  ggplot(aes(x = factor(educ_cat,levels=c(1,2,3),\n                        labels=c(\"Low\",\"High\",\"Higher\")), y=prop, fill = factor(educ_cat))) +\n  geom_col() + scale_y_continuous(labels = percent) + \n  geom_text(\n    aes(label = top_lab),\n    vjust = -0.05,   # moves text above bars\n    size = 2\n  ) +\n  labs(\n    title = \"Figure 1: Bar Plot\",\n    x = \"Education Category\",\n    y = \"Percent\",\n    fill = \"Educ cat\"\n  ) +  theme_minimal() + theme(plot.title = element_text(hjust = 0.5), \n                               legend.position = \"\")\n\n\n#Side by side\ndf2|&gt;filter(!is.na(educ_cat),!is.na(land))|&gt;\n  count(educ_cat,land) |&gt; mutate(prop=n/sum(n))|&gt;\n  ggplot(aes(x = factor(educ_cat,levels=c(1,2,3),\n                        labels=c(\"Low\",\"High\",\"Higher\")), y=prop, fill = factor(land,levels=c(0,1),\n                                                                                labels=c(\"No\",\"Yes\")))) +\n  geom_col(position = \"dodge\") + scale_y_continuous(labels = percent) + labs(\n    title = \"Figure 1: Bar Plot\",\n    x = \"Education Category\",\n    y = \"Percent\",\n    fill = \"Land\"\n  ) +  theme_minimal() + theme(plot.title = element_text(hjust = 0.5), \n                               legend.position = \"right\")\n\nCounts, proportions, percentages and side-by-side bars."
+  },
+  {
+    "objectID": "ddd2/main_script.html#contingency-table",
+    "href": "ddd2/main_script.html#contingency-table",
+    "title": "Main Script",
+    "section": "Contingency table",
+    "text": "Contingency table\n\n##Contingency Tables\nlibrary(janitor)\nlibrary(flextable)\nct_1&lt;-df2|&gt; mutate(across(c(educ_cat,land), as.factor))|&gt; \n  tabyl(educ_cat,land) |&gt;\n  adorn_percentages(\"all\") |&gt;\n  adorn_pct_formatting() |&gt;\n  adorn_ns()\n\nct_2&lt;-flextable(ct_1)\nsave_as_docx(ct_2, path=\"results/contg_1.docx\")\n\nCross table saved to Word."
+  },
+  {
+    "objectID": "ddd2/main_script.html#pie-chart",
+    "href": "ddd2/main_script.html#pie-chart",
+    "title": "Main Script",
+    "section": "Pie chart",
+    "text": "Pie chart\n\n#prepare a pie chart for \"educ_cat\" (title, legend and percentages(outside the slices) should be there)\n#simple pie chart\ndf2|&gt;\n  filter(!is.na(educ_cat))|&gt;\n  count(educ_cat)|&gt;\n  mutate(\n    prop = n / sum(n)\n  )|&gt;\n  ggplot(aes(x = \"\", y = prop, fill = factor(educ_cat))) +\n  geom_col() + coord_polar(theta = \"y\") +  theme_void()\n\n#final pie chart\ndf2|&gt;\n  filter(!is.na(educ_cat))|&gt;\n  count(educ_cat)|&gt;\n  mutate(\n    prop = n / sum(n),\n    values = paste0(round(prop * 100, 1),\"%\")\n  )|&gt;\n  ggplot(aes(x = \"\", y = prop, fill = factor(educ_cat,levels=c(1,2,3),\n                                             labels=c(\"Low\",\"High\",\"Higher\")))) +\n  geom_col() + coord_polar(theta = \"y\") +\n  geom_text(\n    aes(label = values),\n    position = position_stack(vjust = 0.5),\n    size = 2\n  ) + theme_void() + labs(fill = \"Educ Cat\")\n\nSimple and final version with labels."
+  },
+  {
+    "objectID": "ddd2/main_script.html#continuous-variables",
+    "href": "ddd2/main_script.html#continuous-variables",
+    "title": "Main Script",
+    "section": "Continuous variables",
+    "text": "Continuous variables\n\n###now the continuous variables\n#Box plots\nggplot(df2, aes(y=education)) + geom_boxplot(fill=\"orange\") +  \n  labs(title=\"Box Plot 1\", y=\"Years of education\")\n\n#for COPC\ndf2|&gt;filter(!is.na(COPC))|&gt;ggplot(aes(y=COPC)) + geom_boxplot(fill=\"orange\") +  \n  labs(title=\"Box Plot 1\", y=\"Consumption\")\n#remove out-liers and check\ndf2|&gt;filter(!is.na(COPC))|&gt;filter(COPC&lt;30000)|&gt;\n  ggplot(aes(y=COPC)) + geom_boxplot(fill=\"orange\") +  \n  labs(title=\"Box Plot 1\", y=\"Consumption\")\n\n#count of how many observations are geater than some value of x\nsum(df2$COPC &gt; 30000, na.rm = TRUE) #how many obs of COPC are &gt;50000\n\n#histogram\nggplot(df2, aes(education, fill=\"red\")) + geom_histogram(bins=8) +\n  labs(title=\"hist_1\", x=\"Education Years\", y=\"Count\") +\n  scale_x_continuous(breaks=c(0,4,8,12,16)) + labs(fill = \"Educ\") + \n  theme(legend.position = \"\")\n\nBox plot, outlier check and histogram."
+  },
+  {
+    "objectID": "ddd2/final_project.html",
+    "href": "ddd2/final_project.html",
+    "title": "Does Education Help Poor Families Escape Poverty?",
+    "section": "",
+    "text": "When poor families send their children to school, does this help them earn more money and get better jobs in the future? Or do things like caste, where they live, and family background stop them from moving up even with education? Why This Matters Today (in India):\nIndia spends billions of rupees on education ( including different programmes, and sround 4 to 5 percent of the GDP on education) to help people get better jobs and improve their lives.\nBut many educated young people still can’t find good jobs\nSome people escape poverty through education, others don’t\nThe question: Is education really powerful enough to overcome caste, location, and family disadvantage?"
+  },
+  {
+    "objectID": "ddd2/final_project.html#question",
+    "href": "ddd2/final_project.html#question",
+    "title": "Does Education Help Poor Families Escape Poverty?",
+    "section": "",
+    "text": "When poor families send their children to school, does this help them earn more money and get better jobs in the future? Or do things like caste, where they live, and family background stop them from moving up even with education? Why This Matters Today (in India):\nIndia spends billions of rupees on education ( including different programmes, and sround 4 to 5 percent of the GDP on education) to help people get better jobs and improve their lives.\nBut many educated young people still can’t find good jobs\nSome people escape poverty through education, others don’t\nThe question: Is education really powerful enough to overcome caste, location, and family disadvantage?"
+  },
+  {
+    "objectID": "ddd2/final_project.html#sources",
+    "href": "ddd2/final_project.html#sources",
+    "title": "Does Education Help Poor Families Escape Poverty?",
+    "section": "SOURCES",
+    "text": "SOURCES\n\nHow India Funds Public School Education SOURCE 1\nGovernment expenditure on education WORLD BANK SOURC 2"
+  },
+  {
+    "objectID": "ddd2/final_project.html#variables-to-extract",
+    "href": "ddd2/final_project.html#variables-to-extract",
+    "title": "Does Education Help Poor Families Escape Poverty?",
+    "section": "VARIABLES TO EXTRACT:",
+    "text": "VARIABLES TO EXTRACT:\n\n1. FATHER_EDUCATION_YEARS\n\nFrom: Income & Social Capital Questionnaire, Section 1\nQuestion: 1.18c\nCode: ID18c\nValues: 0-16 (years of schooling)\n\n\n\n\n2. HH_CONSUMPTION_ANNUAL\n\nFrom: Income & Social Capital Questionnaire, Section 14\nQuestions: 14.1 to 14.52 (ALL items)\nCode: CO1 through CO52\nHow to calculate: Sum all CO items, multiply by 12 for annual\nValues: Rupees (₹20,000 to ₹500,000 typical)\n\n\n\n\n3. CHILD_EDUCATION_YEARS\n\nFrom: Education & Health Questionnaire, Section 11\nQuestion: 11.5-11.6\nCode: ED5\nValues: 0-16 (years of schooling)\nFilter: Child age ≥ 15\n\n\n\n\n4. ANNUAL_INCOME\n\nFrom: Income & Social Capital Questionnaire, Section 7\nQuestions: 7.6-7.15\nCodes: WS6 (days), WS9 (type), WS10 (rate)\nHow to calculate:\n\nIf WS9=1 (per day): WS10 × WS6\nIf WS9=2 (per month): WS10 × 12\nIf WS9=3 (fixed): WS10\n\nValues: Rupees (₹0 to ₹500,000+)\n\n\n\n\n5. OCCUPATION_CATEGORY\n\nFrom: Income & Social Capital Questionnaire, Section 7\nQuestion: 7.2-7.5\nCode: WS3\nCategorize as:\n\n1 = Unskilled (codes 03, 04)\n2 = Skilled (codes 05, 06)\n3 = Professional (codes 07, 08, 09)\n\n\n\n\n\n6. CASTE\n\nFrom: Income & Social Capital Questionnaire, Section 1\nQuestion: 1.13\nCode: ID13\nValues:\n\n1 = Brahmin\n2 = Forward/General\n3 = OBC\n4 = SC (marginalized)\n5 = ST (marginalized)\n6 = Others\n\n\n\n\n\n7. RURAL_URBAN\n\nFrom: Income & Social Capital Questionnaire, Section 1\nQuestion: 1.8\nCode: ID8\nValues: 0 = Rural, 1 = Urban\n\n\n\n\n8. GENDER\n\nFrom: Household Roster, Section 2\nQuestion: 2.1\nCode: RO1\nValues: 1 = Male, 2 = Female"
+  },
+  {
+    "objectID": "ddd2/final_project.html#linking-key",
+    "href": "ddd2/final_project.html#linking-key",
+    "title": "Does Education Help Poor Families Escape Poverty?",
+    "section": "LINKING KEY:",
+    "text": "LINKING KEY:\nTo link father to child: 1. Father ID = RO9 (from Section 2, same questionnaire) 2. If RO9 = 01-12: Father is in household 3. Match father number to ED5 in Education questionnaire 4. Extract father’s education from that row"
+  },
+  {
+    "objectID": "ddd2/final_project.html#filters",
+    "href": "ddd2/final_project.html#filters",
+    "title": "Does Education Help Poor Families Escape Poverty?",
+    "section": "FILTERS:",
+    "text": "FILTERS:\n*KEEP if:** - Child age ≥ 15 (finished schooling) - Father ID = 01-12 (father in household) - Have father’s education (ED5 not missing) - Have child’s education (ED5 not missing) - Have income data (not all missing)\nDROP if: - Child age &lt; 15 (still in school) - Father ID = 55 (outside household) - Missing education data - Missing father link"
+  },
+  {
+    "objectID": "ddd2/final_project.html#breakdown-by-level",
+    "href": "ddd2/final_project.html#breakdown-by-level",
+    "title": "Does Education Help Poor Families Escape Poverty?",
+    "section": "BREAKDOWN BY LEVEL:",
+    "text": "BREAKDOWN BY LEVEL:\n\nHOUSEHOLD-LEVEL (One record per household):\n\nHH_CONSUMPTION_ANNUAL ← Household consumption\nCASTE ← Household caste\nRURAL_URBAN ← Household location\n\n\n\n\nINDIVIDUAL-LEVEL (One record per person):\n\nFATHER_EDUCATION_YEARS ← Individual’s father’s education\nCHILD_EDUCATION_YEARS ← Individual’s own education\nANNUAL_INCOME ← Individual’s income\nOCCUPATION_CATEGORY ← Individual’s job type\nGENDER ← Individual’s sex"
+  },
+  {
+    "objectID": "ddd2/final_project.html#how-to-use-them",
+    "href": "ddd2/final_project.html#how-to-use-them",
+    "title": "Does Education Help Poor Families Escape Poverty?",
+    "section": "HOW TO USE THEM:",
+    "text": "HOW TO USE THEM:\nStructure of your final dataset:\nOne row = ONE INDIVIDUAL CHILD\n\nColumns:\n- HH_KEY (identifies which household)\n- INDIVIDUAL_KEY (identifies which person)\n- CASTE (from HH - same for all in household)\n- RURAL_URBAN (from HH - same for all in household)\n- HH_CONSUMPTION_ANNUAL (from HH - same for all in household)\n- GENDER (from person's roster)\n- FATHER_EDUCATION_YEARS (from father's education record)\n- CHILD_EDUCATION_YEARS (from this person's education record)\n- ANNUAL_INCOME (from this person's work record)\n- OCCUPATION_CATEGORY (from this person's job code)"
+  },
+  {
+    "objectID": "ddd2/final_project.html#when-merging",
+    "href": "ddd2/final_project.html#when-merging",
+    "title": "Does Education Help Poor Families Escape Poverty?",
+    "section": "WHEN MERGING:",
+    "text": "WHEN MERGING:\n\nStart with Household Roster (individual level)\n\nColumns: HH_KEY, individual person number, age, gender, father_id\n\nAdd Household Variables (attach same values to all in that HH)\n\nCaste, Rural/Urban, HH_Consumption\n\nAdd Individual Education (from Education questionnaire)\n\nChild’s education, Father’s education (link via father_id)\n\nAdd Individual Work (from Income questionnaire)\n\nIncome, Occupation"
+  },
+  {
+    "objectID": "ddd2/assessment_3.html#setup",
+    "href": "ddd2/assessment_3.html#setup",
+    "title": "Assessment 3",
+    "section": "Setup",
+    "text": "Setup\n\nrm(list = ls())"
+  },
+  {
+    "objectID": "ddd2/assessment_3.html#load-required-libraries",
+    "href": "ddd2/assessment_3.html#load-required-libraries",
+    "title": "Assessment 3",
+    "section": "Load Required Libraries",
+    "text": "Load Required Libraries\n\n# Library loading\nlibrary(tibble)   \nlibrary(dplyr)    \nlibrary(rlang)    \nlibrary(lobstr)  \nlibrary(rio)      \nlibrary(ggplot2)\nlibrary(purrr)\nlibrary(labelled)\nlibrary(stargazer)\nlibrary(scales)\nlibrary(janitor)\nlibrary(flextable)"
+  },
+  {
+    "objectID": "ddd2/assessment_3.html#ihds-data-exercise",
+    "href": "ddd2/assessment_3.html#ihds-data-exercise",
+    "title": "Assessment 3",
+    "section": "IHDS Data exercise",
+    "text": "IHDS Data exercise\n\nlibrary(tidyverse)\nlibrary(rio)\nHH_DATA &lt;- import(\"../data/ddd2/RAW_DATA/ICPSR_36151/HH_DATA/HH_DATA.dta\")\n\nIHDS&lt;- subset(HH_DATA, select= c(ID18C, ID13, URBAN2011))\nview(IHDS)"
+  },
+  {
+    "objectID": "ddd2/assessment_3.html#assessment-environment",
+    "href": "ddd2/assessment_3.html#assessment-environment",
+    "title": "Assessment 3",
+    "section": "Assessment Environment",
+    "text": "Assessment Environment\n\n#All assessment answers and variables stored here in this environment\nassessment_3 &lt;- new.env()"
+  },
+  {
+    "objectID": "ddd2/assessment_3.html#question-1-data-cleaning-and-visualization",
+    "href": "ddd2/assessment_3.html#question-1-data-cleaning-and-visualization",
+    "title": "Assessment 3",
+    "section": "Question 1: Data Cleaning and Visualization",
+    "text": "Question 1: Data Cleaning and Visualization"
+  },
+  {
+    "objectID": "ddd2/assessment_3.html#final-check",
+    "href": "ddd2/assessment_3.html#final-check",
+    "title": "Assessment 3",
+    "section": "Final Check",
+    "text": "Final Check\n\nls(assessment_3)\n\n[1] \"df\"       \"df_clean\" \"raw_data\""
+  },
+  {
+    "objectID": "ddd2/assessment_1.html",
+    "href": "ddd2/assessment_1.html",
+    "title": "Assessment 1",
+    "section": "",
+    "text": "x &lt;- c(4, 7, 2, 9, 5, 6)\nx &gt; mean(x)\n\n[1] FALSE  TRUE FALSE  TRUE FALSE  TRUE\n\n#The output TRUE indicates elements greater than the mean of the vector."
+  },
+  {
+    "objectID": "ddd2/assessment_1.html#question-1",
+    "href": "ddd2/assessment_1.html#question-1",
+    "title": "Assessment 1",
+    "section": "",
+    "text": "x &lt;- c(4, 7, 2, 9, 5, 6)\nx &gt; mean(x)\n\n[1] FALSE  TRUE FALSE  TRUE FALSE  TRUE\n\n#The output TRUE indicates elements greater than the mean of the vector."
+  },
+  {
+    "objectID": "ddd2/assessment_1.html#question-2",
+    "href": "ddd2/assessment_1.html#question-2",
+    "title": "Assessment 1",
+    "section": "Question 2",
+    "text": "Question 2\n\ndf &lt;- data.frame(\n  id = 1:4,\n  score = c(65, 70, 68, 72),\n  group = c(\"A\", \"B\", \"A\", \"B\"))\ndf[df$id == 2, \"score\"] &lt;- 75\ndf # again to check new updated one variable in our data frame \n\n  id score group\n1  1    65     A\n2  2    75     B\n3  3    68     A\n4  4    72     B"
+  },
+  {
+    "objectID": "ddd2/assessment_1.html#question-3",
+    "href": "ddd2/assessment_1.html#question-3",
+    "title": "Assessment 1",
+    "section": "Question 3",
+    "text": "Question 3\n\nx &lt;- c(1, 2, 3, 4)\ny &lt;- x\ny[2] &lt;- 10 #MODIFY ONE ELEMENT OF Y VARIABLE\n\n#CHECK \nx#x does NOT change\n\n[1] 1 2 3 4\n\ny#y changes\n\n[1]  1 10  3  4"
+  },
+  {
+    "objectID": "ddd2/assessment_1.html#question-4",
+    "href": "ddd2/assessment_1.html#question-4",
+    "title": "Assessment 1",
+    "section": "Question 4",
+    "text": "Question 4\n\ndf &lt;- data.frame(\n  x = c(2, 4, 6, 8, 10, 12, 14, 16),\n  y = c(5, 7, 9, 11, 13, 15, 17, 19))\ndf[] &lt;- lapply(df, function(z) z - mean(z))\ndf\n\n   x  y\n1 -7 -7\n2 -5 -5\n3 -3 -3\n4 -1 -1\n5  1  1\n6  3  3\n7  5  5\n8  7  7"
+  },
+  {
+    "objectID": "ddd2/assessment_1.html#question-5",
+    "href": "ddd2/assessment_1.html#question-5",
+    "title": "Assessment 1",
+    "section": "Question 5",
+    "text": "Question 5\n\nv &lt;- c(\"Low\", \"Medium\", \"High\", \"Medium\", \"Low\", \"High\")\nf &lt;- factor(v, levels = c(\"Low\", \"Medium\", \"High\", \"VeryHigh\"), ordered = TRUE)\nf\n\n[1] Low    Medium High   Medium Low    High  \nLevels: Low &lt; Medium &lt; High &lt; VeryHigh\n\nas.numeric(f)\n\n[1] 1 2 3 2 1 3\n\ntypeof(f)\n\n[1] \"integer\""
+  },
+  {
+    "objectID": "ddd2/assessment_1.html#question-6",
+    "href": "ddd2/assessment_1.html#question-6",
+    "title": "Assessment 1",
+    "section": "Question 6",
+    "text": "Question 6\n\nmean_na &lt;- function(x) {\n  mean(x, na.rm = TRUE)}\n#to ceeck it we are taking an example \nv &lt;- c(2, 4, NA, 6, 8)\nmean_na(v)\n\n[1] 5"
+  },
+  {
+    "objectID": "ddd2/assessment_1.html#question-7",
+    "href": "ddd2/assessment_1.html#question-7",
+    "title": "Assessment 1",
+    "section": "Question 7",
+    "text": "Question 7\n\n# Create data frame with 6 observations\ndf &lt;- data.frame(\n  id = 1:6,\n  age = c(22, 27, 24, 30, 26, 21),\n  gender = c(\"F\", \"M\", \"F\", \"M\", \"F\", \"M\"),\n  income = c(20000, 35000, 25000, 40000, 32000, 18000))\n#(a) Rename variables\ncolnames(df)[colnames(df) == \"age\"] &lt;- \"age_years\"\ncolnames(df)[colnames(df) == \"income\"] &lt;- \"annual_income\"\n#(b) Add indicator variable (age &gt; 25)\ndf$older_than_25 &lt;- df$age_years &gt; 25\n#(c) Subset individuals older than 25\ndf_sub &lt;- df[df$older_than_25 == TRUE, ]\n#(d) Keep only id and indicator variable\nfinal_df &lt;- df_sub[, c(\"id\", \"older_than_25\")]\nfinal_df\n\n  id older_than_25\n2  2          TRUE\n4  4          TRUE\n5  5          TRUE"
+  },
+  {
+    "objectID": "ddd2/assessment_1.html#question-8",
+    "href": "ddd2/assessment_1.html#question-8",
+    "title": "Assessment 1",
+    "section": "Question 8",
+    "text": "Question 8\n\n#Create data frame with four numeric variables\ndf &lt;- data.frame(\n  a = c(2, 4, 6, NA, 8),\n  b = c(1, 3, 5, 7, NA),\n  c = c(10, 12, NA, 14, 16),\n  d = c(5, NA, 9, 11, 13))\n#Define function\nmedian_dev_fun &lt;- function(data) {\n  \n  data$a_md &lt;- data$a - median(data$a, na.rm = TRUE)\n  data$b_md &lt;- data$b - median(data$b, na.rm = TRUE)\n  data$c_md &lt;- data$c - median(data$c, na.rm = TRUE)\n  data$d_md &lt;- data$d - median(data$d, na.rm = TRUE)\n  \n  data$sum_md &lt;- data$a_md + data$b_md + data$c_md + data$d_md\n  \n  data\n}\n\n#Apply function\nresult &lt;- median_dev_fun(df)\nresult\n\n   a  b  c  d a_md b_md c_md d_md sum_md\n1  2  1 10  5   -3   -3   -3   -5    -14\n2  4  3 12 NA   -1   -1   -1   NA     NA\n3  6  5 NA  9    1    1   NA   -1     NA\n4 NA  7 14 11   NA    3    1    1     NA\n5  8 NA 16 13    3   NA    3    3     NA"
+  },
+  {
+    "objectID": "ddd2/index.html",
+    "href": "ddd2/index.html",
+    "title": "DDD 2: Introduction to Programming and Basic Data Analysis",
+    "section": "",
+    "text": "This course covers the basics of R and RStudio: objects, data frames, functions, loops, data cleaning, plots and tables, using the IHDS household data."
+  },
+  {
+    "objectID": "ddd2/index.html#notes-and-scripts",
+    "href": "ddd2/index.html#notes-and-scripts",
+    "title": "DDD 2: Introduction to Programming and Basic Data Analysis",
+    "section": "Notes and scripts",
+    "text": "Notes and scripts\n\nClass Notes\nMain Script"
+  },
+  {
+    "objectID": "ddd2/index.html#assessments",
+    "href": "ddd2/index.html#assessments",
+    "title": "DDD 2: Introduction to Programming and Basic Data Analysis",
+    "section": "Assessments",
+    "text": "Assessments\n\nAssessment 1\nAssessment 2\nAssessment 3\nAssessment 4\nMid-Semester Exam\nFinal Exam"
+  },
+  {
+    "objectID": "ddd2/index.html#project",
+    "href": "ddd2/index.html#project",
+    "title": "DDD 2: Introduction to Programming and Basic Data Analysis",
+    "section": "Project",
+    "text": "Project\n\nFinal Project: Does Education Help Poor Families Escape Poverty?"
+  },
+  {
+    "objectID": "ddd3/data_clean.html",
+    "href": "ddd3/data_clean.html",
+    "title": "Data Cleaning",
+    "section": "",
+    "text": "Cleaning of the field survey data from the urban slums: women, children and households. The code is shown as written; it is not run when the site is built."
+  },
+  {
+    "objectID": "ddd3/data_clean.html#setup",
+    "href": "ddd3/data_clean.html#setup",
+    "title": "Data Cleaning",
+    "section": "Setup",
+    "text": "Setup\n\nrm(list = ls())\nlibrary(haven)\nlibrary(dplyr) \nlibrary(rio) \nlibrary(labelled)\nlibrary(ggplot2)\nlibrary(stargazer)\n\nClears the workspace and loads the packages."
+  },
+  {
+    "objectID": "ddd3/data_clean.html#womens-data-renaming-variables",
+    "href": "ddd3/data_clean.html#womens-data-renaming-variables",
+    "title": "Data Cleaning",
+    "section": "Women’s data: renaming variables",
+    "text": "Women’s data: renaming variables\n\n# 2. WOMEN_SLUMS\n\nW_SLUMS &lt;- W_SLUMS %&gt;%\n  rename(\n    woman_index         = `_index`,\n    date_interview      = Date_of_interview,\n    team_id             = Team_ID,\n    slum_id             = Slum_ID,\n    household_id        = Household_ID,\n    relation_hhd        = Relation_to_HHD_Head,\n    joint_family        = Joint_family,\n    fil_alive           = Father_in_law_alive,\n    mil_alive           = Mother_in_law_alive,\n    gender              = Gender,\n    marital_status      = Marital_status,\n    age                 = Age,\n    age_at_marriage     = Age_at_marriage,\n    education           = Education,\n    currently_working   = Currently_Working,\n    spouse_age          = Spouse_age,\n    spouse_education    = Spouse_education,\n    spouse_working      = Spouse_working,\n    smartphone          = Smart_Phone,\n    internet            = Internet,\n    health_condition    = Health_condition,\n    sleep_trouble       = Sleep_trouble,\n    cognition           = Cognition,\n    life_satisfaction   = Life_Satisfaction,\n    depression          = Depression,\n    d1                  = `group_wl2zg68/D1`,\n    d2                  = `group_wl2zg68/D2`,\n    d3                  = `group_wl2zg68/D3`,\n    d4                  = `group_wl2zg68/D4`,\n    d5                  = `group_wl2zg68/D5`,\n    d6                  = `group_wl2zg68/D6`,\n    d7                  = `group_wl2zg68/D7`,\n    a1                  = `group_zx8ri59/A1`,\n    a2                  = `group_zx8ri59/A2`,\n    a3                  = `group_zx8ri59/A3`,\n    a4                  = `group_zx8ri59/A4`,\n    a5                  = `group_zx8ri59/A5`,\n    mob_market          = `group_qv9zp21/Market`,\n    mob_health          = `group_qv9zp21/Health_center`,\n    mob_relative        = `group_qv9zp21/Relative_s_house`,\n    mob_bank            = `group_qv9zp21/Bank`,\n    mob_outside         = `group_qv9zp21/Outside_locality`,\n    theft               = Theft,\n    break_in            = Break_in,\n    threat              = Threat,\n    harassment          = Harassment,\n    total_children      = Total_Children)\n\nGives short, clear names to the survey variables."
+  },
+  {
+    "objectID": "ddd3/data_clean.html#womens-data-cleaning",
+    "href": "ddd3/data_clean.html#womens-data-cleaning",
+    "title": "Data Cleaning",
+    "section": "Women’s data: cleaning",
+    "text": "Women’s data: cleaning\n\nW_SLUMS &lt;- W_SLUMS %&gt;%\n  mutate(\n    age           = ifelse(age == 0, NA, age),\n    education     = ifelse(education &gt; 16, NA, education))\nsummary(W_SLUMS$age)\nW_SLUMS |&gt; count(education)\n\nAge 0 and education above 16 are replaced with NA."
+  },
+  {
+    "objectID": "ddd3/data_clean.html#womens-data-recoding",
+    "href": "ddd3/data_clean.html#womens-data-recoding",
+    "title": "Data Cleaning",
+    "section": "Women’s data: recoding",
+    "text": "Women’s data: recoding\n\nW_SLUMS &lt;- W_SLUMS %&gt;%\n  mutate(\n    # widow or separated = 1, others = 0\n    widow_sep = ifelse(marital_status %in% c(3, 4), 1, 0),\n    # age groups\n    age_group = case_when(\n      age &lt; 18               ~ 1,    # below 18\n      age &gt;= 18 & age &lt; 25   ~ 2,    # 18-24\n      age &gt;= 25 & age &lt; 35   ~ 3,    # 25-34\n      age &gt;= 35 & age &lt; 45   ~ 4,    # 35-44\n      age &gt;= 45 & age &lt; 55   ~ 5,    # 45-54\n      age &gt;= 55 & age &lt; 65   ~ 6,    # 55-64\n      age &gt;= 65              ~ 7     # 65+\n    ),\n    \n    # factors\n    slum_id      = as.factor(slum_id),\n    joint_family = as.integer(joint_family == 1),\n    fil_alive    = as.integer(fil_alive == 1),\n    mil_alive    = as.integer(mil_alive == 1))\n\nW_SLUMS &lt;- W_SLUMS %&gt;%\n  mutate(\n    edu_cat = case_when(\n      education == 0                    ~ 1,   # Illiterate\n      education &gt;= 1  & education &lt;= 5  ~ 2,   # Primary\n      education &gt;= 6  & education &lt;= 8  ~ 3,   # Middle\n      education &gt;= 9  & education &lt;= 10 ~ 4,   # Secondary\n      education &gt;= 11 & education &lt;= 12 ~ 5,   # Higher Secondary\n      education &gt;= 13 & education &lt;= 16 ~ 6    # Graduate & Above\n    ))\n\nWidowed or separated indicator, age groups and education categories."
+  },
+  {
+    "objectID": "ddd3/data_clean.html#dummy-variables",
+    "href": "ddd3/data_clean.html#dummy-variables",
+    "title": "Data Cleaning",
+    "section": "Dummy variables",
+    "text": "Dummy variables\n\n# ── CREATE DUMMIES ────────────────────────────────────────────────────────────\n\nW_SLUMS &lt;- W_SLUMS %&gt;%\n  mutate(\n    # education dummies\n    edu_illiterate   = as.integer(edu_cat == 1),\n    edu_primary      = as.integer(edu_cat == 2),\n    edu_middle       = as.integer(edu_cat == 3),\n    edu_secondary    = as.integer(edu_cat == 4),\n    edu_higher_sec   = as.integer(edu_cat == 5),\n    edu_graduate     = as.integer(edu_cat == 6),\n    \n    # age group dummies\n    age_below_18     = as.integer(age_group == 1),\n    age_18_24        = as.integer(age_group == 2),\n    age_25_34        = as.integer(age_group == 3),\n    age_35_44        = as.integer(age_group == 4),\n    age_45_54        = as.integer(age_group == 5),\n    age_55_64        = as.integer(age_group == 6),\n    age_65plus           = as.integer(age_group == 7)\n  )\n\nOne 0/1 variable for each education and age category."
+  },
+  {
+    "objectID": "ddd3/data_clean.html#summary-statistics",
+    "href": "ddd3/data_clean.html#summary-statistics",
+    "title": "Data Cleaning",
+    "section": "Summary statistics",
+    "text": "Summary statistics\n\nW_SLUMS %&gt;%\n  dplyr::select(\n    # dependent variable\n    currently_working,\n    \n    # independent variables — marital status\n    widow_sep,\n    \n    # independent variables — family structure\n    joint_family,\n    \n    # independent variables — age groups\n    age_18_24,\n    age_25_34,\n    age_35_44,\n    age_45_54,\n    age_55_64,\n    age_65plus,\n    \n    # control variables — education\n    edu_illiterate,\n    edu_primary,\n    edu_middle,\n    edu_secondary,\n    edu_higher_sec,\n    edu_graduate,\n    \n    # control variables — in-laws\n    fil_alive,\n    mil_alive\n  ) %&gt;%\n  as.data.frame() %&gt;%\n  stargazer(\n    type         = \"text\",\n    title        = \"Table 1: Summary Statistics — Determinants of Women's Employment in Urban Slums\",\n    summary.stat = c(\"n\", \"mean\", \"sd\", \"min\", \"max\"),\n    digits       = 2,\n    covariate.labels = c(\n      # dependent\n      \"Currently Working\",\n      \n      # independent\n      \"Widowed/Separated\",\n      \"Joint Family\",\n      \n      # age groups\n      \"Age 18-24\",\n      \"Age 25-34\",\n      \"Age 35-44 (ref)\",\n      \"Age 45-54\",\n      \"Age 55-64\",\n      \"Age 65+\",\n      \n      # education\n      \"Illiterate (ref)\",\n      \"Primary (1-5 years)\",\n      \"Middle (6-8 years)\",\n      \"Secondary (9-10 years)\",\n      \"Higher Secondary (11-12 years)\",\n      \"Graduate & Above\",\n      \n      # controls\n      \"Father-in-law Alive\",\n      \"Mother-in-law Alive\"\n    ))\n\nSummary table of the employment variables."
+  },
+  {
+    "objectID": "ddd3/data_clean.html#importing-and-merging",
+    "href": "ddd3/data_clean.html#importing-and-merging",
+    "title": "Data Cleaning",
+    "section": "Importing and merging",
+    "text": "Importing and merging\n\nW_SLUMS &lt;- rio::import(\"../data/ddd3/SLUMS/W_SLUMS.dta\")\n\n\n\n\n\n# data merging\n# 1. 1:1:1 merge (merge by a unique identifier)\n#new_data&lt;- merge(data1, data2, by = c(\"identifiers\"))\n\n# 2. m:1 merge \n# new_data&lt;- merge(data1, data2 by = c(\"identifiers\"), all.x = TRUE)  : all.x = TRUE means that all rows from data1 will be kept, and only matching rows from data2 will be included.\n# in this case we need to at place of data1  we need to keep many rows and at place of data2 we need to keep one row.\n\nImports the women’s data. The merge notes explain a one-to-one and a many-to-one merge."
+  },
+  {
+    "objectID": "ddd3/data_clean.html#childrens-data",
+    "href": "ddd3/data_clean.html#childrens-data",
+    "title": "Data Cleaning",
+    "section": "Children’s data",
+    "text": "Children’s data\n\n# 1 CHILD_SLUMS \nlibrary(tidyverse)\nC_SLUMS &lt;- C_SLUMS %&gt;%\n  rename(\n    birth_order      = `children_history/C_Child_birth_order`,\n    c_gender     = `children_history/C_Gender`,\n    c_age        = `children_history/C_Age`,\n    c_education  = `children_history/C_Education`,\n    c_enrolled   = `children_history/C_currently_enrolled`,\n    c_dropout    = `children_history/C_drop_out`,\n    c_dropout_reason = `children_history/C_dropout_reason`,\n    c_work       = `children_history/C_Work`,\n    c_marital    = `children_history/C_Marital_Status`,\n    parent_index     = `_parent_index`) \n\nRenames the children’s variables."
+  },
+  {
+    "objectID": "ddd3/data_clean.html#household-data",
+    "href": "ddd3/data_clean.html#household-data",
+    "title": "Data Cleaning",
+    "section": "Household data",
+    "text": "Household data\n\n# 3. HH_SLUMS\n\nHH_SLUMS &lt;- HH_SLUMS %&gt;%\n  rename(\n    hh_index          = `_index`,\n    date_interview    = Date_of_interview,\n    team_id           = Team_ID,\n    slum_id           = Slum_ID,\n    household_id      = Household_ID,\n    hh_head_name      = Name_of_the_household_head,\n    religion          = Religion,\n    caste             = Caste,\n    residence         = Residence,\n    house_type        = House_type,\n    n_rooms           = Number_of_rooms,\n    rain_leak         = Rain_leak,\n    hot_summer        = Hot_summer,\n    ownership         = Ownership,\n    electricity       = Electricity,\n    water_supply      = Water_supply,\n    toilet_facility   = Toilet_facility,\n    cooking_fuel      = Cooking_fuel,\n    ration_card       = Ration_card,\n    ration_card_type  = Ration_card_type,\n    land              = Land,\n    tv                = `group_dd5nq69/A1`,\n    fan               = `group_dd5nq69/A2`,\n    cooler            = `group_dd5nq69/A3`,\n    refrigerator      = `group_dd5nq69/A4`,\n    washing_machine   = `group_dd5nq69/A5`,\n    motorcycle        = `group_dd5nq69/A6`,\n    bicycle           = `group_dd5nq69/A7`,\n    auto_car          = `group_dd5nq69/A8`,\n    smartphone        = `group_dd5nq69/A9`,\n    computer          = `group_dd5nq69/A10`,\n    sewing_machine    = `group_dd5nq69/A11`,\n    livestock         = `group_dd5nq69/A12`,\n    income_source     = Income_Source,\n    food_exp          = Food_expenditure,\n    non_food_exp      = Non_food_expenditure,\n    income            = Income,\n    migration         = Migration,\n    loan              = Loan,\n    loan_purpose      = Loan_purpose,\n    loan_source       = Loan_Source,\n    loan_amount       = Loan_Amount,\n    awas_yojna        = `group_uz6ik40/Awas_Yojna`,\n    ujjwala           = `group_uz6ik40/Ujjwala_Yojana`,\n    pds               = `group_uz6ik40/PDS`,\n    ayushman          = `group_uz6ik40/Ayushman_Bharat`,\n    DAY               = `group_uz6ik40/Deendayal_Antyodaya_Yojana`,\n    pm_svanidhi       = `group_uz6ik40/PM_Street_Vendor_Loan`,\n    pension           = `group_uz6ik40/Pension`,\n    swachh_bharat     = `group_uz6ik40/Swachh_Bharat_Mission`,\n    ladli_behna       = `group_uz6ik40/Ladli_Behna_Yojana`,\n    total_members     = Total_members,\n    rain_leak_yes     = `Rain_leak/1`,\n    rain_leak_no      = `Rain_leak/0`,\n    hot_summer_yes    = `Hot_summer/1`,\n    hot_summer_no     = `Hot_summer/0`,\n    ownership_own     = `Ownership/1`,\n    ownership_rent    = `Ownership/2`,\n    ownership_informal = `Ownership/3`,\n    ownership_other   = `Ownership/4`,\n    cooking_lpg       = `Cooking_fuel/1`,\n    cooking_elec      = `Cooking_fuel/2`,\n    cooking_kerosene  = `Cooking_fuel/3`,\n    cooking_firewood  = `Cooking_fuel/4`,\n    cooking_other     = `Cooking_fuel/5`,\n    loan_source_bank  = `Loan_Source/1`,\n    loan_source_ml    = `Loan_Source/2`,\n    loan_source_rel   = `Loan_Source/3`,\n    loan_source_shg   = `Loan_Source/4`,\n    loan_source_other = `Loan_Source/5`)\n\nRenames the household variables."
+  },
+  {
+    "objectID": "ddd3/index.html",
+    "href": "ddd3/index.html",
+    "title": "DDD 3: Summer Field Practice Course",
+    "section": "",
+    "text": "Field practice work on urban slums: cleaning the survey data and studying what determines women’s employment.\n\nData Cleaning: renaming, recoding and dummy variables for the women, children and household data.\nPresentation: What Determines Women’s Employment in Urban Slums?: slides on marital status, family structure and age.\n\n\n\n\n\n\n\nTipSlides as PDF\n\n\n\nOpen the presentation and add ?print-pdf at the end of the address, then print to PDF from the browser."
+  }
+]

@@ -1,0 +1,71 @@
+project:
+  type: website
+  output-dir: docs            # GitHub Pages serves this folder
+  resources:
+    - .nojekyll
+
+website:
+  title: "Data, Democracy and Development"
+  navbar:
+    background: "#1b2a41"
+    pinned: true
+    left:
+      - href: index.qmd
+        text: Home
+      - text: "DDD 2"
+        menu:
+          - href: ddd2/index.qmd
+            text: Overview
+          - href: ddd2/class_notes.qmd
+            text: Class Notes
+          - href: ddd2/main_script.qmd
+            text: Main Script
+          - href: ddd2/assessment_1.qmd
+            text: Assessment 1
+          - href: ddd2/assessment_2.qmd
+            text: Assessment 2
+          - href: ddd2/assessment_3.qmd
+            text: Assessment 3
+          - href: ddd2/assessment_4.qmd
+            text: Assessment 4
+          - href: ddd2/midterm.qmd
+            text: Mid-Semester Exam
+          - href: ddd2/final_exam.qmd
+            text: Final Exam
+          - href: ddd2/final_project.qmd
+            text: Final Project
+      - text: "DDD 3"
+        menu:
+          - href: ddd3/index.qmd
+            text: Overview
+          - href: ddd3/data_clean.qmd
+            text: Data Cleaning
+          - href: ddd3/women_employment.qmd
+            text: Women's Employment (slides)
+      - text: "DDD 4"
+        menu:
+          - href: ddd4/index.qmd
+            text: Overview
+          - href: ddd4/computational_statistics.qmd
+            text: Computational Statistics
+    right:
+      - icon: github
+        href: https://github.com/R-code11/ddd-courses
+  page-footer: "Ramesh Beniwal. Occupational Track in Data, Democracy and Development."
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
+    toc-depth: 3
+    code-copy: true
+    smooth-scroll: true
+  typst:
+    toc: true
+
+execute:
+  warning: false
+  message: false
+  error: true
+  freeze: auto               # a page is re-run only when it changes

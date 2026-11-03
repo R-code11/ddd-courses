@@ -1,0 +1,185 @@
+---
+title: "Does Education Help Poor Families Escape Poverty?"
+subtitle: "DDD 2 final project"
+author: "Group 4"
+---
+
+## Question 
+- When poor families send their children to school, does this help them earn more money and get better jobs in the future? Or do things like caste, where they live, and family background stop them from moving up even with education?
+Why This Matters Today (in India):
+
+- India spends billions of rupees on education ( including different programmes, and sround 4 to 5 percent of the GDP on education) to help people get better jobs and improve their lives.
+
+- But many educated young people still can't find good jobs
+- Some people escape poverty through education, others don't
+- The question: Is education really powerful enough to overcome caste, location, and family disadvantage?
+
+## SOURCES 
+
+- How India Funds Public School Education [SOURCE 1 ](https://www.indiaspend.com/budget/budget-explainer-how-india-funds-public-school-education-718488#:~:text=The%20states%20also%20contribute%20to%20education.%20They,38%2C317%20crore%20($5.25%20billion)%20to%20higher%20education)
+
+- Government expenditure on education WORLD BANK [SOURC 2](https://data.worldbank.org/indicator/SE.XPD.TOTL.GD.ZS?locations=IN)
+
+
+##  VARIABLES TO EXTRACT:
+
+
+### **1. FATHER_EDUCATION_YEARS**
+- **From:** Income & Social Capital Questionnaire, Section 1
+- **Question:** 1.18c
+- **Code:** ID18c
+- **Values:** 0-16 (years of schooling)
+
+---
+
+### **2. HH_CONSUMPTION_ANNUAL**
+- **From:** Income & Social Capital Questionnaire, Section 14
+- **Questions:** 14.1 to 14.52 (ALL items)
+- **Code:** CO1 through CO52
+- **How to calculate:** Sum all CO items, multiply by 12 for annual
+- **Values:** Rupees (₹20,000 to ₹500,000 typical)
+
+---
+
+### **3. CHILD_EDUCATION_YEARS**
+- **From:** Education & Health Questionnaire, Section 11
+- **Question:** 11.5-11.6
+- **Code:** ED5
+- **Values:** 0-16 (years of schooling)
+- **Filter:** Child age ≥ 15
+
+---
+
+### **4. ANNUAL_INCOME**
+- **From:** Income & Social Capital Questionnaire, Section 7
+- **Questions:** 7.6-7.15
+- **Codes:** WS6 (days), WS9 (type), WS10 (rate)
+- **How to calculate:**
+  - If WS9=1 (per day): WS10 × WS6
+  - If WS9=2 (per month): WS10 × 12
+  - If WS9=3 (fixed): WS10
+- **Values:** Rupees (₹0 to ₹500,000+)
+
+---
+
+### **5. OCCUPATION_CATEGORY**
+- **From:** Income & Social Capital Questionnaire, Section 7
+- **Question:** 7.2-7.5
+- **Code:** WS3
+- **Categorize as:**
+  - 1 = Unskilled (codes 03, 04)
+  - 2 = Skilled (codes 05, 06)
+  - 3 = Professional (codes 07, 08, 09)
+
+---
+
+### **6. CASTE**
+- **From:** Income & Social Capital Questionnaire, Section 1
+- **Question:** 1.13
+- **Code:** ID13
+- **Values:** 
+  - 1 = Brahmin
+  - 2 = Forward/General
+  - 3 = OBC
+  - 4 = SC (marginalized)
+  - 5 = ST (marginalized)
+  - 6 = Others
+
+---
+
+### **7. RURAL_URBAN**
+- **From:** Income & Social Capital Questionnaire, Section 1
+- **Question:** 1.8
+- **Code:** ID8
+- **Values:** 0 = Rural, 1 = Urban
+
+---
+
+### **8. GENDER**
+- **From:** Household Roster, Section 2
+- **Question:** 2.1
+- **Code:** RO1
+- **Values:** 1 = Male, 2 = Female
+
+---
+
+## **LINKING KEY:**
+
+**To link father to child:**
+1. Father ID = RO9 (from Section 2, same questionnaire)
+2. If RO9 = 01-12: Father is in household
+3. Match father number to ED5 in Education questionnaire
+4. Extract father's education from that row
+
+---
+
+## **FILTERS:**
+
+*KEEP if:**
+- Child age ≥ 15 (finished schooling)
+- Father ID = 01-12 (father in household)
+- Have father's education (ED5 not missing)
+- Have child's education (ED5 not missing)
+- Have income data (not all missing)
+
+**DROP if:**
+- Child age < 15 (still in school)
+- Father ID = 55 (outside household)
+- Missing education data
+- Missing father link
+
+---
+
+## **BREAKDOWN BY LEVEL:**
+
+### **HOUSEHOLD-LEVEL (One record per household):**
+1. **HH_CONSUMPTION_ANNUAL** ← Household consumption
+2. **CASTE** ← Household caste
+3. **RURAL_URBAN** ← Household location
+
+---
+
+### **INDIVIDUAL-LEVEL (One record per person):**
+1. **FATHER_EDUCATION_YEARS** ← Individual's father's education
+2. **CHILD_EDUCATION_YEARS** ← Individual's own education
+3. **ANNUAL_INCOME** ← Individual's income
+4. **OCCUPATION_CATEGORY** ← Individual's job type
+5. **GENDER** ← Individual's sex
+
+---
+
+## **HOW TO USE THEM:**
+
+**Structure of your final dataset:**
+
+```
+One row = ONE INDIVIDUAL CHILD
+
+Columns:
+- HH_KEY (identifies which household)
+- INDIVIDUAL_KEY (identifies which person)
+- CASTE (from HH - same for all in household)
+- RURAL_URBAN (from HH - same for all in household)
+- HH_CONSUMPTION_ANNUAL (from HH - same for all in household)
+- GENDER (from person's roster)
+- FATHER_EDUCATION_YEARS (from father's education record)
+- CHILD_EDUCATION_YEARS (from this person's education record)
+- ANNUAL_INCOME (from this person's work record)
+- OCCUPATION_CATEGORY (from this person's job code)
+```
+
+---
+
+## **WHEN MERGING:**
+
+1. **Start with Household Roster** (individual level)
+   - Columns: HH_KEY, individual person number, age, gender, father_id
+
+2. **Add Household Variables** (attach same values to all in that HH)
+   - Caste, Rural/Urban, HH_Consumption
+
+3. **Add Individual Education** (from Education questionnaire)
+   - Child's education, Father's education (link via father_id)
+
+4. **Add Individual Work** (from Income questionnaire)
+   - Income, Occupation

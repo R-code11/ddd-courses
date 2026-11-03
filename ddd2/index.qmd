@@ -1,0 +1,27 @@
+---
+title: "DDD 2: Introduction to Programming and Basic Data Analysis"
+subtitle: "Jan 2026 · UGRD-10480-1"
+format:
+  html:
+    toc: false
+---
+
+This course covers the basics of R and RStudio: objects, data frames, functions, loops, data cleaning, plots and tables, using the IHDS household data.
+
+## Notes and scripts
+
+- [Class Notes](class_notes.qmd)
+- [Main Script](main_script.qmd)
+
+## Assessments
+
+- [Assessment 1](assessment_1.qmd)
+- [Assessment 2](assessment_2.qmd)
+- [Assessment 3](assessment_3.qmd)
+- [Assessment 4](assessment_4.qmd)
+- [Mid-Semester Exam](midterm.qmd)
+- [Final Exam](final_exam.qmd)
+
+## Project
+
+- [Final Project: Does Education Help Poor Families Escape Poverty?](final_project.qmd)

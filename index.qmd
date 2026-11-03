@@ -1,0 +1,111 @@
+---
+pagetitle: "Data, Democracy and Development"
+page-layout: full
+toc: false
+format:
+  html:
+    toc: false
+    title-block-style: none
+---
+
+::: {.hero}
+::: {.hero-inner}
+<p class="eyebrow">Occupational Track</p>
+
+# Data, Democracy and Development {.hero-title}
+
+<p class="hero-lead">What does development mean, and how do we measure it? My course work in R and Quarto: notes, code, assessments and field research.</p>
+
+<p class="hero-buttons">
+[Start with DDD 2](ddd2/index.qmd){.btn-ddd .btn-solid}
+[DDD 3](ddd3/index.qmd){.btn-ddd .btn-line}
+[DDD 4](ddd4/index.qmd){.btn-ddd .btn-line}
+</p>
+:::
+:::
+
+::: {.wrap}
+
+## Courses {.section-title}
+
+::: {.course-grid}
+
+::: {.course-card .c2}
+<p class="num">02</p>
+
+### Introduction to Programming and Basic Data Analysis
+
+<p class="meta">Jan 2026 · UGRD-10480-1</p>
+
+R and RStudio from the first line of code: data frames, functions, loops, cleaning, plots and tables, using household survey data.
+
+<p class="card-buttons">
+[Overview](ddd2/index.qmd){.btn-ddd .btn-solid}
+[Class notes](ddd2/class_notes.qmd){.btn-ddd .btn-line}
+[Final project](ddd2/final_project.qmd){.btn-ddd .btn-line}
+</p>
+:::
+
+::: {.course-card .c3}
+<p class="num">03</p>
+
+### Summer Field Practice Course
+
+<p class="meta">Summer 2026 · UGRD-10002-1</p>
+
+Field research in urban slums: cleaning the survey data and asking what shapes women's employment.
+
+<p class="card-buttons">
+[Overview](ddd3/index.qmd){.btn-ddd .btn-solid}
+[Data cleaning](ddd3/data_clean.qmd){.btn-ddd .btn-line}
+[Slides](ddd3/women_employment.qmd){.btn-ddd .btn-line}
+</p>
+:::
+
+::: {.course-card .c4}
+<p class="num">04</p>
+
+### Statistical Principles through Computation
+
+<p class="meta">Jul 2026 · UGRD-10594-1</p>
+
+Statistics done with code: exploratory analysis, correlation, simple and multiple regression.
+
+<p class="card-buttons">
+[Overview](ddd4/index.qmd){.btn-ddd .btn-solid}
+[Class notes](ddd4/computational_statistics.qmd){.btn-ddd .btn-line}
+</p>
+:::
+
+:::
+
+## About the track {.section-title}
+
+::: {.about-grid}
+::: {}
+#### Measuring development
+What development means, and how it can be measured with data.
+:::
+::: {}
+#### Income and inequality
+Income, inequality and socio-economic mobility, seen in real data.
+:::
+::: {}
+#### Capabilities
+Amartya Sen's capabilities framework as a way to see well-being.
+:::
+::: {}
+#### Right to Information
+Information as a tool for accountability in a democracy.
+:::
+::: {}
+#### Data ethics
+Who collects data, who is counted, and the politics behind it.
+:::
+::: {}
+#### Code you can read
+Every page shows its R code, and each page can be saved as a PDF.
+:::
+:::
+
+:::

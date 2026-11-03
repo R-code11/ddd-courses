@@ -1,0 +1,354 @@
+---
+title: "Assessment 2"
+subtitle: "DDD 2: Introduction to Programming and Basic Data Analysis"
+author: "Ramesh Beniwal | Admission ID: BAEC2240006"
+date: today
+---
+
+
+------------------------------------------------------------------------
+
+## Setup
+```{r}
+rm(list = ls())
+```
+
+------------------------------------------------------------------------
+
+## Load Required Libraries
+```{r}
+library(tibble)   
+library(dplyr)    
+library(rlang)    
+library(lobstr)  
+library(rio)
+library(ggplot2)
+library(labelled)
+library(stargazer)
+library(scales)
+library(ivo.table)
+library(flextable)
+library(janitor)
+library(tinytex)
+```
+
+------------------------------------------------------------------------
+
+## Exam Environment
+```{r}
+ASSESSMENT2_DDD <- new.env()
+```
+
+------------------------------------------------------------------------
+
+## Question 1 
+```{r}
+ASSESSMENT2_DDD <- new.env()
+
+ASSESSMENT2_DDD$x <- 5
+
+while(ASSESSMENT2_DDD$x <= 15) {
+  print(ASSESSMENT2_DDD$x)
+  ASSESSMENT2_DDD$x <- ASSESSMENT2_DDD$x + 2
+}
+```
+------------------------------------------------------------------------
+
+## Question 2 (a) Explanitation of the code
+```{r}
+x<- 13 
+repeat{
+  x= x+2
+  print(x)
+  if ( x == 25 ) break
+}
+
+# During the execution of the code variable x starts with a value of 13. In each iteration of the repeat loop, x is incremented by 2 and its new value is printed. The loop continues until x reaches 25, at which point the break statement is executed, terminating or we can say stoping the loop. The output will be like as printed in the console:
+```
+## Question 2 (b) Modification of the code 
+```{r}
+x <- 13
+repeat{
+  print(x)
+  x = x + 2
+  if (x > 25) break
+}
+```
+
+------------------------------------------------------------------------
+
+## Question 3 (a)  Creating a data frame with 2 columns and 6 rows
+```{r}
+df <- tibble::tibble(
+  a = rnorm(6),
+  b = rnorm(6))
+
+df
+```
+## Question 3 (b) function defining to calculate mean deviation 
+```{r}
+mean_dev <- function(x) {
+  x - mean(x, na.rm = TRUE)}
+mean_dev(df$a)
+mean_dev(df$b)
+
+## The output of the above code will be the mean deviation of each value in columns a and b from their means. The mean deviation is calculated by subtracting the mean of the column from each individual value in that column. The output will be displayed here;
+```
+## Question 3 (c)  
+```{r}
+library(purrr)
+
+df$c <- mean_dev(df$a)
+df$d <- mean_dev(df$b)
+
+df
+```
+
+------------------------------------------------------------------------
+
+## Question 4 ( IHDS  Data exercise )
+```{r}
+library(tidyverse)
+library(rio)
+HH_DATA <- import("../data/ddd2/RAW_DATA/ICPSR_36151/HH_DATA/HH_DATA.dta")
+
+IHDS<- subset(HH_DATA, select= c(ID18C, ID13, URBAN2011))
+view(IHDS)
+```
+------------------------------------------------------------------------
+
+## Question 4 ( Data Cleaning and Variable Labeling )
+```{r}
+library(labelled)
+
+unique(IHDS$ID18C)
+table(IHDS$ID18C)
+attributes(IHDS$ID18C)
+
+unique(IHDS$ID13)
+table(IHDS$ID13)
+attributes(IHDS$ID13)
+
+unique(IHDS$URBAN2011)
+table(IHDS$URBAN2011)
+attributes(IHDS$URBAN2011)
+
+IHDS <- IHDS |> mutate(ID18C = ifelse(ID18C == 16, NA, ID18C))
+
+IHDS <- IHDS |> filter(ID18C <= 15 & ID18C >= 0 | is.na(ID18C))
+
+var_label(IHDS$ID18C) <- "Years of Education"
+var_label(IHDS$ID13) <- "Caste Category"
+var_label(IHDS$URBAN2011) <- "Urban Residence"
+
+IHDS$ID18C <- as.numeric(IHDS$ID18C)
+IHDS$ID13 <- as.factor(IHDS$ID13)
+IHDS$URBAN2011 <- as.factor(IHDS$URBAN2011)
+
+table(IHDS$ID18C)
+table(IHDS$ID13)
+table(IHDS$URBAN2011)
+
+view(IHDS)
+```
+------------------------------------------------------------------------
+ 
+## Question 4  (Recoding Caste Variable )
+```{r}
+unique(IHDS$ID13)
+table(IHDS$ID13)
+
+IHDS <- IHDS |> 
+  mutate(caste_r = case_when(
+    ID13 == 1 | ID13 == 2 ~ 1,
+    ID13 == 3 ~ 3,
+    ID13 == 4 ~ 4,
+    ID13 == 5 ~ 5,
+    TRUE ~ NA_real_
+  ))
+
+table(IHDS$caste_r)
+var_label(IHDS$caste_r) <- "Caste Category Recoded"
+val_labels(IHDS$caste_r) <- c(
+  General = 1,
+  OBC = 3,
+  SC = 4,
+  ST = 5)
+
+attributes(IHDS$caste_r)
+```
+------------------------------------------------------------------------
+
+## Question 4 (SUmmary Statistics)
+```{r}
+library(stargazer)
+
+IHDS_summary <- IHDS |> 
+  select(ID18C, caste_r, URBAN2011) |>
+  mutate(
+    ID18C = as.numeric(ID18C),
+    caste_recoded = as.numeric(caste_r),
+    URBAN2011 = as.numeric(URBAN2011)
+  )
+
+IHDS_summary |>
+  as.data.frame() |>
+  stargazer(
+    type = "text",
+    title = "Summary Statistics",
+    summary.stat = c("n", "mean", "sd", "min", "max"),
+    digits = 2,
+    out = "Results/summary_statistics.txt"
+  )
+```
+------------------------------------------------------------------------
+
+## Extra code (not run)
+
+```{r}
+#| eval: false
+# STEP 1: Create family size and constructed per capita income
+FINAL_EXAM$HH_DATA_q1 <- HH_DATA |>
+  mutate(
+    family_size = NADULTM + NADULTF + NCHILDM + NCHILDF + NTEENM + NTEENF + NELDERM + NELDERF,
+    income_pc_constructed = INCOME / family_size
+  ) |>
+  select(INCOME, family_size, income_pc_constructed, INCOMEPC)
+
+# Check for missing values
+summary(FINAL_EXAM$HH_DATA_q1)
+
+# STEP 2: Remove rows with missing or zero values
+FINAL_EXAM$df_q1_clean <- FINAL_EXAM$HH_DATA_q1 |>
+  filter(!is.na(income_pc_constructed), 
+         !is.na(INCOMEPC),
+         income_pc_constructed > 0,
+         INCOMEPC > 0)
+
+# STEP 3: Plot correlation between constructed and given per capita income
+FINAL_EXAM$df_q1_clean |>
+  ggplot(aes(x = INCOMEPC, y = income_pc_constructed)) +
+  geom_point(alpha = 0.5, size = 2) +
+  geom_smooth(se = TRUE, method = "lm", color = "red") +
+  labs(
+    title = "Correlation between Constructed and Given Per Capita Income (Ramesh Beniwal)",
+    x = "Given Per Capita Income (Rupees) [Ramesh Beniwal]",
+    y = "Constructed Per Capita Income (Rupees) [Ramesh Beniwal]"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 12),
+    axis.title = element_text(size = 10)
+  )
+
+# STEP 4: Calculate correlation coefficient
+FINAL_EXAM$correlation_q1 <- cor(FINAL_EXAM$df_q1_clean$INCOMEPC, 
+                                   FINAL_EXAM$df_q1_clean$income_pc_constructed)
+print(paste("Correlation coefficient:", round(FINAL_EXAM$correlation_q1, 4)))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# =====================================================
+# QUESTION 2: Validate Income-Consumption Assumption
+# =====================================================
+
+# STEP 1: Prepare data with both income variables
+FINAL_EXAM$HH_DATA_q2 <- HH_DATA |>
+  mutate(
+    family_size = NADULTM + NADULTF + NCHILDM + NCHILDF + NTEENM + NTEENF + NELDERM + NELDERF,
+    income_pc_constructed = INCOME / family_size
+  ) |>
+  select(income_pc_constructed, INCOMEPC, COPC) |>
+  filter(income_pc_constructed > 0, INCOMEPC > 0, COPC > 0)
+
+# Check data
+print("Summary before outlier removal (Q2):")
+summary(FINAL_EXAM$HH_DATA_q2)
+
+# STEP 2: Remove outliers (filter high values like you did in scripts)
+FINAL_EXAM$HH_DATA_q2 <- FINAL_EXAM$HH_DATA_q2 |>
+  filter(COPC < 100000, income_pc_constructed < 100000, INCOMEPC < 100000)
+
+# Check cleaned data
+print("Summary after outlier removal (Q2):")
+summary(FINAL_EXAM$HH_DATA_q2)
+
+# STEP 3: PLOT 1 - Both relationships on same graph
+FINAL_EXAM$HH_DATA_q2 |>
+  ggplot() +
+  geom_smooth(aes(x = INCOMEPC, y = COPC, color = "Given Per Capita Income"), 
+              se = TRUE, method = "lm", linewidth = 1.2) +
+  geom_smooth(aes(x = income_pc_constructed, y = COPC, color = "Constructed Per Capita Income"), 
+              se = TRUE, method = "lm", linewidth = 1.2) +
+  scale_x_continuous(labels = scales::comma) +
+  scale_y_continuous(labels = scales::comma) +
+  labs(
+    title = "Income-Consumption Relationship: Validation of Assumption (Ramesh Beniwal)",
+    x = "Per Capita Income (Rupees) [Ramesh Beniwal]",
+    y = "Per Capita Consumption (Rupees) [Ramesh Beniwal]",
+    color = "Income Measure [Ramesh Beniwal]"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 12),
+    axis.title = element_text(size = 10),
+    legend.position = "bottom"
+  )
+
+# STEP 4: PLOT 2 - Faceted comparison
+FINAL_EXAM$HH_DATA_q2_long <- FINAL_EXAM$HH_DATA_q2 |>
+  pivot_longer(cols = c(INCOMEPC, income_pc_constructed),
+               names_to = "income_type",
+               values_to = "income_value") |>
+  mutate(income_type = case_when(
+    income_type == "INCOMEPC" ~ "Given Per Capita Income",
+    income_type == "income_pc_constructed" ~ "Constructed Per Capita Income"
+  ))
+
+FINAL_EXAM$HH_DATA_q2_long |>
+  ggplot(aes(x = income_value, y = COPC, color = income_type)) +
+  geom_point(alpha = 0.3, size = 1.5) +
+  geom_smooth(se = TRUE, method = "lm", linewidth = 1) +
+  facet_wrap(~income_type, scales = "free_x") +
+  scale_x_continuous(labels = scales::comma) +
+  scale_y_continuous(labels = scales::comma) +
+  labs(
+    title = "Income-Consumption Relationship by Income Type (Ramesh Beniwal)",
+    x = "Per Capita Income (Rupees) [Ramesh Beniwal]",
+    y = "Per Capita Consumption (Rupees) [Ramesh Beniwal]",
+    color = "Income Measure [Ramesh Beniwal]"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 12),
+    axis.title = element_text(size = 10),
+    legend.position = "bottom"
+  )
+
+# STEP 5: Calculate correlations
+FINAL_EXAM$cor_given_income <- cor(FINAL_EXAM$HH_DATA_q2$INCOMEPC, FINAL_EXAM$HH_DATA_q2$COPC)
+FINAL_EXAM$cor_constructed_income <- cor(FINAL_EXAM$HH_DATA_q2$income_pc_constructed, FINAL_EXAM$HH_DATA_q2$COPC)
+
+# STEP 6: Print results
+print("QUESTION 2: VALIDATION OF INCOME-CONSUMPTION ASSUMPTION")
+print(paste("Correlation (Given Per Capita Income vs Consumption):", round(FINAL_EXAM$cor_given_income, 4)))
+print(paste("Correlation (Constructed Per Capita Income vs Consumption):", round(FINAL_EXAM$cor_constructed_income, 4)))
+print("INTERPRETATION: ASSUMPTION VALIDATED - Both income measures show POSITIVE correlation with consumption")
+print("As per capita income increases, per capita consumption also increases")
+```

@@ -1,0 +1,297 @@
+---
+title: "Final Exam"
+subtitle: "DDD 2: Introduction to Programming and Basic Data Analysis"
+author: "Ramesh Beniwal | Admission ID: BAEC2240006"
+date: today
+---
+
+
+------------------------------------------------------------------------
+
+## Setup
+```{r}
+rm(list = ls())
+```
+
+------------------------------------------------------------------------
+
+## Load Required Libraries
+```{r}
+library(tibble)   
+library(dplyr)    
+library(rlang)    
+library(lobstr)  
+library(rio)
+library(ggplot2)
+library(labelled)
+library(stargazer)
+library(scales)
+library(ivo.table)
+library(flextable)
+library(janitor)
+library(tinytex)
+library(labelled)
+```
+
+------------------------------------------------------------------------
+
+## Exam Environment
+```{r}
+FINAL_EXAM <- new.env()
+```
+
+------------------------------------------------------------------------
+
+## Data Loading 
+```{r}
+library(tidyverse)
+library(rio)
+#1 HH_DATA
+HH_DATA <- import("../data/ddd2/RAW_DATA/ICPSR_36151/HH_DATA/HH_DATA.dta")
+View(HH_DATA)
+
+```
+
+---
+
+
+## QUESTION 1 
+```{r}
+## Creating my own per capita income from household  income variable 
+# creating household size from given variables 
+
+FINAL_EXAM$HH_DATA_q1 <- HH_DATA |>
+  mutate(
+    family_size = NADULTM + NADULTF + NCHILDM + NCHILDF + NTEENM + NTEENF + NELDERM + NELDERF,
+    income_pc_constructed = INCOME / family_size) |>
+  select(INCOME, family_size, income_pc_constructed, INCOMEPC)
+
+# Check for missing values
+summary(FINAL_EXAM$HH_DATA_q1)
+
+# Some Oultiers in Income and Per Capita so we need to remove them
+#Remove negative values and zeros
+FINAL_EXAM$HH_DATA_q1 <- FINAL_EXAM$HH_DATA_q1 |>
+  filter(income_pc_constructed > 0, INCOMEPC > 0)
+
+
+# CHECKING SUMMARY AGAIN TO MATCH 
+summary(FINAL_EXAM$HH_DATA_q1)
+
+# THERE IS DIFFERENCE BETWEEN INCOMEPC AND income_pc_constructed lets know this difference
+FINAL_EXAM$HH_DATA_q1 <- FINAL_EXAM$HH_DATA_q1 |>
+  mutate(
+    difference = income_pc_constructed - INCOMEPC,
+    pct_diff = (difference / INCOMEPC) * 100)
+
+summary(FINAL_EXAM$HH_DATA_q1$difference)
+summary(FINAL_EXAM$HH_DATA_q1$pct_diff)
+
+# So if we look into summary of it the median is around 0  for both cases means our correlation is strong and this difference is may be due to some small differences in household sizes and rounding of eorrors. 
+
+
+## CORRELATION BETWEEEN THE CONSTRUCTED ADN ORIGINAL INCOMEPC 
+# PLOT CORRELATION BETWEEN CONSTRUCTED AND GIVEN PER CAPITA INCOME
+FINAL_EXAM$HH_DATA_q1 |>
+  ggplot(aes(x = INCOMEPC, y = income_pc_constructed)) +
+  geom_point(alpha = 0.5, size = 2, color = "steelblue") +
+  geom_abline(intercept = 0, slope = 1, color = "red", linetype = "dashed", linewidth = 1) +
+  geom_smooth(se = TRUE, method = "lm", color = "darkblue", linewidth = 1) +
+  scale_y_continuous(labels = scales::comma) +
+  scale_x_continuous(labels = scales::comma) +
+  annotate("text", x = Inf, y = -Inf, label = "Red dashed line = Perfect correlation", 
+           hjust = 1.1, vjust = -0.5, color = "red", size = 3) +
+  annotate("text", x = Inf, y = -Inf, label = "Blue line = Actual relationship", 
+           hjust = 1.1, vjust = -2, color = "darkblue", size = 3) +
+  labs(
+    title = "Correlation between Constructed and Given Per Capita Income (Ramesh Beniwal)",
+    x = "Given Per Capita Income (Rupees) [Ramesh Beniwal]",
+    y = "Constructed Per Capita Income (Rupees) [Ramesh Beniwal]",
+    subtitle = "Check Median difference above = 0 | Correlation is very strong") +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 12),
+    plot.subtitle = element_text(hjust = 0.5, size = 10, color = "gray40"),
+    axis.title = element_text(size = 10))
+
+# coefficient for correlation
+FINAL_EXAM$correlation_q1 <- cor(FINAL_EXAM$HH_DATA_q1$INCOMEPC,FINAL_EXAM$HH_DATA_q1$income_pc_constructed)
+
+print(paste("Correlation coefficient (Q1):", round(FINAL_EXAM$correlation_q1, 2)))
+print(paste("Interpretation: Very strong positive correlation - constructed and given per capita income are highly similar"))
+```
+
+---
+
+
+## QUESTION 2 
+```{r}
+# ASSUMPTION - Y GOES UP ~ C GOES UP 
+# VALIDATION BY RELATIONSHIP BETWEEN COPC AND income_pc_constructed
+
+# PART1
+FINAL_EXAM$HH_DATA_q2 <- HH_DATA |>
+  mutate(
+    family_size = NADULTM + NADULTF + NCHILDM + NCHILDF + NTEENM + NTEENF + NELDERM + NELDERF,
+    income_pc_constructed = INCOME / family_size
+  ) |>
+  select(income_pc_constructed, INCOMEPC, COPC) |>
+  filter(income_pc_constructed > 0, INCOMEPC > 0, COPC > 0)
+
+summary(FINAL_EXAM$HH_DATA_q2)
+```
+
+```{r}
+
+#BOXPLOT - Check outliers in COPC before filtering
+FINAL_EXAM$HH_DATA_q2 |>
+  ggplot(aes(y = COPC)) +
+  geom_boxplot(fill = "orange", color = "black", linewidth = 1) +
+  scale_y_continuous(labels = scales::comma) +
+  labs(
+    title = "Boxplot of Per Capita Consumption - Identifying Outliers (Ramesh Beniwal)",
+    y = "Per Capita Consumption (Rupees) [Ramesh Beniwal]") +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 12),
+    axis.title = element_text(size = 10),
+    axis.text.x = element_blank())
+
+```
+```{r}
+# BOXPLOT FOR CONSTRUCTED PER CAPITA INCOME
+FINAL_EXAM$HH_DATA_q2 |>
+  ggplot(aes(y = income_pc_constructed)) +
+  geom_boxplot(fill = "skyblue", color = "black", linewidth = 1) +
+  scale_y_continuous(labels = scales::comma) +
+  labs(
+    title = "Boxplot of Constructed Per Capita Income - Identifying Outliers (Ramesh Beniwal)",
+    y = "Constructed Per Capita Income (Rupees) [Ramesh Beniwal]") +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 12),
+    axis.title = element_text(size = 10),
+    axis.text.x = element_blank())
+```
+
+
+```{r}
+# BOXPLOT FOR GIVEN PER CAPITA INCOME
+FINAL_EXAM$HH_DATA_q2 |>
+  ggplot(aes(y = INCOMEPC)) +
+  geom_boxplot(fill = "lightgreen", color = "black", linewidth = 1) +
+  scale_y_continuous(labels = scales::comma) +
+  labs(
+    title = "Boxplot of Given Per Capita Income - Identifying Outliers (Ramesh Beniwal)",
+    y = "Given Per Capita Income (Rupees) [Ramesh Beniwal]") +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 12),
+    axis.title = element_text(size = 10),
+    axis.text.x = element_blank())
+```
+
+
+```{r}
+# Remove outliers from COPC and other variables
+FINAL_EXAM$HH_DATA_q2 <- FINAL_EXAM$HH_DATA_q2 |>
+  filter(COPC < 600000, income_pc_constructed < 900000, INCOMEPC < 900000)
+
+summary(FINAL_EXAM$HH_DATA_q2)
+```
+
+```{r}
+# Both relationships on same graph
+FINAL_EXAM$HH_DATA_q2 |>
+  ggplot() +
+  geom_smooth(aes(x = INCOMEPC, y = COPC, color = "Given Per Capita Income"), 
+              se = TRUE, method = "lm", linewidth = 1.2) +
+  geom_smooth(aes(x = income_pc_constructed, y = COPC, color = "Constructed Per Capita Income"), 
+              se = TRUE, method = "lm", linewidth = 1.2) +
+  scale_x_continuous(labels = scales::comma) +
+  scale_y_continuous(labels = scales::comma) +
+  labs(
+    title = "Income-Consumption Relationship: Validation of Assumption (Ramesh Beniwal)",
+    x = "Per Capita Income (Rupees) [Ramesh Beniwal]",
+    y = "Per Capita Consumption (Rupees) [Ramesh Beniwal]",
+    color = "Income Measure [Ramesh Beniwal]",
+    subtitle = "shows positive relationship- As income increases, consumption increases") +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 12),
+    plot.subtitle = element_text(hjust = 0.5, size = 10, color = "gray40"),
+    axis.title = element_text(size = 10),
+    legend.position = "bottom")
+```
+
+```{r}
+# side by side
+FINAL_EXAM$HH_DATA_q2_side<- FINAL_EXAM$HH_DATA_q2 |>
+  pivot_longer(cols = c(INCOMEPC, income_pc_constructed),
+               names_to = "income_type",
+               values_to = "income_value") |>
+  mutate(income_type = case_when(
+    income_type == "INCOMEPC" ~ "Given Per Capita Income",
+    income_type == "income_pc_constructed" ~ "Constructed Per Capita Income"))
+
+FINAL_EXAM$HH_DATA_q2_side|>
+  ggplot(aes(x = income_value, y = COPC, color = income_type)) +
+  geom_point(alpha = 0.3, size = 1.5) +
+  geom_smooth(se = TRUE, method = "lm", linewidth = 1) +
+  facet_wrap(~income_type, scales = "free_x") +
+  scale_x_continuous(labels = scales::comma) +
+  scale_y_continuous(labels = scales::comma) +
+  labs(
+    title = "Income-Consumption Relationship by Income Type (Ramesh Beniwal)",
+    x = "Per Capita Income (Rupees) [Ramesh Beniwal]",
+    y = "Per Capita Consumption (Rupees) [Ramesh Beniwal]",
+    color = "Income Measure [Ramesh Beniwal]") +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 12),
+    axis.title = element_text(size = 10),
+    legend.position = "bottom")
+```
+
+```{r}
+#Cor calculation for both 
+FINAL_EXAM$cor_given_income <- cor(FINAL_EXAM$HH_DATA_q2$INCOMEPC, FINAL_EXAM$HH_DATA_q2$COPC)
+FINAL_EXAM$cor_constructed_income <- cor(FINAL_EXAM$HH_DATA_q2$income_pc_constructed, FINAL_EXAM$HH_DATA_q2$COPC)
+```
+
+```{r}
+# Results / Print
+print(paste("Correlation (Given Per Capita Income vs Consumption):", round(FINAL_EXAM$cor_given_income, 2)))
+print(paste("Correlation (Constructed Per Capita Income vs Consumption):", round(FINAL_EXAM$cor_constructed_income, 2)))
+print("INTERPRETATION: ASSUMPTION VALIDATED - Both income measures show POSITIVE correlation with consumption")
+print("As per capita income increases, per capita consumption also increases")
+```
+
+---
+
+
+## INTERPRETATION
+
+::: {.callout-note}
+## Key Findings
+**Correlation Coefficients:**
+- **Given Per Capita Income vs Consumption:** 0.49
+- **Constructed Per Capita Income vs Consumption:** 0.48
+
+**Interpretation:**
+
+Both per capita income measures ( manually and given ) show a **POSITIVE correlation** (approximately 0.48-0.49) with per capita consumption, which **VALIDATES the assumption** that as income increases, consumption also increases.
+
+**Key Observations:**
+
+1. **Positive Relationship:** The correlation of ~0.48 indicates a positive relationship between income and consumption.
+
+2. **Both Measures Consistent:** The constructed per capita income and given per capita income show nearly identical correlations (0.49 vs 0.48), confirming our constructed income variable is valid.
+
+3. **Assumption Validated:** The economic assumption that consumption increases with income is **CONFIRMED** as per Household Data we are using.
+
+**Conclusion:**
+
+The analysis provides evidence supporting the economic thinking and assumption of positive income-consumption relationship. Both graphs and correlation shows that their is positive relationships between them and positively related to each other.
+:::
+

@@ -1,0 +1,555 @@
+---
+title: "What Determines Women's Employment in Urban Slums?"
+subtitle: "Role of Marital Status, Family Structure, and Age"
+author: "Ramesh Beniwal"
+date: today
+format:
+  revealjs:
+    theme: white
+    transition: slide
+    background-transition: fade
+    slide-number: true
+    chalkboard: false
+    footer: "Women's Employment Analysis | Urban Slums 2026"
+    width: 1920
+    height: 1200
+    margin: 0.04
+    embed-resources: true
+execute:
+  warning: false
+  message: false
+  echo: false
+  fig-width: 18
+  fig-height: 8
+  fig-align: center
+editor:
+  markdown:
+    wrap: 72
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+library(rio)
+library(dplyr)
+library(ggplot2)
+library(kableExtra)
+library(knitr)
+library(scales)
+
+options(scipen = 999)
+
+# IMPORT DATA
+W_SLUMS <- rio::import("../data/ddd3/SLUMS/W_SLUMS.xlsx")
+W_VILLAGES<- rio::import("../data/ddd3/VILLAGES/W_VILLAGES.xlsx")
+
+# DATA CLEANING
+W_SLUMS <- W_SLUMS %>%
+  rename(
+    woman_index       = `_index`,
+    slum_id           = Slum_ID,
+    household_id      = Household_ID,
+    joint_family      = Joint_family,
+    fil_alive         = Father_in_law_alive,
+    mil_alive         = Mother_in_law_alive,
+    marital_status    = Marital_status,
+    age               = Age,
+    education         = Education,
+    currently_working = Currently_Working
+  ) %>%
+  mutate(
+    age           = ifelse(age == 0, NA, age),
+    education     = ifelse(education > 16, NA, education),
+    widow_sep     = ifelse(marital_status %in% c(3, 4), 1, 0),
+    married       = as.integer(marital_status == 1),
+    unmarried     = as.integer(marital_status == 2),
+    joint_family  = as.integer(joint_family == 1),
+    fil_alive     = as.integer(fil_alive == 1),
+    mil_alive     = as.integer(mil_alive == 1),
+    slum_id       = as.factor(slum_id),
+    age_group = case_when(
+      age >= 18 & age < 25 ~ 2,
+      age >= 25 & age < 35 ~ 3,
+      age >= 35 & age < 45 ~ 4,
+      age >= 45 & age < 55 ~ 5,
+      age >= 55 & age < 65 ~ 6,
+      age >= 65            ~ 7
+    ),
+    edu_cat = case_when(
+      education == 0                    ~ 1,
+      education >= 1  & education <= 5  ~ 2,
+      education >= 6  & education <= 8  ~ 3,
+      education >= 9  & education <= 10 ~ 4,
+      education >= 11 & education <= 12 ~ 5,
+      education >= 13 & education <= 16 ~ 6
+    ),
+    age_18_24      = as.integer(age_group == 2),
+    age_25_34      = as.integer(age_group == 3),
+    age_35_44      = as.integer(age_group == 4),
+    age_45_54      = as.integer(age_group == 5),
+    age_55_64      = as.integer(age_group == 6),
+    age_65plus     = as.integer(age_group == 7),
+    edu_illiterate = as.integer(edu_cat == 1),
+    edu_primary    = as.integer(edu_cat == 2),
+    edu_middle     = as.integer(edu_cat == 3),
+    edu_secondary  = as.integer(edu_cat == 4),
+    edu_higher_sec = as.integer(edu_cat == 5),
+    edu_graduate   = as.integer(edu_cat == 6)
+  )
+
+# SHARED THEME
+theme_pres <- function() {
+  theme_minimal(base_size = 28) +
+    theme(
+      plot.title      = element_text(face = "bold", size = 32,
+                                     hjust = 0.5, margin = margin(b = 20)),
+      axis.title      = element_text(size = 26),
+      axis.text       = element_text(size = 24),
+      legend.position = "none",
+      plot.margin     = margin(20, 40, 20, 40)
+    )
+}
+```
+
+```{r}
+#| label: functions
+#| include: false
+
+fmt  <- function(x, d = 2) ifelse(is.na(x), "",
+          format(round(x, d), big.mark = ",", nsmall = d, trim = TRUE))
+fmt0 <- function(x) ifelse(is.na(x), "",
+          format(round(x, 0), big.mark = ",", trim = TRUE))
+
+row_dummy <- function(label, var) {
+  v <- W_SLUMS[[var]]
+  v <- v[!is.na(v)]
+  data.frame(
+    Variable = paste0("&nbsp;&nbsp;&nbsp;&nbsp;", label),
+    N        = fmt0(length(v)),
+    Mean     = fmt(mean(v), 3),
+    SD       = fmt(sd(v), 3),
+    Min      = "0",
+    Max      = "1",
+    panel    = "data",
+    stringsAsFactors = FALSE
+  )
+}
+
+panel_row <- function(label, type = "main") {
+  data.frame(Variable = label, N = "", Mean = "", SD = "",
+             Min = "", Max = "", panel = type,
+             stringsAsFactors = FALSE)
+}
+
+make_summary_table <- function() {
+  rbind(
+    panel_row("Panel A: Dependent Variable",               "main"),
+    row_dummy("Currently Working (Yes = 1)",               "currently_working"),
+    panel_row("Panel B: Independent Variables",            "main"),
+    panel_row("&nbsp;&nbsp;Marital Status",                "sub"),
+    row_dummy("Married (Yes = 1)",                         "married"),
+    row_dummy("Unmarried (Yes = 1)",                       "unmarried"),
+    row_dummy("Widowed / Separated (Yes = 1)",             "widow_sep"),
+    panel_row("&nbsp;&nbsp;Family Structure",              "sub"),
+    row_dummy("Joint Family (Yes = 1)",                    "joint_family"),
+    panel_row("&nbsp;&nbsp;Age Groups",                    "sub"),
+    row_dummy("Age 18&ndash;24",                           "age_18_24"),
+    row_dummy("Age 25&ndash;34",                           "age_25_34"),
+    row_dummy("Age 35&ndash;44 &nbsp;(ref)",               "age_35_44"),
+    row_dummy("Age 45&ndash;54",                           "age_45_54"),
+    row_dummy("Age 55&ndash;64",                           "age_55_64"),
+    row_dummy("Age 65+",                                   "age_65plus"),
+    panel_row("Panel C: Control Variables",                "main"),
+    panel_row("&nbsp;&nbsp;Education Categories",          "sub"),
+    row_dummy("Illiterate &mdash; No Schooling (ref)",     "edu_illiterate"),
+    row_dummy("Primary &mdash; 1 to 5 years",              "edu_primary"),
+    row_dummy("Middle &mdash; 6 to 8 years",               "edu_middle"),
+    row_dummy("Secondary &mdash; 9 to 10 years",           "edu_secondary"),
+    row_dummy("Higher Secondary &mdash; 11 to 12 years",   "edu_higher_sec"),
+    row_dummy("Graduate and Above &mdash; 13 to 16 years", "edu_graduate"),
+    panel_row("&nbsp;&nbsp;In-laws",                       "sub"),
+    row_dummy("Father-in-law Alive (Yes = 1)",             "fil_alive"),
+    row_dummy("Mother-in-law Alive (Yes = 1)",             "mil_alive")
+  )
+}
+```
+
+## Introduction {.center}
+
+::::::: columns
+:::: {.column width="52%"}
+
+### Motivation {style="font-size: 1.3em;"}
+
+::: {style="font-size: 1.15em; line-height: 2.0; margin-top: 20px;"}
+- Women's employment is a key indicator of **empowerment** and household welfare
+- Urban slum women face multiple barriers — family structure, marital status, and social norms
+- Very few studies focus on determinants of employment among slum women in India
+- This study uses data from **four urban slums** — Atal Ayub Nagar, Nawab Colony, J.P Nagar, Arif Nagar
+:::
+::::
+
+:::: {.column width="48%"}
+
+### Research Question {style="font-size: 1.3em;"}
+
+::: {style="font-size: 1.1em; line-height: 1.9; background-color: #dceeff; padding: 25px; border-left: 6px solid #2c7fb8; border-radius: 6px; margin-top: 20px;"}
+*"What determines women's employment in urban slums — role of marital status, family structure, and age?"*
+:::
+
+::: {style="font-size: 1.1em; line-height: 2.2; margin-top: 25px;"}
+- **Dependent:** Currently Working (Yes/No)
+- **Independent:** Marital Status, Family Type, Age
+- **Controls:** Education, In-laws Alive
+:::
+::::
+:::::::
+
+---
+
+
+## Data Cleaning {.center}
+
+::: {style="font-size: 1.2em; line-height: 2.2; padding: 10px 60px; margin-top: 10px;"}
+- Data collected from **four urban slums** in 2026
+
+- Age = 0 replaced with **NA** &nbsp;— data entry error
+
+- Education > 16 replaced with **NA** &nbsp;— beyond questionnaire range
+
+- Marital status recoded: **Widowed / Separated = 1**, others = 0
+
+- Education grouped into six categories: **Illiterate, Primary, Middle, Secondary, Higher Secondary, Graduate & Above**
+
+- Age grouped into six categories: **18–24, 25–34, 35–44, 45–54, 55–64, 65+**
+
+- **Binary dummies** created for each education and age category
+:::
+
+---
+
+
+## Summary Statistics (Slums) {.center}
+
+```{r}
+#| label: summary-table
+
+tbl      <- make_summary_table()
+main_idx <- which(tbl$panel == "main")
+sub_idx  <- which(tbl$panel == "sub")
+display  <- tbl[, c("Variable", "N", "Mean", "SD", "Min", "Max")]
+
+display |>
+  kbl(
+    booktabs  = TRUE,
+    linesep   = "",
+    col.names = c("Variable", "N", "Mean", "Std. Dev.", "Min", "Max"),
+    format    = "html",
+    escape    = FALSE
+  ) |>
+  kable_styling(
+    full_width        = TRUE,
+    font_size         = 22,
+    bootstrap_options = c("hover", "condensed")
+  ) |>
+  column_spec(1, width = "50%") |>
+  column_spec(2:6, width = "10%") |>
+  row_spec(0,        bold = TRUE, background = "#2c7fb8",
+           color = "white",  font_size = 23) |>
+  row_spec(main_idx, bold = TRUE, background = "#d0e4f7",
+           color = "black",  font_size = 23) |>
+  row_spec(sub_idx,  bold = TRUE, background = "#f0f0f0",
+           color = "#333333", italic = TRUE, font_size = 22)
+```
+
+---
+
+
+## Employment by Marital Status {.center}
+
+```{r}
+#| label: fig-marital
+#| fig-cap: "Women's Employment Status by Marital Status"
+
+W_SLUMS |>
+  filter(!is.na(currently_working),
+         !is.na(marital_status)) |>
+  mutate(
+    marital_lab = factor(
+      case_when(
+        marital_status == 1 ~ "Married",
+        marital_status == 2 ~ "Unmarried",
+        marital_status %in% c(3, 4) ~ "Widowed / Separated"),
+      levels = c("Married",
+                 "Unmarried",
+                 "Widowed / Separated")),
+    work_status = factor(
+      if_else(currently_working == 1,
+              "Working",
+              "Not Working"),
+      levels = c("Not Working", "Working"))
+  ) |>
+  
+  count(marital_lab, work_status) |>
+  group_by(marital_lab) |>
+  mutate(
+    pct = n / sum(n) * 100,
+    lab = paste0(round(pct, 1), "%")
+  ) |>
+  
+  ggplot(aes(marital_lab, pct,
+             fill = work_status)) +
+  geom_col(width = 0.5) +
+  geom_text(aes(label = lab),
+            position = position_stack(vjust = 0.5),
+            size = 8,
+            fontface = "bold") +
+  scale_fill_manual(values = c(
+    "Not Working" = "#F6DCDC",
+    "Working" = "#00CC33"
+  )) +
+  scale_y_continuous(
+    labels = percent_format(scale = 1),
+    limits = c(0, 100)
+  ) +
+  labs(
+    title = "Figure 1: Women's Employment Status by Marital Status",
+    x = "Marital Status",
+    y = "% of Women",
+    fill = NULL
+  ) +
+  
+  theme_pres() +
+  theme(legend.position = "bottom")
+```
+
+---
+
+
+## Employment by Family Structure {.center}
+
+```{r}
+#| label: fig-family
+#| fig-cap: "Women's Employment Status by Family Structure"
+
+W_SLUMS |>
+  filter(!is.na(currently_working),
+         !is.na(joint_family)) |>
+  mutate(
+    family_lab = factor(
+      joint_family,
+      levels = c(0, 1),
+      labels = c("Nuclear Family",
+                 "Joint Family")),
+    work_status = factor(
+      if_else(currently_working == 1,
+              "Working",
+              "Not Working"),
+      levels = c("Not Working", "Working")
+    )
+  ) |>
+  
+  count(family_lab, work_status) |>
+  group_by(family_lab) |>
+  mutate(
+    pct = n / sum(n) * 100,
+    lab = paste0(round(pct, 1), "%")
+  ) |>
+  ggplot(aes(family_lab, pct,
+             fill = work_status)) +
+  geom_col(width = 0.5) +
+  geom_text(aes(label = lab),
+            position = position_stack(vjust = 0.5),
+            size = 8,
+            fontface = "bold") +
+  scale_fill_manual(values = c(
+    "Not Working" = "#F6DCDC",
+    "Working" = "#00CC33"
+  )) +
+  scale_y_continuous(
+    labels = percent_format(scale = 1),
+    limits = c(0, 100)
+  ) +
+  labs(
+    title = "Figure 2: Women's Employment Status by Family Structure",
+    x = "Family Type",
+    y = "% of Women",
+    fill = NULL
+  ) +
+  theme_pres() +
+  theme(legend.position = "bottom")
+```
+
+---
+
+
+## Employment by Age Group {.center}
+
+```{r}
+#| label: fig-age
+#| fig-cap: "Women's Employment Status by Age Group"
+
+W_SLUMS |>
+  filter(!is.na(currently_working),
+         !is.na(age_group)) |>
+  mutate(
+    age_lab = factor(
+      age_group,
+      levels = c(2, 3, 4, 5, 6, 7),
+      labels = c("18-24", "25-34", "35-44",
+                 "45-54", "55-64", "65+")),
+    work_status = factor(
+      if_else(currently_working == 1,
+              "Working",
+              "Not Working"),
+      levels = c("Not Working", "Working"))
+  ) |>
+  count(age_lab, work_status) |>
+  group_by(age_lab) |>
+  mutate(
+    pct = n / sum(n) * 100,
+    lab = paste0(round(pct, 1), "%")
+  ) |>
+  ggplot(aes(age_lab, pct,
+             fill = work_status)) +
+  geom_col(width = 0.55) +
+  geom_text(aes(label = lab),
+            position = position_stack(vjust = 0.5),
+            size = 8,
+            fontface = "bold") +
+  scale_fill_manual(values = c(
+    "Not Working" = "#F6DCDC",
+    "Working" = "#00CC33"
+  )) +
+  scale_y_continuous(
+    labels = percent_format(scale = 1),
+    limits = c(0, 100)
+  ) +
+  labs(
+    title = "Figure 3: Women's Employment Status by Age Group",
+    x = "Age Group",
+    y = "% of Women",
+    fill = NULL
+  ) +
+  theme_pres() +
+  theme(legend.position = "bottom")
+```
+
+---
+
+
+## Employment by Education Level {.center}
+
+```{r}
+#| label: fig-edu
+#| fig-cap: "Women's Employment Status by Education Level"
+
+W_SLUMS |>
+  filter(!is.na(currently_working),
+         !is.na(edu_cat)) |>
+  
+  mutate(
+    edu_lab = factor(
+      edu_cat,
+      levels = c(1, 2, 3, 4, 5, 6),
+      labels = c("Illiterate", "Primary",
+                 "Middle", "Secondary",
+                 "Higher Sec", "Graduate+")
+    ),
+    
+    work_status = factor(
+      if_else(currently_working == 1,
+              "Working",
+              "Not Working"),
+      levels = c("Not Working", "Working")
+    )
+  ) |>
+  
+  count(edu_lab, work_status) |>
+  
+  group_by(edu_lab) |>
+  
+  mutate(
+    pct = n / sum(n) * 100,
+    lab = paste0(round(pct, 1), "%")
+  ) |>
+  
+  ggplot(aes(edu_lab, pct,
+             fill = work_status)) +
+  
+  geom_col(width = 0.55) +
+  
+  geom_text(aes(label = lab),
+            position = position_stack(vjust = 0.5),
+            size = 8,
+            fontface = "bold") +
+  
+  scale_fill_manual(values = c(
+    "Not Working" = "#F6DCDC",
+    "Working" = "#00CC33"
+  )) +
+  
+  scale_y_continuous(
+    labels = percent_format(scale = 1),
+    limits = c(0, 100)
+  ) +
+  
+  labs(
+    title = "Figure 4: Women's Employment Status by Education Level",
+    x = "Education Level",
+    y = "% of Women",
+    fill = NULL
+  ) +
+  
+  theme_pres() +
+  theme(legend.position = "bottom")
+```
+
+---
+
+
+## Key Findings {.center}
+
+:::::: columns
+::: {.column width="31%" style="font-size: 1.15em; line-height: 2.0; background-color: #dceeff; padding: 25px; border-radius: 10px; border-top: 5px solid #2c7fb8;"}
+**📊 Marital Status**
+
+- Married → **14.2%** working
+- Unmarried → **25.0%** working
+- Widowed / Separated → **41.7%** working
+- Economic necessity drives work after loss of spouse
+:::
+
+::: {.column width="3%"}
+:::
+
+::: {.column width="31%" style="font-size: 1.15em; line-height: 2.0; background-color: #dceeff; padding: 25px; border-radius: 10px; border-top: 5px solid #2c7fb8;"}
+**🏠 Family Structure**
+
+- Nuclear family → **20.1%** working
+- Joint family → **13.4%** working
+- Joint families **restrict** women's mobility and work decisions
+:::
+
+::: {.column width="3%"}
+:::
+
+::: {.column width="31%" style="font-size: 1.15em; line-height: 2.0; background-color: #dceeff; padding: 25px; border-radius: 10px; border-top: 5px solid #2c7fb8;"}
+**📅 Age & Education**
+ 
+- Women aged **35–44** have highest employment (24.7%)
+- More educated women work **less** — social restrictions in slum communities
+:::
+::::::
+
+---
+
+
+## Thank You {.center}
+
+::: {style="font-size: 1.8em; text-align: center; margin-top: 120px; line-height: 3.0;"}
+**Ramesh Beniwal**
+
+*Women's Employment Study | Urban Slums | 2026*
+:::
